@@ -204,4 +204,6 @@ bleugh :: A -> B -> A
 We won't always do this, but sometimes it's less noisy than a `Typescript`
 functional signature.
 
+- The docs for `Ramda` have a [great guide](https://github.com/ramda/ramda/wiki/Type-Signatures) for these type signatures.
+
 # And now...onwards....
