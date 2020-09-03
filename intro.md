@@ -2,7 +2,13 @@
 title: Functional programming is boring
 author: Daniel J Harvey 
 patat:
-    incrementalLists: true
+  wrap: true
+  margins:
+    left: 10
+    right: 10
+    top: 10
+    bottom: 10
+  incrementalLists: true
 ...
 
 # Hello.
