@@ -96,7 +96,7 @@ type Maybe<A> = { type: "Just"; value: A } | { type: "Nothing" };
 
 // map :: (A -> B) -> Maybe A -> Maybe B
 
-// orElse :: (A -> B) -> B -> Maybe A -> Maybe B
+// orElse :: (A -> B) -> B -> Maybe A -> B
 
 /*
  * Now let's use them to rewrite horseFinder
