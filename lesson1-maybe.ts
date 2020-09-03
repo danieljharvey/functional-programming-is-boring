@@ -61,7 +61,7 @@ const perhapsMap = <A, B>(
   return undefined;
 };
 
-const orElse = <A>(
+const orElse = <A,B>(
   perhapsValue: A | undefined,
   func: (a: A) => B,
   def: B
