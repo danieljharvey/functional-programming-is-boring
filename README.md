@@ -1,4 +1,4 @@
-Functional Programming Is Boring
+:egg: Functional Programming Is Boring
 
 A completely OK short course on FP for Bulb Engineers.
 
