@@ -19,12 +19,8 @@ const horses: Horse[] = [
 ];
 
 // left :: E -> Either E never
-const left = <E>(value: E): Either<E,never> =>
-  ({ type: "Left", value })
 
 // right :: A -> Either never A
-const right = <A>(value: A): Either<never,A> => 
-  ({ type: "Right", value })
 
 const getHorse = (name: string): Either<string, Horse> => {
   const found = horses.filter(horse => horse.name === name)
@@ -74,50 +70,26 @@ const standardise = (horse: Horse): Either<TailCheckError,StandardHorse> => {
 };
 
 // map :: (A -> B) -> Either E A -> Either E B
-const map = <E,A,B>(fn: (a: A) => B, either: Either<E,A>):Either<E,B> => 
-  either.type === 'Left' ? either : right(fn(either.value))
 
 // bind :: (A -> Either E B) -> Either E A -> Either E B
-const bind = <E,A,B>(fn: (a: A) => Either<E,B>, either: Either<E,A>): Either<E,B> =>
-  either.type === 'Left' ? either : fn(either.value)
 
 // leftMap :: (E -> G) -> Either E A -> Either G A
-const leftMap = <E,G,A>(fn: (e:E) => G, either: Either<E,A>): Either<G,A> =>
-  either.type === 'Right' ? either : left(fn(either.value))
 
 // id :: A -> A
-const id = <A>(a: A): A => a
 
 // bimap :: (E -> G) -> (A -> B) -> Either E A -> Either G B
-const bimap = <E,G,A,B>(leftFn: (E: E) => G, rightFn: (a: A) => B, either: Either<E,A>): Either<G,B> =>
-  either.type === 'Left' ? left(leftFn(either.value)) : right(rightFn(either.value))
+
+// (bonus marks - how can we rewrite map and leftMap using bimap and id?)
 
 // match :: (E -> B) -> (A -> B) -> Either E A -> B
-const match = <E,A,B>(left: (e:E) => B, right: (a:A) => B, either: Either<E,A>): B => 
-  either.type === 'Left' ? left(either.value) : right(either.value)
 
-// we can rewrite map and leftMap using bimap and id
-
-const showHorseError = (err: TailCheckError): string => {
-  switch (err.type) {
-    case 'TOO_MANY_LEGS':
-      return `This horse has too many legs`
-    case 'NOT_ENOUGH_LEGS':
-      return `This horse has a less than standard number of legs`
-    case 'HAS_NO_TAIL':
-      return 'This horse has no tail'
-  }
-}
-
-const horseFinder2 = (name: string): Either<string,StandardHorse> => {
+// convert this to use the above functions and return Either<string,
+// StandardHorse>
+const horseFinder = (name: string): Maybe<StandardHorse> => {
   const horse = getHorse(name);
 
   const tidyHorse = map(tidyHorseName, horse);
 
-  return bind(horse => leftMap(showHorseError,standardise(horse)), 
-    tidyHorse);
+  return bind(standardise(horse), tidyHorse);
 };
 
-type Tuple<A,B> = { type: "Tuple", a:A,b:B}
-
-// partitionEithers :: Array (Either E A) -> Tuple (Array E) (Array A)
