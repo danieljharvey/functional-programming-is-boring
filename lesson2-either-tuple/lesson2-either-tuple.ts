@@ -93,3 +93,30 @@ const horseFinder = (name: string): Maybe<StandardHorse> => {
   return bind(standardise(horse), tidyHorse);
 };
 
+/* PART 2 */
+
+const otherHorses: Horse[] = [
+  {
+    type: "HORSE",
+    name: "ROAST_BEEF",
+    legs: 2,
+    hasTail: false
+  },
+  {
+    type: "HORSE",
+    name: "INFINITE_JEFF",
+    legs: 5,
+    hasTail: true
+  }
+];
+
+const getHorse2 = (possibleHorses: Horse[]) => 
+  (name: string): Either<string, Horse> => {
+    const found = possibleHorses.filter(horse => horse.name === name)
+    return found[0] ? right(found[0]): left(`Horse ${name} not found`)
+}
+
+// how can we deal with two horse sources now?
+
+// alt :: Either E A -> Either E A -> Either E A
+

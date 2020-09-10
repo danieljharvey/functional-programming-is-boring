@@ -249,6 +249,59 @@ const standardise = (horse: Horse): Either<TailCheckError,StandardHorse> => {
 
 - You are very smart.
 
+## Alternatives - a nice pattern
+
+Our code here suggests a fairly linear path, but the truth is that most things
+aren't so simple.
+
+- Imagine for a moment, that there is a second source of horses.
+
+```typescript
+const otherHorses: Horse[] = [
+  {
+    type: "HORSE",
+    name: "ROAST_BEEF",
+    legs: 2,
+    hasTail: false
+  },
+  {
+    type: "HORSE",
+    name: "INFINITE_JEFF",
+    legs: 5,
+    hasTail: true
+  }
+];
+```
+
+- Therefore, when doing `getHorse` we have two places we can look.
+
+- The first place is preferable though.
+
+## Great
+
+- We could adapt this function to take the horse source as a parameter..
+
+```typescript
+const getHorse2 = (possibleHorses: Horse[]) => 
+  (name: string): Either<string, Horse> => {
+    const found = possibleHorses.filter(horse => horse.name === name)
+    return found[0] ? right(found[0]): left(`Horse ${name} not found`)
+}
+```
+
+- But how do we try one and then the other?
+
+- Now, what if, we had a function, with a type signature that looked like this?
+
+- `alt :: Either E A -> Either E A -> Either E A`
+
+- Or indeed, for `Maybe`:
+
+- `alt :: Maybe A -> Maybe A -> Maybe A`
+ 
+- Let's try fixing our horse issues with these:
+
+
 ## Measuring complexity
 
 - Reducing complexity is good, and so it's helpful to have a way of measuring
