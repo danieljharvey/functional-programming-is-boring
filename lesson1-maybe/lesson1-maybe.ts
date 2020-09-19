@@ -1,4 +1,9 @@
-type Horse = { type: "HORSE"; name: string; legs: number; hasTail: boolean };
+export type Horse = {
+  type: "HORSE";
+  name: string;
+  legs: number;
+  hasTail: boolean;
+};
 
 const goodHorses: Horse[] = [
   {
@@ -61,7 +66,7 @@ const perhapsMap = <A, B>(
   return undefined;
 };
 
-const orElse = <A,B>(
+const orElse = <A, B>(
   perhapsValue: A | undefined,
   func: (a: A) => B,
   def: B

@@ -1,38 +1,42 @@
-type FileTree<W, A> =
-  | { type: "File"; value: A; annotation: W | null }
-  | { type: "Directory"; leaves: FileTree<W, A>[]; annotation: W | null };
+type FileTree<A> =
+  | { type: "File"; value: A }
+  | { type: "Directory"; left: FileTree<A>; right: FileTree<A> };
 
-const file = <W, A>(value: A, annotation?: W): FileTree<W, A> => ({
+const file = <A>(value: A): FileTree<A> => ({
   type: "File",
-  value,
-  annotation: annotation || null
+  value
 });
 
-const directory = <W, A>(
-  leaves: FileTree<W, A>[],
-  annotation?: W
-): FileTree<W, A> => ({
+const directory = <A>(left: FileTree<A>, right: FileTree<A>): FileTree<A> => ({
   type: "Directory",
-  leaves,
-  annotation: annotation || null
+  left,
+  right
 });
 
-const tree: FileTree<string, number> = directory(
-  [
-    file(123, "filey boy"),
-    file(456, "filey log"),
-    directory([file(789, "oh no"), directory([file(890)], "More stuff")])
-  ],
-  "This is the root folder"
+const tree: FileTree<number> = directory(
+  file(123),
+  directory(file(789), directory(file(890), file(123)))
 );
 
-// map :: (a -> b) -> Tree W A -> Tree W B
-const fmap = <W, A, B>(f: (a: A) => B, tree: FileTree<W, A>): FileTree<W, B> =>
+// map :: (a -> b) -> Tree A -> Tree B
+const fmap = <A, B>(f: (a: A) => B, tree: FileTree<A>): FileTree<B> =>
   tree.type === "File"
     ? { ...tree, value: f(tree.value) }
     : {
         ...tree,
-        leaves: tree.leaves.map((leaf: FileTree<W, A>) => fmap(f, leaf))
+        left: fmap(f, tree.left),
+        right: fmap(f, tree.right)
       };
 
 console.log(fmap(a => a + 1, tree));
+
+// fold :: (b -> a -> b) -> Tree A -> B -> B
+const fold = <A, B>(f: (b: B, a: A) => B, tree: FileTree<A>, def: B): B => {
+  if (tree.type === "File") {
+    return f(def, tree.value);
+  }
+  const leftB = fold(f, tree.left, def);
+  return fold(f, tree.right, leftB);
+};
+
+console.log(fold((b, a) => a + b, tree, 0));
