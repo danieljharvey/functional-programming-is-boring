@@ -2,6 +2,10 @@ export type Semigroup<A> = {
   append: (one: A, two: A) => A;
 };
 
+export const semigroupArray = <A>(): Semigroup<A[]> => ({
+  append: (a, b) => a.concat(b)
+});
+
 export const semigroupString: Semigroup<string> = {
   append: (a, b) => `${a}${b}`
 };

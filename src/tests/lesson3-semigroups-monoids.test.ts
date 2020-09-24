@@ -1,6 +1,7 @@
 import * as fc from "fast-check";
 import {
   Semigroup,
+  semigroupArray,
   semigroupString,
   Monoid,
   monoidAnd,
@@ -27,6 +28,30 @@ const isAssociative = <A>(
     semigroup.append(semigroup.append(one, two), three),
     semigroup.append(one, semigroup.append(two, three))
   );
+
+describe("Array semigroup", () => {
+  it("Combines two arrays", () => {
+    expect(semigroupArray().append([1, 2, 3], [4, 5])).toEqual([
+      1,
+      2,
+      3,
+      4,
+      5
+    ]);
+  });
+  it("Obeys associativity", () => {
+    fc.assert(
+      fc.property(
+        fc.array(fc.integer()),
+        fc.array(fc.integer()),
+        fc.array(fc.integer()),
+        (a, b, c) => {
+          expect(isAssociative(semigroupArray(), a, b, c)).toBeTruthy();
+        }
+      )
+    );
+  });
+});
 
 describe("String semigroup", () => {
   it("Combines two strings", () => {
