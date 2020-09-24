@@ -2,22 +2,15 @@ export type Semigroup<A> = {
   append: (one: A, two: A) => A;
 };
 
-export const semigroupArray = <A>(): Semigroup<A[]> => ({
-  append: (a, b) => a.concat(b)
-});
+export const monoidArray = undefined as any;
 
-export const semigroupString: Semigroup<string> = {
-  append: (a, b) => `${a}${b}`
-};
+export const monoidString = undefined as any;
 
 export type Monoid<A> = {
   empty: A;
 } & Semigroup<A>;
 
-export const monoidAnd: Monoid<boolean> = {
-  empty: true,
-  append: (a, b) => a && b
-};
+export const monoidAnd = undefined as any;
 
 // we can combine them...
 export type Nothing = { type: "Nothing" };
@@ -28,50 +21,21 @@ export const just = <A>(value: A): Maybe<A> => ({ type: "Just", value });
 
 export const nothing = (): Maybe<never> => ({ type: "Nothing" });
 
-export const monoidMaybe = <A>(
-  semigroupA: Semigroup<A>
-): Monoid<Maybe<A>> => ({
-  empty: { type: "Nothing" },
-  append: (a, b) => {
-    if (a.type === "Just" && b.type === "Just") {
-      return just(semigroupA.append(a.value, b.value));
-    }
-    return a.type === "Just" ? a : b;
-  }
-});
+export const monoidMaybe = undefined as any;
 
-export const monoidMaybeString = monoidMaybe(semigroupString);
+export const monoidMaybeString = undefined as any;
 
 ////
 
 // combines numbers with addition
-const monoidSum: Monoid<number> = {
-  empty: 0,
-  append: (a, b) => a + b
-};
+const monoidSum = undefined as any;
 
-export const monoidMaybeSum = monoidMaybe(monoidSum);
+export const monoidMaybeSum = undefined as any;
 
 //////////////
 
-export const monoidFirst = <A>(): Monoid<Maybe<A>> => ({
-  empty: nothing(),
-  append: (a, b): Maybe<A> => (a.type === "Just" ? a : b)
-});
-
-/////
-
-export const monoidMap = <A>(): Monoid<Map<number, A>> => ({
-  empty: new Map(),
-  append: (a, b) => {
-    const arrA = Array.from(a);
-    const arrB = Array.from(b);
-    return new Map([...arrA, ...arrB]);
-  }
-});
+export const monoidFirst = undefined as any;
 
 // concat :: Monoid<A> -> A[] -> A
 export const concat = <A>(monoid: Monoid<A>, list: A[]): A =>
   list.reduce(monoid.append, monoid.empty);
-
-// todo - fast check these tests?
