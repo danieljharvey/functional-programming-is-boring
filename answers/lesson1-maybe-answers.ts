@@ -5,34 +5,40 @@
  * first, we're going to need the following functions:
  */
 
-type Maybe<A> = { type: "Just"; value: A } | { type: "Nothing" };
+export type Maybe<A> = { type: "Just"; value: A } | { type: "Nothing" };
 
 // just :: A -> Maybe A
 
-const just = <A extends any>(a: A): Maybe<A> => ({type: "Just", value: a})
+export const just = <A extends any>(a: A): Maybe<A> => ({
+  type: "Just",
+  value: a
+});
 
 // nothing :: () -> Maybe never
 
-const nothing = (): Maybe<never> => ({ type: "Nothing" })
+const nothing = (): Maybe<never> => ({ type: "Nothing" });
 
 // map :: (A -> B) -> Maybe A -> Maybe B
 
-const map = <A extends any, B extends any>(fn: (a: A) => B, maybe: Maybe<A>): Maybe<B> =>
-    maybe.type === 'Just' ? just(fn(maybe.value)) : nothing();
+const map = <A extends any, B extends any>(
+  fn: (a: A) => B,
+  maybe: Maybe<A>
+): Maybe<B> => (maybe.type === "Just" ? just(fn(maybe.value)) : nothing());
 
 // orElse :: (A -> B) -> B -> Maybe A -> B
 
-const orElse = <A extends any, B extends any>(fn: (a: A) => B, def: B, maybe: Maybe<A>): B =>
-    maybe.type === 'Just' ? fn(maybe.value) : def
+const orElse = <A extends any, B extends any>(
+  fn: (a: A) => B,
+  def: B,
+  maybe: Maybe<A>
+): B => (maybe.type === "Just" ? fn(maybe.value) : def);
 
 /*
  * Now let's use them to rewrite horseFinder
  */
 
-
 // GO
 type Horse = { type: "HORSE"; name: string; legs: number; hasTail: boolean };
-
 
 type GoodHorse = {
   name: string;
@@ -56,22 +62,20 @@ const goodHorses: Horse[] = [
   }
 ];
 
-
 // getHorse :: string -> Maybe A
 
 const getHorse = (name: string): Maybe<Horse> => {
-    let found;
+  let found;
   goodHorses.forEach(goodHorse => {
     if (goodHorse.name === name) {
       found = goodHorse;
     }
   });
   if (found) {
-      return just(found)
+    return just(found);
   }
   return nothing();
-  }
-
+};
 
 const tidyHorseName = (horse: Horse): Horse => {
   return {
@@ -89,7 +93,7 @@ const mandatoryTailCheck = (horse: Horse): Maybe<GoodHorse> => {
     hasTail: true,
     legs: 4,
     type: "GOOD_HORSE"
-  }) 
+  });
 };
 
 // horseFinder :: String -> String
@@ -104,7 +108,7 @@ const horseFinder = (name: string): string => {
   return orElse(
     horse => `Found a good horse named ${horse.name}`,
     `${name} is not a good horse`,
-    goodHorse,
+    goodHorse
   );
 };
 
@@ -112,12 +116,15 @@ const horseFinder = (name: string): string => {
 
 // join :: Maybe (Maybe A) -> Maybe A
 
-const join = <A extends any>(a: Maybe<Maybe <A>>): Maybe<A> =>
-    a.type === 'Just' ? a.value : nothing()
+const join = <A extends any>(a: Maybe<Maybe<A>>): Maybe<A> =>
+  a.type === "Just" ? a.value : nothing();
 
 // or
 
 // bind :: (A -> Maybe B) -> Maybe A -> Maybe B
-const bind = <A, B extends any>(fn: (a: A) => Maybe<B>, maybs: Maybe<A>): Maybe<B> => join(map(fn, maybs))
+const bind = <A, B extends any>(
+  fn: (a: A) => Maybe<B>,
+  maybs: Maybe<A>
+): Maybe<B> => join(map(fn, maybs));
 
-console.log(horseFinder('HOOVES_GALORE'))
+console.log(horseFinder("HOOVES_GALORE"));
