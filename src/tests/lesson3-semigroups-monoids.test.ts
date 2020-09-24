@@ -12,7 +12,7 @@ import {
   monoidMaybeString,
   monoidMaybeSum,
   monoidFirst
-} from "./semigroups-monoids";
+} from "../lesson3-semigroups-monoids";
 
 // cope better with javascript's terrible notion of equality
 const eq = <A>(a: A, b: A): boolean => JSON.stringify(a) === JSON.stringify(b);
