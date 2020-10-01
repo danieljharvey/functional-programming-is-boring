@@ -99,7 +99,6 @@ describe("Continuation", () => {
     expect(output).toEqual(expected);
   });
 
-  // ie, pure does nothing interesting pt 1
   it("Obeys left identity law", async () => {
     const f = a => pure([a, a]);
     await fc.assert(
@@ -112,7 +111,7 @@ describe("Continuation", () => {
       })
     );
   });
-  // ie, pure does nothing interesting pt 2
+
   it("Obeys right identity law", async () => {
     await fc.assert(
       fc.asyncProperty(fc.string(), async a => {
@@ -125,14 +124,13 @@ describe("Continuation", () => {
     );
   });
 
-  // ie, nesting doesn't matter
   it("Obeys monad associativity law", async () => {
     const f = a => pure([a, a]);
     const g = a => pure(a + 2);
     await fc.assert(
       fc.asyncProperty(fc.integer(), async a => {
         const value1 = bind(f, bind(g, pure(a)));
-        const value2 = bind(b => bind(f, g(b)), pure(a));
+        const value2 = bind(bind(b => f(b), g), pure(a));
         const output1 = await runContinuationToPromise(value1);
         const output2 = await runContinuationToPromise(value2);
         return expect(output1).toEqual(output2);
