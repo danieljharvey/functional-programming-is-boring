@@ -1,5 +1,11 @@
 import * as fc from "fast-check";
-import { pure, runContinuationToPromise, map, ap, bind } from "./cont";
+import {
+  pure,
+  runContinuationToPromise,
+  map,
+  ap,
+  bind
+} from "../lesson4-continuations";
 
 describe("Continuation", () => {
   it("Pure works", async () => {
