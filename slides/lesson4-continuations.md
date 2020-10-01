@@ -21,7 +21,7 @@ So far we've looked at a couple of things:
 
 - They've helped us express _stuff that goes wrong_, as life does
 
-- Lots of different `Monoids`
+- Lots of different __monoids__ for `strings` and things
 
 - These have helped us formalise the _smashing together of data_
 
@@ -87,8 +87,9 @@ there is some sort of ordering to how things are calculated.
 
 Let's look at the functions we've been using a lot of recently:
 
-`map :: (A -> B) -> Maybe A -> Maybe B`
-
+```haskell
+map :: (A -> B) -> Maybe A -> Maybe B
+```
 - (brief recap)
 
 ```typescript
@@ -106,8 +107,9 @@ Let's imagine a fictional type `Async<A>`.
   some point__
 
 - How does `map` work ordering wise there?
-
-`map :: (A -> B) -> Async A -> Async B`
+```haskell
+map :: (A -> B) -> Async A -> Async B
+```
 
 - What's going to happen, roughly, step by step?
 
@@ -121,9 +123,11 @@ Let's imagine a fictional type `Async<A>`.
 
 What about `bind`?
 
-`bind :: (A -> Async B) -> Async A -> Async B`
+```haskell
+bind :: (A -> Async B) -> Async A -> Async B`
+```
 
-What's going to happen? How long is it going to take?
+- What's going to happen? How long is it going to take?
 
 - .
 
@@ -137,15 +141,25 @@ Meet our new buddy `ap`. Conceptually, he lives somewhere between `map` and `bin
 
 - He works on a bunch of our old friends:
 
-`ap :: Maybe (A -> B) -> Maybe A -> Maybe B`
+```haskell
+ap :: Maybe (A -> B) -> Maybe A -> Maybe B
+```
 
-`ap :: Either E (A -> B) -> Either E A -> Either E B`
+```haskell
+ap :: Either E (A -> B) -> Either E A -> Either E B
+```
+ 
+- He can be quite helpful there, but not particularly interesting.
 
-- Most importantly today though, we'll look at him with our new `Async` friend:
+- However...
 
-`ap :: Async (A -> B) -> Async A -> Async B`
+- Today though, we'll look at him with our new `Async` friend:
 
 ## Let's think about what's going to need to happen here:
+
+```haskell
+ap :: Async (A -> B) -> Async A -> Async B
+```
 
 - We __wait__ for an `A -> B` function from our first `Async`
 
