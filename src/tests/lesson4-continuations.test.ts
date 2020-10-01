@@ -4,7 +4,9 @@ import {
   runContinuationToPromise,
   map,
   ap,
-  bind
+  bind,
+  liftA2,
+  liftA3
 } from "../lesson4-continuations";
 
 describe("Continuation", () => {
@@ -15,7 +17,7 @@ describe("Continuation", () => {
   it.skip("Obeys associativity", async () => {
     await fc.assert(
       fc.asyncProperty(fc.anything(), async a => {
-        const value = map(a => a, pure(a));
+        const value = map((a: any) => a, pure(a));
         const output = await runContinuationToPromise(value);
         expect(output).toEqual(a);
       })
@@ -29,7 +31,7 @@ describe("Continuation", () => {
       fc.asyncProperty(fc.integer(), async a => {
         const value1 = map(g, map(f, pure(a)));
         const output1 = await runContinuationToPromise(value1);
-        const value2 = map(a => g(f(a)), pure(a));
+        const value2 = map((a: any) => g(f(a)), pure(a));
         const output2 = await runContinuationToPromise(value2);
         expect(output1).toEqual(output2);
       })
@@ -107,7 +109,7 @@ describe("Continuation", () => {
 
   // ie, pure does nothing interesting pt 1
   it.skip("Obeys left identity law", async () => {
-    const f = a => pure([a, a]);
+    const f = <A>(a: A) => pure([a, a]);
     await fc.assert(
       fc.asyncProperty(fc.string(), async a => {
         const value1 = bind(f, pure(a));
@@ -133,16 +135,43 @@ describe("Continuation", () => {
 
   // ie, nesting doesn't matter
   it.skip("Obeys monad associativity law", async () => {
-    const f = a => pure([a, a]);
-    const g = a => pure(a + 2);
+    const f = <A>(a: A) => pure([a, a]);
+    const g = (a: number) => pure(a + 2);
     await fc.assert(
       fc.asyncProperty(fc.integer(), async a => {
         const value1 = bind(f, bind(g, pure(a)));
-        const value2 = bind(b => bind(f, g(b)), pure(a));
+        const value2 = bind((b: any) => bind(f, g(b)), pure(a));
         const output1 = await runContinuationToPromise(value1);
         const output2 = await runContinuationToPromise(value2);
         return expect(output1).toEqual(output2);
       })
+    );
+  });
+
+  it.skip("liftA2", async () => {
+    const f = <A>(a: A) => <B>(b: B) => [a, b];
+    await fc.assert(
+      fc.asyncProperty(fc.anything(), fc.anything(), async (a, b) => {
+        const value = liftA2(f, pure(a), pure(b));
+        const output = await runContinuationToPromise(value);
+        return expect(output).toEqual([a, b]);
+      })
+    );
+  });
+
+  it.skip("liftA3", async () => {
+    const f = <A>(a: A) => <B>(b: B) => <C>(c: C) => [a, b, c];
+    await fc.assert(
+      fc.asyncProperty(
+        fc.anything(),
+        fc.anything(),
+        fc.anything(),
+        async (a, b, c) => {
+          const value = liftA3(f, pure(a), pure(b), pure(c));
+          const output = await runContinuationToPromise(value);
+          return expect(output).toEqual([a, b, c]);
+        }
+      )
     );
   });
 });

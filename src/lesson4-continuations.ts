@@ -10,7 +10,7 @@ export const runContinuationToPromise = <A>(
     value.runContinuation(resolve);
   });
 
-const continuation = <A>(
+export const continuation = <A>(
   runContinuation: (next: (a: A) => void) => void
 ): Continuation<A> => ({
   type: "Continuation",
@@ -31,6 +31,9 @@ export const bind = undefined as any;
 
 // liftA2 :: (A -> B -> C) -> Continuation A -> Continuation B -> Continuation C
 export const liftA2 = undefined as any;
+
+// liftA3 :: (A -> B -> C -> D) -> Continuation A -> Continuation B -> Continuation C -> Continuation D
+export const liftA3 = undefined as any;
 
 // race :: Continuation A -> Continuation A -> Continuation A
 
