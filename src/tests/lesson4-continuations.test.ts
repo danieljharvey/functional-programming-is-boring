@@ -8,11 +8,11 @@ import {
 } from "../lesson4-continuations";
 
 describe("Continuation", () => {
-  it("Pure works", async () => {
+  it.skip("Pure works", async () => {
     const result = await runContinuationToPromise(pure("dog"));
     expect(result).toEqual("dog");
   });
-  it("Obeys associativity", async () => {
+  it.skip("Obeys associativity", async () => {
     await fc.assert(
       fc.asyncProperty(fc.anything(), async a => {
         const value = map(a => a, pure(a));
@@ -21,7 +21,7 @@ describe("Continuation", () => {
       })
     );
   });
-  it("Obeys composition", async () => {
+  it.skip("Obeys composition", async () => {
     const f = (a: number): string => `---${a}---`;
     const g = (s: string): string => `${s}${s}`;
 
@@ -36,7 +36,7 @@ describe("Continuation", () => {
     );
   });
 
-  it("Obeys applicative identity", async () => {
+  it.skip("Obeys applicative identity", async () => {
     const id = <A>(a: A): A => a;
     await fc.assert(
       fc.asyncProperty(fc.anything(), async (a: any) => {
@@ -47,7 +47,7 @@ describe("Continuation", () => {
     );
   });
 
-  it("Obeys applicative composition", async () => {
+  it.skip("Obeys applicative composition", async () => {
     const v = pure((a: number) => `---${a}---`);
     const u = pure((s: string) => `${s}${s}`);
     const compose = <B, C>(f: (b: B) => C) => <A>(g: (a: A) => B) => (
@@ -66,7 +66,7 @@ describe("Continuation", () => {
     );
   });
 
-  it("Obeys homomorphism law", async () => {
+  it.skip("Obeys homomorphism law", async () => {
     const f = (a: number) => a + 2;
     await fc.assert(
       fc.asyncProperty(fc.integer(), async a => {
@@ -79,7 +79,7 @@ describe("Continuation", () => {
     );
   });
 
-  it("Obeys interchange law", async () => {
+  it.skip("Obeys interchange law", async () => {
     const f = (a: any): [any, any, any] => [a, a, a];
     await fc.assert(
       fc.asyncProperty(fc.anything(), async a => {
@@ -96,7 +96,7 @@ describe("Continuation", () => {
     );
   });
 
-  it("Has working bind", async () => {
+  it.skip("Has working bind", async () => {
     const f = (a: string) => pure(`${a}horses${a}`);
     const a = "dog";
     const value = bind(f, pure(a));
@@ -106,7 +106,7 @@ describe("Continuation", () => {
   });
 
   // ie, pure does nothing interesting pt 1
-  it("Obeys left identity law", async () => {
+  it.skip("Obeys left identity law", async () => {
     const f = a => pure([a, a]);
     await fc.assert(
       fc.asyncProperty(fc.string(), async a => {
@@ -119,7 +119,7 @@ describe("Continuation", () => {
     );
   });
   // ie, pure does nothing interesting pt 2
-  it("Obeys right identity law", async () => {
+  it.skip("Obeys right identity law", async () => {
     await fc.assert(
       fc.asyncProperty(fc.string(), async a => {
         const value1 = bind(pure, pure(a));
@@ -132,7 +132,7 @@ describe("Continuation", () => {
   });
 
   // ie, nesting doesn't matter
-  it("Obeys monad associativity law", async () => {
+  it.skip("Obeys monad associativity law", async () => {
     const f = a => pure([a, a]);
     const g = a => pure(a + 2);
     await fc.assert(

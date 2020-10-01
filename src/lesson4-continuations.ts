@@ -18,35 +18,16 @@ const continuation = <A>(
 });
 
 // pure :: A -> Continuation A
-export const pure = <A>(a: A): Continuation<A> =>
-  continuation(next => next(a));
+export const pure = undefined as any;
 
 // map :: (A -> B) -> Continuation A -> Continuation B
-export const map = <A, B>(
-  f: (a: A) => B,
-  value: Continuation<A>
-): Continuation<B> =>
-  continuation(next => value.runContinuation(a => next(f(a))));
+export const map = undefined as any;
 
 // ap :: Continuation (A -> B) -> Continuation A -> Continuation B
-export const ap = <A, B>(
-  fAB: Continuation<(a: A) => B>,
-  a: Continuation<A>
-): Continuation<B> =>
-  continuation<B>(next =>
-    fAB.runContinuation((f: (a: A) => B) =>
-      a.runContinuation((a: A) => next(f(a)))
-    )
-  );
+export const ap = undefined as any;
 
 // bind :: (A -> Continuation B) -> Continuation A -> Continuation B
-export const bind = <A, B>(
-  aToFB: (a: A) => Continuation<B>,
-  value: Continuation<A>
-): Continuation<B> =>
-  continuation<B>(next =>
-    value.runContinuation(a => aToFB(a).runContinuation(b => next(b)))
-  );
+export const bind = undefined as any;
 
 // race :: Continuation A -> Continuation A -> Continuation A
 
