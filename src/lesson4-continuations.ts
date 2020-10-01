@@ -29,6 +29,9 @@ export const ap = undefined as any;
 // bind :: (A -> Continuation B) -> Continuation A -> Continuation B
 export const bind = undefined as any;
 
+// liftA2 :: (A -> B -> C) -> Continuation A -> Continuation B -> Continuation C
+export const liftA2 = undefined as any;
+
 // race :: Continuation A -> Continuation A -> Continuation A
 
 // delay :: Int -> Continuation A -> Continuation
