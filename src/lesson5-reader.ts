@@ -6,40 +6,26 @@ export const reader = <R, A>(runReader: (r: R) => A): Reader<R, A> => ({
   runReader: runReader
 });
 
-// take A and plop it into the Reader context
-// A -> Reader R A
-export const pure = <R, A>(a: A): Reader<R, A> => reader(_ => a);
-
 // run the computation, by passing it the environment
 export const runReader = <R, A>(environment: R, value: Reader<R, A>): A =>
   value.runReader(environment);
 
+// take A and plop it into the Reader context
+// pure :: A -> Reader R A
+export const pure = undefined as any;
+
 // Let's add mapping
 // map :: (A -> B) -> Reader R A -> Reader R B
-export const map = <R, A, B>(
-  fn: (a: A) => B,
-  readA: Reader<R, A>
-): Reader<R, B> => reader(r => fn(readA.runReader(r)));
+export const map = undefined as any;
 
 // bind :: (A -> Reader R B) -> Reader R A -> Reader R B
-export const bind = <R, A, B>(
-  fn: (a: A) => Reader<R, B>,
-  readA: Reader<R, A>
-): Reader<R, B> => reader(r => fn(readA.runReader(r)).runReader(r));
+export const bind = undefined as any;
 
 // ap :: Reader R (A -> B) -> Reader R A -> Reader R B
-export const ap = <R, A, B>(
-  readF: Reader<R, (a: A) => B>,
-  readA: Reader<R, A>
-): Reader<R, B> =>
-  reader(r => {
-    const f = readF.runReader(r);
-    const a = readA.runReader(r);
-    return f(a);
-  });
+export const ap = undefined as any;
 
 // curry2 :: (A, B -> C) -> A -> B -> C
-const curry2 = <A, B, C>(f: (a: A, b: B) => C) => (a: A) => (b: B) => f(a, b);
+const curry2 = undefined as any;
 
 // liftA2 :: (A -> B -> C) -> Reader R A -> Reader R B -> Reader R C
 export const liftA2 = <R, A, B, C>(
@@ -207,66 +193,16 @@ export type Environment = {
 };
 
 // horseNameExists :: Reader Environment (Maybe Stable)
-const horseNameExists = (
-  horseName: string
-): Reader<Environment, Maybe<Stable>> =>
-  reader(({ horseInfo, logger }) => {
-    logger(`Checking for horse name: ${horseName}`);
-    return horseInfo.acceptableNames.indexOf(horseName) !== -1
-      ? just(
-          makeStableWithHorse({
-            type: "Horse",
-            name: horseName,
-            legs: horseInfo.expectedLegs,
-            tail: horseInfo.expectedTail
-          })
-        )
-      : nothing();
-  });
-
-// showHorseAcceptability :: Maybe<Stable> -> String
-const showHorseAcceptability = (value: Maybe<Stable>): string =>
-  value.type === "Nothing"
-    ? "No good horses here I am afraid"
-    : value.value.horses
-        .map(horse => `${horse.name} is an acceptable horse`)
-        .join(", ");
 
 // readerMonoid :: Monoid<Reader<R,A>>
-const readerMonoid = <R, A>(monoid: Monoid<A>): Monoid<Reader<R, A>> => ({
-  empty: pure(monoid.empty),
-  append: (readA, readB) => liftA2(monoid.append, readA, readB)
-});
 
 // readerMaybeStableMonoid :: Monoid<Reader<Maybe<Stable>>>
-const readerMaybeStableMonoid = readerMonoid<Environment, Maybe<Stable>>(
-  maybeMonoid(stableMonoid())
-);
 
-// check feature flag to see if we should convert name to uppercase
-// and log what we are doing
-const horseNameToUppercase = (name: string): Reader<Environment, string> =>
-  reader(({ logger, featureFlags }) => {
-    if (featureFlags.convertToUppercase) {
-      logger("Converting to uppercase");
-      return name.toUpperCase();
-    }
-    logger("Not converting to uppercase");
-    return name;
-  });
+// horseNameToUppercase :: String -> Reader Environment String
 
 // bigHorseValidator :: String[] -> Reader Environment (Maybe Stable)
-const bigHorseValidator = (
-  names: string[]
-): Reader<Environment, Maybe<Stable>> => {
-  const readerHorses = names.map(name =>
-    bind(horseNameExists, horseNameToUppercase(name))
-  );
-  return concat(readerMaybeStableMonoid, readerHorses);
-};
+
+// showHorseAcceptability :: Maybe Stable -> String
 
 // acceptableHorsesCheck :: String[] -> Reader Environment String
-export const acceptableHorsesCheck = (
-  names: string[]
-): Reader<Environment, string> =>
-  map(showHorseAcceptability, bigHorseValidator(names));
+export const acceptableHorsesCheck = undefined as any;
