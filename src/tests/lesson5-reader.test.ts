@@ -7,36 +7,22 @@ import {
   bind,
   liftA2,
   horseInformation,
-  read1,
-  read2,
-  read3,
-  read4,
-  acceptableHorsesCheck
+  acceptableHorsesCheck,
+  oldAcceptableHorsesCheck,
+  Environment
 } from "../lesson5-reader";
 
 const environment = { name: "Mr Horse", age: 100 };
 
-describe("Reader Part 1", () => {
-  it("Reader test 1", () => {
-    expect(runReader(horseInformation, read1)).toEqual("Horses");
-  });
+const testEnv: Environment = {
+  horseInfo: horseInformation,
+  logger: _ => {},
+  featureFlags: {
+    convertToUppercase: true
+  }
+};
 
-  it("Reader test 2", () => {
-    expect(runReader(horseInformation, read2)).toEqual("HORSES");
-  });
-
-  it("Reader test 3", () => {
-    expect(runReader(horseInformation, read3)).toEqual({
-      type: "Nothing"
-    });
-  });
-
-  it("Reader test 4", () => {
-    expect(runReader(horseInformation, read4)).toEqual(
-      "HOOVES GALORE is an acceptable horse"
-    );
-  });
-
+describe("Reader functions", () => {
   it("Pure works", () => {
     const result = runReader(environment, pure("dog"));
     expect(result).toEqual("dog");
@@ -114,9 +100,7 @@ describe("Reader Part 1", () => {
       })
     );
   });
-});
 
-describe("Reader Part 2", () => {
   it("Obeys applicative identity", () => {
     const id = <A>(a: A): A => a;
     fc.assert(
@@ -186,21 +170,66 @@ describe("Reader Part 2", () => {
       })
     );
   });
+});
 
-  it("Reader test 5 part 1", () => {
+describe("Reader exercise", () => {
+  it("Original example functions work", () => {
     expect(
-      runReader(horseInformation, acceptableHorsesCheck(["Steve Bannon"]))
+      oldAcceptableHorsesCheck(
+        testEnv.logger,
+        testEnv.horseInfo,
+        testEnv.featureFlags,
+        ["Paul Dacre"]
+      )
     ).toEqual("No good horses here I am afraid");
-  });
-
-  it("Reader test 5 part 2", () => {
     expect(
-      runReader(
-        horseInformation,
-        acceptableHorsesCheck(["Steve Bannon", "CHAMPION", "HOOVES GALORE"])
+      oldAcceptableHorsesCheck(
+        testEnv.logger,
+        testEnv.horseInfo,
+        testEnv.featureFlags,
+        ["Steve Bannon", "champion", "HOOVES GALORE"]
       )
     ).toEqual(
       "CHAMPION is an acceptable horse, HOOVES GALORE is an acceptable horse"
     );
+    expect(
+      oldAcceptableHorsesCheck(
+        testEnv.logger,
+        testEnv.horseInfo,
+        { convertToUppercase: false },
+        ["Steve Bannon", "champion", "HOOVES GALORE"]
+      )
+    ).toEqual("HOOVES GALORE is an acceptable horse");
+  });
+  it("Reader test part 1", () => {
+    expect(
+      runReader(testEnv, acceptableHorsesCheck(["Steve Bannon"]))
+    ).toEqual("No good horses here I am afraid");
+  });
+
+  it("Reader test part 2", () => {
+    expect(
+      runReader(
+        testEnv,
+        acceptableHorsesCheck(["Steve Bannon", "champion", "HOOVES GALORE"])
+      )
+    ).toEqual(
+      "CHAMPION is an acceptable horse, HOOVES GALORE is an acceptable horse"
+    );
+  });
+
+  it("Reader test part 3", () => {
+    const testEnv2 = {
+      ...testEnv,
+      featureFlags: {
+        convertToUppercase: false
+      }
+    };
+    expect(
+      runReader(
+        testEnv2,
+        acceptableHorsesCheck(["Steve Bannon", "champion", "HOOVES GALORE"])
+      )
+    ).toEqual("HOOVES GALORE is an acceptable horse");
   });
 });
