@@ -206,7 +206,7 @@ export type Environment = {
   featureFlags: FeatureFlags;
 };
 
-// horseNameExists :: Reader Environment (Maybe Stable)
+// horseNameExists :: String -> Reader Environment (Maybe Stable)
 const horseNameExists = (
   horseName: string
 ): Reader<Environment, Maybe<Stable>> =>
