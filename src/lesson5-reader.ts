@@ -192,7 +192,7 @@ export type Environment = {
   featureFlags: FeatureFlags;
 };
 
-// horseNameExists :: Reader Environment (Maybe Stable)
+// horseNameExists :: String -> Reader Environment (Maybe Stable)
 
 // readerMonoid :: Monoid<Reader<R,A>>
 
