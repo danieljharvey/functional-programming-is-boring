@@ -1,4 +1,5 @@
 import {
+  Horse,
   statusCode,
   timestamp,
   postcode,
@@ -13,7 +14,7 @@ import {
 } from "../lesson6-optics";
 
 describe("Lesson 6 - optics", () => {
-  describe("Get", () => {
+  describe.skip("Get", () => {
     it("Gets the status code", () => {
       expect(statusCode).toEqual(201);
     });
@@ -30,7 +31,7 @@ describe("Lesson 6 - optics", () => {
       expect(horseName).toEqual("CHAMPION");
     });
   });
-  describe("Set", () => {
+  describe.skip("Set", () => {
     it("Sets the status code to 400", () => {
       expect(responseWith400StatusCode).toEqual({
         ...sampleResponse,
@@ -68,7 +69,7 @@ describe("Lesson 6 - optics", () => {
       });
     });
   });
-  describe("Modify", () => {
+  describe.skip("Modify", () => {
     it("Happy birthday horse", () => {
       const response = horseBirthday(sampleResponse);
       expect(response).toEqual({
@@ -87,7 +88,7 @@ describe("Lesson 6 - optics", () => {
     });
     it("Creates a horse mapping function", () => {
       const response = mapHorse(
-        horse => ({ ...horse, age: horse.age + 1 }),
+        (horse: Horse) => ({ ...horse, age: horse.age + 1 }),
         sampleResponse
       );
       expect(response).toEqual({

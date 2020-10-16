@@ -3,19 +3,9 @@ import { Lens } from "monocle-ts";
 const statusCodeL = Lens.fromProp<Response>()("statusCode");
 const dataL = Lens.fromProp<Response>()("data");
 
-const timestampL = dataL.compose(Lens.fromProp<Data>()("timestamp"));
+// const timestampL = dataL.compose(Lens.fromProp<Data>()("timestamp"));
 
-const stableL = dataL.compose(Lens.fromProp<Data>()("stable"));
-const postcodeL = stableL.compose(Lens.fromProp<Stable>()("postcode"));
-
-const horseL = stableL.compose(Lens.fromProp<Stable>()("horse"));
-const horseLegsL = horseL.compose(Lens.fromProp<Horse>()("numberOfLegs"));
-const horseNameL = horseL.compose(Lens.fromProp<Horse>()("name"));
-
-const horseTailL = horseL.compose(Lens.fromProp<Horse>()("hasTail"));
-const horseAgeL = horseL.compose(Lens.fromProp<Horse>()("age"));
-
-type Horse = {
+export type Horse = {
   name: string;
   age: number;
   numberOfLegs: number;
@@ -69,33 +59,32 @@ export const sampleResponse: Response = {
 export const statusCode = statusCodeL.get(sampleResponse);
 
 // timestamp: number
-export const timestamp = timestampL.get(sampleResponse);
+export const timestamp = undefined as any;
 
 // postcode :: string
-export const postcode = postcodeL.get(sampleResponse);
+export const postcode = undefined as any;
 
 // horseLegs :: number
-export const horseLegs = horseLegsL.get(sampleResponse);
+export const horseLegs = undefined as any;
 
 // horseName :: string
-export const horseName = horseNameL.get(sampleResponse);
+export const horseName = undefined as any;
 
 // setters
 
 // responseWith400StatusCode :: Response
-export const responseWith400StatusCode = statusCodeL.set(400)(sampleResponse);
+export const responseWith400StatusCode = undefined as any;
 
 // responseWithRemovedTail :: Response
-export const responseWithRemovedTail = horseTailL.set(false)(sampleResponse);
+export const responseWithRemovedTail = undefined as any;
 
 // responseWithAdditionalLeg :: Response
-export const responseWithAdditionalLeg = horseLegsL.set(4)(sampleResponse);
+export const responseWithAdditionalLeg = undefined as any;
 
 // over
 
 // horseBirthday :: Response -> Response
-export const horseBirthday = horseAgeL.modify(a => a + 1);
+export const horseBirthday = undefined as any;
 
 // mapHorse :: (Horse -> Horse) -> Response -> Response
-export const mapHorse = (f: (a: Horse) => Horse, resp: Response): Response =>
-  horseL.modify(f)(resp);
+export const mapHorse = undefined as any;
