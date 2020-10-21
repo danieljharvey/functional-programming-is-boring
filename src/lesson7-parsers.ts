@@ -1,20 +1,21 @@
 // rustle up a quick maybe type
 
-type Just<A> = { type: "Just"; value: A };
-type Nothing = { type: "Nothing" };
-type Maybe<A> = Nothing | Just<A>;
+export type Just<A> = { type: "Just"; value: A };
+export type Nothing = { type: "Nothing" };
+export type Maybe<A> = Nothing | Just<A>;
 
-const just = <A>(value: A): Maybe<A> => ({ type: "Just", value });
+export const just = <A>(value: A): Maybe<A> => ({ type: "Just", value });
 
-const nothing = (): Maybe<never> => ({ type: "Nothing" });
+export const nothing = (): Maybe<never> => ({ type: "Nothing" });
 
-const maybeMap = <A, B>(f: (a: A) => B, maybe: Maybe<A>): Maybe<B> =>
+export const maybeMap = <A, B>(f: (a: A) => B, maybe: Maybe<A>): Maybe<B> =>
   maybe.type === "Just" ? just(f(maybe.value)) : nothing();
 
-const isNothing = <A>(maybe: Maybe<A>): maybe is Nothing =>
+export const isNothing = <A>(maybe: Maybe<A>): maybe is Nothing =>
   maybe.type === "Nothing";
 
-const isJust = <A>(maybe: Maybe<A>): maybe is Just<A> => !isNothing(maybe);
+export const isJust = <A>(maybe: Maybe<A>): maybe is Just<A> =>
+  !isNothing(maybe);
 
 // and off we go...
 
@@ -31,6 +32,14 @@ export const makeParser = <A>(
   type: "Parser",
   parse
 });
+
+export const runParser = <A>(parser: Parser<A>, input: string): Maybe<A> => {
+  const result = parser.parse(input);
+  if (isNothing(result)) {
+    return nothing();
+  }
+  return result.value[0].length === 0 ? just(result.value[1]) : nothing();
+};
 
 // take the first X characters of string, returns null if X is over string
 // length
@@ -59,6 +68,12 @@ export const alt = <A>(parser1: Parser<A>, parser2: Parser<A>): Parser<A> =>
     }
     return parser2.parse(input);
   });
+
+// provide a list of alternatives that will be tried in order
+export const altMany = <A>(
+  parser1: Parser<A>,
+  ...parsers: Parser<A>[]
+): Parser<A> => parsers.reduce((total, parser) => alt(total, parser), parser1);
 
 // try parserA, and if succeeds, pass the result to thenParserB
 export const andThen = <A, B>(
@@ -172,18 +187,32 @@ export const matchLiteral = <Lit extends string>(lit: Lit): Parser<Lit> =>
     return match === lit ? just([rest, lit]) : nothing();
   });
 
-// predicate for a char which is a letter or number
-const isAlphaNumeric = (char: string): boolean => {
+// predicate for number
+const isNumber = (char: string): boolean => {
   const code = char.charCodeAt(0);
   return (
-    (code > 47 && code < 58) || // numeric (0-9)
+    code > 47 && code < 58 // numeric (0-9)
+  );
+};
+
+// predicate for letter
+const isLetter = (char: string): boolean => {
+  const code = char.charCodeAt(0);
+  return (
     (code > 64 && code < 91) || // upper alpha (A-Z)
     (code > 96 && code < 123) // lower alpha (a-z)
   );
 };
 
+// predicate for a char which is a letter or number
+const isAlphaNumeric = (char: string): boolean =>
+  isLetter(char) || isNumber(char);
+
 // parse a single alphanumeric char
 export const alphaNumeric = pred(anyChar, isAlphaNumeric);
+
+// parse a single digit
+export const number = pred(anyChar, isNumber);
 
 // parse a string of alphanumeric chars
 export const identifier = map(oneOrMore(alphaNumeric), as => as.join(""));
@@ -196,3 +225,132 @@ export const space0 = zeroOrMore(whitespace);
 
 // parser of required space
 export const space1 = oneOrMore(whitespace);
+
+// if parsers finds match, return output
+const mapLiteral = <A>(match: string, output: A): Parser<A> =>
+  map(matchLiteral(match), _ => output);
+
+// example: person@bulb.co.uk
+// would become { name: 'person', country: "UK" }
+
+type EmailCountry = "UK" | "USA" | "SPAIN" | "FRANCE";
+
+export type BulbEmailAddress = {
+  name: string;
+  country: EmailCountry;
+};
+
+const ukParser: Parser<EmailCountry> = mapLiteral("co.uk", "UK");
+const usaParser: Parser<EmailCountry> = mapLiteral("com", "USA");
+const spainParser: Parser<EmailCountry> = mapLiteral("es", "SPAIN");
+const franceParser: Parser<EmailCountry> = mapLiteral("fr", "FRANCE");
+
+const emailCountryParser: Parser<EmailCountry> = altMany(
+  ukParser,
+  usaParser,
+  spainParser,
+  franceParser
+);
+
+export const bulbEmailParser: Parser<BulbEmailAddress> = map(
+  pair(
+    left(identifier, matchLiteral("@bulb")),
+    right(matchLiteral("."), emailCountryParser)
+  ),
+  ([name, country]) => ({ name, country })
+);
+
+////////////
+// Exercise - meter serial numbers as per https://en.wikipedia.org/wiki/Meter_serial_number
+//
+
+/*
+A, B, D, Z	AMPY (now owned by Landis + Gyr)
+C	CEWE
+D	Landis + Gyr
+E	EDMI
+F	Siemens Metering Ltd (also FML, Ferranti)
+H	Secure Controls
+I	Iskraemeco
+J	Jinling (Shanghai Electricity)
+K	Elster/ABB
+L	Landis + Gyr
+M	General Electric
+P	(PRI) Polymeters Response International
+R	Sagem
+S	Actaris/Schlumberger (now owned by Itron)[1][2]
+*/
+
+type ManufacturerCode =
+  | "AMPY"
+  | "CEWE"
+  | "Landis+Gyr"
+  | "EDMI"
+  | "Siemens"
+  | "Secure"
+  | "Iskraemeco"
+  | "Jinling"
+  | "Elster"
+  | "GeneralElectric"
+  | "Polymeters"
+  | "Sagem"
+  | "Actaris";
+
+type Year = number;
+
+type BatchNumber = number;
+
+type PurchasingCompany = string;
+
+type MeterSerialNumber = {
+  manufacturer: ManufacturerCode;
+  year: Year;
+  purchasingCompany: PurchasingCompany;
+  batchNumber: BatchNumber;
+};
+
+// two digit number
+const yearParser: Parser<Year> = map(pair(number, number), ([a, b]) =>
+  Number(`${a}${b}`)
+);
+
+// six digit number
+const batchNumberParser: Parser<BatchNumber> = map(oneOrMore(number), as =>
+  Number(as.join(""))
+);
+
+const landis: Parser<ManufacturerCode> = map(
+  altMany(
+    matchLiteral("A"),
+    matchLiteral("B"),
+    matchLiteral("D"),
+    matchLiteral("Z")
+  ),
+  _ => "Landis+Gyr"
+);
+
+const manufacturerParser: Parser<ManufacturerCode> = altMany(
+  landis,
+  mapLiteral("C", "CEWE"),
+  mapLiteral("D", "Landis+Gyr"),
+  mapLiteral("E", "EDMI"),
+  mapLiteral("F", "Siemens")
+);
+
+const purchasingCompanyParser = map(
+  pair(anyChar, anyChar),
+  ([a, b]) => `${a}${b}`
+);
+
+export const msnParser: Parser<MeterSerialNumber> = map(
+  pair(
+    pair(manufacturerParser, yearParser),
+    pair(purchasingCompanyParser, batchNumberParser)
+  ),
+  ([[manufacturer, year], [purchasingCompany, batchNumber]]) => ({
+    manufacturer,
+    year,
+    purchasingCompany,
+    batchNumber
+  })
+);
