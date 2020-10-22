@@ -310,13 +310,17 @@ type MeterSerialNumber = {
 };
 
 // two digit number
-const yearParser: Parser<Year> = map(pair(number, number), ([a, b]) =>
+export const yearParser: Parser<Year> = map(pair(number, number), ([a, b]) =>
   Number(`${a}${b}`)
 );
 
-// six digit number
-const batchNumberParser: Parser<BatchNumber> = map(oneOrMore(number), as =>
-  Number(as.join(""))
+// five or six digit number
+export const batchNumberParser: Parser<BatchNumber> = map(
+  pred(
+    map(oneOrMore(number), as => as.join("")),
+    a => a.length === 6 || a.length === 5
+  ),
+  Number
 );
 
 const landis: Parser<ManufacturerCode> = map(
@@ -329,15 +333,16 @@ const landis: Parser<ManufacturerCode> = map(
   _ => "Landis+Gyr"
 );
 
-const manufacturerParser: Parser<ManufacturerCode> = altMany(
+export const manufacturerParser: Parser<ManufacturerCode> = altMany(
   landis,
   mapLiteral("C", "CEWE"),
   mapLiteral("D", "Landis+Gyr"),
   mapLiteral("E", "EDMI"),
-  mapLiteral("F", "Siemens")
+  mapLiteral("F", "Siemens"),
+  mapLiteral("H", "Secure")
 );
 
-const purchasingCompanyParser = map(
+export const purchasingCompanyParser = map(
   pair(anyChar, anyChar),
   ([a, b]) => `${a}${b}`
 );
