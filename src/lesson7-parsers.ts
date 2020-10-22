@@ -240,10 +240,10 @@ export type BulbEmailAddress = {
   country: EmailCountry;
 };
 
-const ukParser: Parser<EmailCountry> = mapLiteral("co.uk", "UK");
-const usaParser: Parser<EmailCountry> = mapLiteral("com", "USA");
-const spainParser: Parser<EmailCountry> = mapLiteral("es", "SPAIN");
-const franceParser: Parser<EmailCountry> = mapLiteral("fr", "FRANCE");
+const ukParser: Parser<EmailCountry> = undefined as any;
+const usaParser: Parser<EmailCountry> = undefined as any;
+const spainParser: Parser<EmailCountry> = undefined as any;
+const franceParser: Parser<EmailCountry> = undefined as any;
 
 const emailCountryParser: Parser<EmailCountry> = altMany(
   ukParser,
@@ -252,13 +252,7 @@ const emailCountryParser: Parser<EmailCountry> = altMany(
   franceParser
 );
 
-export const bulbEmailParser: Parser<BulbEmailAddress> = map(
-  pair(
-    left(identifier, matchLiteral("@bulb")),
-    right(matchLiteral("."), emailCountryParser)
-  ),
-  ([name, country]) => ({ name, country })
-);
+export const bulbEmailParser: Parser<BulbEmailAddress> = undefined as any;
 
 ////////////
 // Exercise - meter serial numbers as per https://en.wikipedia.org/wiki/Meter_serial_number
@@ -310,42 +304,14 @@ type MeterSerialNumber = {
 };
 
 // two digit number
-export const yearParser: Parser<Year> = map(pair(number, number), ([a, b]) =>
-  Number(`${a}${b}`)
-);
+export const yearParser: Parser<Year> = undefined as any;
 
 // five or six digit number
-export const batchNumberParser: Parser<BatchNumber> = map(
-  pred(
-    map(oneOrMore(number), as => as.join("")),
-    a => a.length === 6 || a.length === 5
-  ),
-  Number
-);
+export const batchNumberParser: Parser<BatchNumber> = undefined as any;
 
-const landis: Parser<ManufacturerCode> = map(
-  altMany(
-    matchLiteral("A"),
-    matchLiteral("B"),
-    matchLiteral("D"),
-    matchLiteral("Z")
-  ),
-  _ => "Landis+Gyr"
-);
+export const manufacturerParser: Parser<ManufacturerCode> = undefined as any;
 
-export const manufacturerParser: Parser<ManufacturerCode> = altMany(
-  landis,
-  mapLiteral("C", "CEWE"),
-  mapLiteral("D", "Landis+Gyr"),
-  mapLiteral("E", "EDMI"),
-  mapLiteral("F", "Siemens"),
-  mapLiteral("H", "Secure")
-);
-
-export const purchasingCompanyParser = map(
-  pair(anyChar, anyChar),
-  ([a, b]) => `${a}${b}`
-);
+export const purchasingCompanyParser: Parser<PurchasingCompany> = undefined as any;
 
 export const msnParser: Parser<MeterSerialNumber> = map(
   pair(

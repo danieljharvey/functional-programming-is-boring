@@ -11,7 +11,7 @@ import {
 } from "../lesson7-parsers";
 
 describe("Lesson 7 - parsers", () => {
-  describe("Email parser", () => {
+  describe.skip("Email parser", () => {
     it("Fail on nonsense", () => {
       expect(runParser(bulbEmailParser, "dfgjkldfgjdfjlkg")).toEqual(
         nothing()
@@ -44,7 +44,7 @@ describe("Lesson 7 - parsers", () => {
       );
     });
   });
-  describe("MSN parser", () => {
+  describe.skip("MSN parser", () => {
     it("Fail on nonsense", () => {
       expect(runParser(msnParser, "dfgjkldfgjdfjlkg")).toEqual(nothing());
     });
