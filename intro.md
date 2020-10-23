@@ -13,15 +13,15 @@ patat:
 
 ## Hello.
 
-## Functional programming is exciting
+### Functional programming is exciting
 
-## Functional programming is **boring**
+### Functional programming is **boring**
 
-## Functional programming is difficult
+### Functional programming is difficult
 
-## **Imperative** programming is difficult
+### **Imperative** programming is difficult
 
-## Functional programming is **tediously predictable**
+### Functional programming is **tediously predictable**
 
 ## What's the big idea then?
 
@@ -112,7 +112,7 @@ const functionOne = (name: string) => {
 
 Mutating an external variable is a side effect and __NOT PURE__
 
-# If you chose function **TWO**
+## If you chose function **TWO**
 
 - Then great job
 
