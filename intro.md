@@ -11,19 +11,19 @@ patat:
   incrementalLists: true
 ...
 
-# Hello.
+## Hello.
 
-# Functional programming is exciting
+## Functional programming is exciting
 
-# Functional programming is **boring**
+## Functional programming is **boring**
 
-# Functional programming is difficult
+## Functional programming is difficult
 
-# **Imperative** programming is difficult
+## **Imperative** programming is difficult
 
-# Functional programming is **tediously predictable**
+## Functional programming is **tediously predictable**
 
-# What's the big idea then?
+## What's the big idea then?
 
 - Immutability 
 
@@ -37,7 +37,7 @@ patat:
 
 - __(making lots of small good things and combining them instead of big things)__
 
-# Sounds familiar....
+## Sounds familiar....
 
 That's because React has been slowly smuggling FP ideas into the mainstream for
 years
@@ -48,11 +48,11 @@ years
 
 - state machines and stuff (redux, xstate, blah)
 
-# Basically none of this should be wildly different
+## Basically none of this should be wildly different
 
 So pretty boring, basically.
 
-# I hear FP is about maths
+## I hear FP is about maths
 
 So, yes, and no.
 
@@ -65,7 +65,7 @@ So, yes, and no.
 - We can enjoy all the great bits without caring about any of that if we don't
   want to. 
 
-# Exercise one
+## Exercise one
 
 Spot the pure function:
 
@@ -94,11 +94,11 @@ const functionThree = (name: string) => {
 ```
 
 
-# What did you choose?
+## What did you choose?
 
-# Well?
+## Well?
 
-# If you chose function **ONE**
+## If you chose function **ONE**
 
 - Then bad news
 
@@ -128,7 +128,9 @@ const functionTwo = (horses: string[], name: string) => {
 Although this uses an external var, `goodHorseNames`, it doesn't mess with it,
 so it's a ~~totally sick and good function~~.
 
-# If you chose function **THREE**
+- (Although somebody else could still mutate `goodHorseNames` externally and we'd lose referential transparency, but we're doing our best here, it's Javascript ffs)
+
+## If you chose function **THREE**
 
 - Then kinda OK job
 
@@ -143,19 +145,19 @@ Although it doesn't mess with any variables or do anything seriously bad,
 logging is still a side effect. You think you don't care now until it makes
 your test output look like messy garbage.
 
-# OK, I am a functional programming expert now
+## OK, I am a functional programming expert now
 
 Now hang on.
 
 There is one more thing that divides the FP community bitterly.
 
-# TYPES
+## TYPES
 
 - Are they __totally sick__?
 
 - Or are they just ~~slowing down my 10x-ing~~?
 
-# SUBTEXT: I THINK THEY ARE TOTALLY SICK AND IMPORTANT
+## SUBTEXT: I THINK THEY ARE TOTALLY SICK AND IMPORTANT
 
 - If you are happy gluing lots of small
 
@@ -165,7 +167,7 @@ There is one more thing that divides the FP community bitterly.
 
 - then you are braver than I.
 
-# They also give a nice language to talk about things
+## They also give a nice language to talk about things
 
 - What does this function do?
 
@@ -191,7 +193,7 @@ const bleugh = <A,B>(a: A, b: B): A => {
 }
 ```
 
-# A notation for types
+## A notation for types
 
 When talking about the type signatures of functions, we can use `Hindley-Milner` notation.
 
@@ -212,4 +214,4 @@ functional signature.
 
 - The docs for `Ramda` have a [great guide](https://github.com/ramda/ramda/wiki/Type-Signatures) for these type signatures.
 
-# And now...onwards....
+## And now...onwards....
