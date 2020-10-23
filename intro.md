@@ -1,25 +1,8 @@
----
-title: Functional programming is boring
-author: Daniel J Harvey 
-patat:
-  wrap: true
-  margins:
-    left: 10
-    right: 10
-    top: 10
-    bottom: 10
-  incrementalLists: true
-...
+# Hello.
 
-## Hello.
+### Functional programming is ~~exciting~~ boring
 
-### Functional programming is exciting
-
-### Functional programming is **boring**
-
-### Functional programming is difficult
-
-### **Imperative** programming is difficult
+### ~~Functional~~ imperative programming is difficult
 
 ### Functional programming is **tediously predictable**
 
@@ -27,15 +10,15 @@ patat:
 
 - Immutability 
 
-- __(as much as possible)__
+- _(as much as possible)_
 
 - Purity
 
-- __(as much as possible)__
+- _(as much as possible)_
 
 - Composability
 
-- __(making lots of small good things and combining them instead of big things)__
+- _(making lots of small good things and combining them instead of big things)_
 
 ## Sounds familiar....
 
@@ -126,7 +109,7 @@ const functionTwo = (horses: string[], name: string) => {
 ```
 
 Although this uses an external var, `goodHorseNames`, it doesn't mess with it,
-so it's a ~~totally sick and good function~~.
+so it's a _totally sick and good function_.
 
 - (Although somebody else could still mutate `goodHorseNames` externally and we'd lose referential transparency, but we're doing our best here, it's Javascript ffs)
 
@@ -155,7 +138,7 @@ There is one more thing that divides the FP community bitterly.
 
 - Are they __totally sick__?
 
-- Or are they just ~~slowing down my 10x-ing~~?
+- Or are they just _slowing down my 10x-ing_?
 
 ## SUBTEXT: I THINK THEY ARE TOTALLY SICK AND IMPORTANT
 
