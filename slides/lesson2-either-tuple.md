@@ -1,16 +1,3 @@
----
-title: Lesson 2 - Either / Tuple
-author: Daniel J Harvey
-patat:
-  wrap: true
-  margins:
-    left: 10
-    right: 10
-    top: 10
-    bottom: 10
-  incrementalLists: true
-...
-
 # Part 2
 
 ##  if it isn't there, why isn't it?
