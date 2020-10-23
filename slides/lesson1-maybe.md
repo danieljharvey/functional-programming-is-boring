@@ -11,7 +11,7 @@ patat:
   incrementalLists: true
 ...
 
-# Part 1
+## Part 1
 
 Dealing with things that may or maybe not be there.
 
@@ -44,7 +44,7 @@ const getHorse = (name: string) => {
 };
 ```
 
-# How do we use this getHorse function?
+## How do we use this getHorse function?
 
 - What if there isn't a match?
 
@@ -58,7 +58,7 @@ if (horse) {
 
 - Seems fine I guess
 
-# How do we change `horse`?
+## How do we change `horse`?
 
 - Say we now need to tidy up those weird uppercase names
 
@@ -97,7 +97,7 @@ const horse = getHorse("CHAMPION");
 const tidyHorse = horse ? tidyHorseName(horse) : undefined;
 ```
 
-# One more thing
+## One more thing
 
 - Rules are rules, we are going to need to inspect this horse for a few things
 
@@ -131,7 +131,7 @@ const mandatoryTailCheck = (horse: Horse): GoodHorse | undefined => {
 };
 ```
 
-# How to use it
+## How to use it
 
 - Once again, we have two choices for dealing with the potential lack of `horse`
 
@@ -163,7 +163,7 @@ const tidyHorse = horse ? tidyHorseName(horse) : undefined;
 const goodHorse = tidyHorse ? mandatoryTailCheck(tidyHorse) : undefined;
 ```
 
-# Which do you prefer?
+## Which do you prefer?
 
 - .
 
@@ -173,7 +173,7 @@ const goodHorse = tidyHorse ? mandatoryTailCheck(tidyHorse) : undefined;
 
 - If you chose **none of them, i want more abstraction** then you are correct
 
-# A solution
+## A solution
 
 - What about a function that turns our normal function into a careful function?
 
@@ -197,7 +197,7 @@ const orElse = <A>(perhapsValue: A | undefined, def: A): A =>
   perhapsValue || def;
 ```
 
-# Pretty neat right?
+## Pretty neat right?
 
 - We could then use it like this?
 
@@ -227,7 +227,7 @@ horseFinder("CHAMPION"); // "Found a good horse named champion"
 
 - I think we can do better though....
 
-# Discriminated unions
+## Discriminated unions
 
 - We're familiar with **union types** right?
 
@@ -268,7 +268,7 @@ const weirdReducer = (action: Action) {
 }
 ```
 
-# Maybe
+## Maybe
 
 Maybe is a container for holding things that may or may not be there:
 
@@ -301,7 +301,7 @@ const b = nothing();
 // b == { type: "Nothing" }
 ```
 
-# Examples in action
+## Examples in action
 
 - We can then return this where we would have partial data
 
@@ -338,7 +338,7 @@ getHorse("NON-EXISTANT-HORSE")
 /*
 ```
 
-# There's no reason we can't make 'smart constructors' for Maybe values too
+## There's no reason we can't make 'smart constructors' for Maybe values too
 
 `fromMissing :: A | undefined -> Maybe a`
 
@@ -357,11 +357,11 @@ fromMissing(undefined)
 // { type: "Nothing" }
 ```
 
-# How would we use these to make the horse finding function nicer?
+## How would we use these to make the horse finding function nicer?
 
 - Down to you...
 
-# Answers
+## Answers
 
 - These are not the only answers, but some answers
 
@@ -401,7 +401,7 @@ const bind = (func: (a: A) => Maybe B, value: Maybe<A>): Maybe<B> =>
   value.type === 'Just' ? func(value.value) : nothing()
 ```
 
-# A note on currying
+## A note on currying
 
 Often in functional languages (or indeed, in libraries like `Ramda` or `fp-ts`)
 our functions are `curried`
@@ -434,6 +434,6 @@ add2(1) // 3
 
 - It does make things a lot more dense though
 
-# One last thing
+## One last thing
 
 - https://egghead.io/lessons/javascript-you-ve-been-using-monads
