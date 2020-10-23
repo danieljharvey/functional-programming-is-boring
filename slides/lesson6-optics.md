@@ -1,16 +1,3 @@
----
-title: Lesson 5 - Optics 
-author: Daniel J Harvey
-patat:
-  wrap: true
-  margins:
-    left: 10
-    right: 10
-    top: 10
-    bottom: 10
-  incrementalLists: true
-...
-
 # Part 6
 
 ## Optics
