@@ -17,7 +17,7 @@ patat:
 
 ### Functional programming is **boring**
 
-### Functional programming is difficult
+### Functional programming is difficult
 
 ### **Imperative** programming is difficult
 
