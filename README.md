@@ -1,4 +1,4 @@
-# :egg: Functional Programming Is Boring
+# :egg: Functional Programming Is Boring :egg:
 
 ## A completely OK short course on FP for Bulb Engineers.
 
@@ -45,6 +45,7 @@ Click on the words for information about subjects and things.
 ### Lesson 7 - Parsers
 
 [Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson7-parsers.md)
+
 [Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson7-parsers.ts)
 
 ## Installing stuff
