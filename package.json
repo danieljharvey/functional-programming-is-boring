@@ -6,6 +6,7 @@
   "author": "Daniel Harvey <danieljamesharvey@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.21.0",
     "fast-check": "^2.3.0",
     "fp-ts": "^2.8.4",
     "jest": "^26.4.2",
