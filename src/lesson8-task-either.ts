@@ -69,11 +69,7 @@ const errorHandler = (reason: any): MyError => {
 // axiosGetWithErrorHandler :: String -> TaskEither MyError ApiReturn
 const axiosGetWithErrorHandler = (
   url: string
-): TE.TaskEither<MyError, ApiReturn> =>
-  pipe(
-    TE.tryCatch(() => axios.get(url), errorHandler),
-    TE.map(resp => resp.data)
-  );
+): TE.TaskEither<MyError, ApiReturn> => undefined as any;
 
 export const third = axiosGetWithErrorHandler("https://httpstat.us/400");
 
@@ -107,16 +103,10 @@ const wrappedBadEndpoint: TE.TaskEither<MyError, ApiReturn> = pipe(
 // Now, let's take a look at the error. If it's an InternalError
 // then we're going to want to retry, otherwise we should give up
 // niceEndpoint :: TaskEither UserError ApiReturn
-export const niceEndpoint: TE.TaskEither<UserError, ApiReturn> = pipe(
-  wrappedBadEndpoint,
-  TE.orElse(myError => {
-    if (myError.type === "InternalError") {
-      return niceEndpoint;
-    }
-    // it's genuine user error, give up
-    return TE.left(myError);
-  })
-);
+export const niceEndpoint: TE.TaskEither<
+  UserError,
+  ApiReturn
+> = undefined as any;
 
 export const fourth: TE.TaskEither<UserError, ApiReturn> = niceEndpoint;
 
@@ -136,20 +126,7 @@ type NewError = UserError | TooManyAttempts;
 // niceEndpointWithLimit :: Number -> TaskEither NewError ApiReturn
 export const niceEndpointWithLimit = (
   attemptsLeft: number
-): TE.TaskEither<NewError, ApiReturn> =>
-  pipe(
-    wrappedBadEndpoint,
-    TE.orElse(myError => {
-      if (attemptsLeft < 1) {
-        return TE.left(tooManyAttempts);
-      }
-      if (myError.type === "InternalError") {
-        return niceEndpointWithLimit(attemptsLeft - 1);
-      }
-      // it's genuine user error, give up
-      return TE.left(myError);
-    })
-  );
+): TE.TaskEither<NewError, ApiReturn> => undefined as any;
 
 export const fifth: TE.TaskEither<NewError, ApiReturn> = niceEndpointWithLimit(
   4
@@ -176,21 +153,7 @@ export const withDelay = <E, A>(
 export const niceEndpointWithBackoff = (
   attempts: number,
   delay: number
-): TE.TaskEither<NewError, ApiReturn> =>
-  pipe(
-    withDelay(delay, wrappedBadEndpoint),
-    TE.orElse(myError => {
-      if (attempts < 1) {
-        return TE.left(tooManyAttempts);
-      }
-      if (myError.type === "InternalError") {
-        const newDelay = delay < 1 ? 50 : delay * 2;
-        return niceEndpointWithBackoff(attempts - 1, newDelay);
-      }
-      // it's genuine user error, give up
-      return TE.left(myError);
-    })
-  );
+): TE.TaskEither<NewError, ApiReturn> => undefined as any;
 
 export const sixth: TE.TaskEither<
   UserError | TooManyAttempts,
