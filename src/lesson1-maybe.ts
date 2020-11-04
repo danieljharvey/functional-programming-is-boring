@@ -96,59 +96,24 @@ const horseFinder = (name: string): string => {
 type Maybe<A> = { type: "Just"; value: A } | { type: "Nothing" };
 
 // just :: A -> Maybe A
-export const just = <A>(value: A): Maybe<A> => ({ type: "Just", value });
+export const just = undefined as any;
 
 // nothing :: () -> Maybe never
-export const nothing = (): Maybe<never> => ({ type: "Nothing" });
+export const nothing = undefined as any;
 
 // map :: (A -> B) -> Maybe A -> Maybe B
-export const map = <A, B>(f: (a: A) => B, maybeA: Maybe<A>): Maybe<B> =>
-  maybeA.type === "Just" ? just(f(maybeA.value)) : nothing();
+export const map = undefined as any;
 
 // orElse :: (A -> B) -> B -> Maybe A -> B
-export const orElse = <A, B>(f: (a: A) => B, def: B, maybeA: Maybe<A>): B =>
-  maybeA.type === "Just" ? f(maybeA.value) : def;
+export const orElse = undefined as any;
 
-export const bind = <A, B>(
-  f: (a: A) => Maybe<B>,
-  maybeA: Maybe<A>
-): Maybe<B> => (maybeA.type === "Just" ? f(maybeA.value) : nothing());
+export const bind = undefined as any;
 
 // newGetHorse :: String -> Maybe<Horse>
-export const newGetHorse = (name: string): Maybe<Horse> => {
-  let found;
-  standardHorses.forEach(standardHorse => {
-    if (standardHorse.name === name) {
-      found = standardHorse;
-    }
-  });
-  return found ? just(found) : nothing();
-};
+export const newGetHorse = undefined as any;
 
 // newMandatoryTailCheck :: Horse -> Maybe<StandardHorse>
-export const newMandatoryTailCheck = (horse: Horse): Maybe<StandardHorse> => {
-  if (!horse.hasTail || horse.legs !== 4) {
-    return nothing();
-  }
-  return just({
-    name: horse.name,
-    hasTail: true,
-    legs: 4,
-    type: "STANDARD_HORSE"
-  });
-};
+export const newMandatoryTailCheck = undefined as any;
 
 // newHorseFinder :: String -> String
-export const newHorseFinder = (name: string): string => {
-  const horse = newGetHorse(name);
-
-  const tidyHorse = map(tidyHorseName, horse);
-
-  const standardHorse = bind(newMandatoryTailCheck, tidyHorse);
-
-  return orElse(
-    horse => `Found a good horse named ${horse.name}`,
-    `${name} is not a good horse`,
-    standardHorse
-  );
-};
+export const newHorseFinder = undefined as any;
