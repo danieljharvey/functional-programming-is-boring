@@ -67,45 +67,24 @@ type StandardHorse = {
   type: "STANDARD_HORSE";
 };
 
-export const standardise = (
-  horse: Horse
-): Either<HorseError, StandardHorse> => {
-  if (!horse.hasTail) {
-    return left({ type: "HAS_NO_TAIL" });
-  }
-  if (horse.legs < 4) {
-    return left({ type: "NOT_ENOUGH_LEGS" });
-  }
-  if (horse.legs > 4) {
-    return left({ type: "TOO_MANY_LEGS" });
-  }
-  return right({
-    name: horse.name,
-    hasTail: true,
-    legs: 4,
-    type: "STANDARD_HORSE"
-  });
-};
+// standardise :: Horse -> Either HorseError StandardHorse
+export const standardise = (horse: Horse): Either<HorseError, StandardHorse> =>
+  undefined as any;
 
 // map :: (A -> B) -> Either E A -> Either E B
 export const map = <E, A, B>(
   fn: (a: A) => B,
   either: Either<E, A>
-): Either<E, B> => (either.type === "Left" ? either : right(fn(either.value)));
+): Either<E, B> => undefined as any;
 
 // bind :: (A -> Either E B) -> Either E A -> Either E B
 export const bind = <E, A, B>(
   fn: (a: A) => Either<E, B>,
   either: Either<E, A>
-): Either<E, B> => (either.type === "Left" ? either : fn(either.value));
+): Either<E, B> => undefined as any;
 
 // match :: (E -> B) -> (A -> B) -> Either E A -> B
-export const matchEither = <E, A, B>(
-  leftFn: (e: E) => B,
-  rightFn: (a: A) => B,
-  either: Either<E, A>
-): B =>
-  either.type === "Right" ? rightFn(either.value) : leftFn(either.value);
+export const matchEither = undefined as any;
 
 const showError = (err: HorseError): string => {
   switch (err.type) {
@@ -124,16 +103,4 @@ const showError = (err: HorseError): string => {
 // result into a sensible string
 
 // horseFinder :: String -> String
-export const horseFinder = (name: string): string => {
-  const horse = getHorse(name);
-
-  const tidyHorse = map(tidyHorseName, horse);
-
-  const standardisedHorse = bind(standardise, tidyHorse);
-
-  return matchEither(
-    (e: HorseError) => showError(e),
-    stdHorse => `What a good horse named ${stdHorse.name}`,
-    standardisedHorse
-  );
-};
+export const horseFinder = undefined as any;

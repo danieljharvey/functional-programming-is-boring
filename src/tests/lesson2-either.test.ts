@@ -9,7 +9,7 @@ import {
   horseFinder
 } from "../lesson2-either";
 
-describe("Either", () => {
+describe.skip("Either", () => {
   it("Right", () => {
     expect(right(1)).toEqual({ type: "Right", value: 1 });
   });
