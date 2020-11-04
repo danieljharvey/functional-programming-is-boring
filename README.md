@@ -48,6 +48,20 @@ Click on the words for information about subjects and things.
 
 [Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson7-parsers.ts)
 
+### Lesson 7 - TaskEither 
+
+[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson8-task-either.md)
+
+[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson8-task-either.ts)
+
+### Bonus 1 - Currying
+
+[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/currying.md)
+
+### Bonus 2 - Complexity
+
+[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/complexity.md)
+
 ## Installing stuff
 
 The exercises are in Typescript and be run as such:
