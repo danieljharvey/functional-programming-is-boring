@@ -160,60 +160,6 @@ const goodHorse = tidyHorse ? mandatoryTailCheck(tidyHorse) : undefined;
 
 - If you chose **none of them, i want more abstraction** then you are correct
 
-## A solution
-
-- What about a function that turns our normal function into a careful function?
-
-```typescript
-const perhapsMap = <A, B>(
-  func: (a: A) => B,
-  value: A | undefined
-): B | undefined => {
-  if (value) {
-    return func(value);
-  }
-  return undefined;
-};
-```
-
-- And another to give us a default value at the end if we couldn't find
-  anything?
-
-```typescript
-const orElse = <A>(perhapsValue: A | undefined, def: A): A =>
-  perhapsValue || def;
-```
-
-## Pretty neat right?
-
-- We could then use it like this?
-
-```typescript
-const horseFinder = (name: string): string => {
-  const horse = getHorse(name);
-
-  const tidyHorse = perhapsMap(tidyHorseName, horse);
-
-  const goodHorse = perhapsMap(mandatoryTailCheck, tidyHorse);
-
-  const horseMessage = perhapsMap(
-    horse => `Found a good horse named ${horse.name}`,
-    goodHorse
-  );
-
-  return orElse(horseMessage, `${name} is not a good horse`);
-};
-```
-
-- OK?
-
-```typescript
-horseFinder("JULIAN"); // "julian is not a good horse"
-horseFinder("CHAMPION"); // "Found a good horse named champion"
-```
-
-- I think we can do better though....
-
 ## Discriminated unions
 
 - We're familiar with **union types** right?
@@ -325,24 +271,18 @@ getHorse("NON-EXISTANT-HORSE")
 /*
 ```
 
-## There's no reason we can't make 'smart constructors' for Maybe values too
+## What about changing the value inside?
 
-`fromMissing :: A | undefined -> Maybe a`
-
-```typescript
-const fromMissing = <A>(value: A | undefined): Maybe<A> =>
-  value ? just(value) : nothing();
-```
+We can use a function called `map`:
 
 ```typescript
-fromMissing("dog")
-// { type: "Just", value: "Dog" }
+// map :: (A -> B) -> Maybe A -> Maybe B
+const map = (f: (a: A) => B, maybe: Maybe<A>): Maybe<B> =>
+  maybe.type === 'Just' ? just(f(maybe.value)) : nothing()
 ```
 
-```typescript
-fromMissing(undefined)
-// { type: "Nothing" }
-```
+Think of it working like `Array.map` - if the `Array` is empty, nothing
+happens, and if there's items inside, we run the function on it.
 
 ## How would we use these to make the horse finding function nicer?
 

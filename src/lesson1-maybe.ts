@@ -56,39 +56,21 @@ const mandatoryTailCheck = (horse: Horse): StandardHorse | undefined => {
   };
 };
 
-const perhapsMap = <A, B>(
-  func: (a: A) => B,
-  value: A | undefined
-): B | undefined => {
-  if (value) {
-    return func(value);
-  }
-  return undefined;
-};
-
-const valueOrElse = <A, B>(
-  perhapsValue: A | undefined,
-  func: (a: A) => B,
-  def: B
-): B => (perhapsValue ? func(perhapsValue) : def);
-
 const horseFinder = (name: string): string => {
   const horse = getHorse(name);
 
-  const tidyHorse = perhapsMap(tidyHorseName, horse);
+  const tidyHorse = horse ? tidyHorseName(horse) : undefined;
 
-  const standardHorse = perhapsMap(mandatoryTailCheck, tidyHorse);
+  const standardHorse = tidyHorse ? mandatoryTailCheck(tidyHorse) : undefined;
 
-  return valueOrElse(
-    standardHorse,
-    horse => `Found a good horse named ${horse.name}`,
-    `${name} is not a good horse`
-  );
+  if (!standardHorse) {
+    return `${name} is not a good horse`;
+  }
+  return `Found a good horse named ${standardHorse.name}`;
 };
 
 /*
- *
- * Let's make the above not terrible.
+ * Let's make the above more elegant and 10x
  *
  * first, we're going to need the following functions:
  */
@@ -96,10 +78,10 @@ const horseFinder = (name: string): string => {
 type Maybe<A> = { type: "Just"; value: A } | { type: "Nothing" };
 
 // just :: A -> Maybe A
-export const just = undefined as any;
+export const just = <A>(a: A): Maybe<A> => ({ type: "Just", value: a });
 
 // nothing :: () -> Maybe never
-export const nothing = undefined as any;
+export const nothing = (): Maybe<never> => ({ type: "Nothing" });
 
 // map :: (A -> B) -> Maybe A -> Maybe B
 export const map = undefined as any;
@@ -107,6 +89,7 @@ export const map = undefined as any;
 // orElse :: (A -> B) -> B -> Maybe A -> B
 export const orElse = undefined as any;
 
+// bind :: (A -> Maybe B) -> Maybe A -> Maybe B
 export const bind = undefined as any;
 
 // newGetHorse :: String -> Maybe<Horse>
