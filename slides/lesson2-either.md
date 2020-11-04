@@ -24,9 +24,9 @@ So last time we looked at `Maybe`, which can be
 
 ```typescript
 const getHorse = (name: string): Maybe<Horse> => {
-  const found = goodHorses.find(horse => horse.name === name)
-  return found ? just(found) : nothing()
-}
+  const found = goodHorses.find(horse => horse.name === name);
+  return found ? just(found) : nothing();
+};
 ```
 
 - `nothing` is all very well but it doesn't tell us why we are sitting here
@@ -38,20 +38,20 @@ const getHorse = (name: string): Maybe<Horse> => {
 
 ```typescript
 const getHorse = (name: string): Horse => {
-  const found = goodHorses.find(horse => horse.name === name)
+  const found = goodHorses.find(horse => horse.name === name);
   if (!found) {
-    throw Error(`Horse ${name} not found`)
+    throw Error(`Horse ${name} not found`);
   }
-  return found 
-}
+  return found;
+};
 ```
 
 - ...and catch them down the line to see what happened.
 
 ```typescript
-let maybeHorse
+let maybeHorse;
 try {
-  maybeHorse = getHorse("FAST-BOY")
+  maybeHorse = getHorse("FAST-BOY");
 } catch (e: string) {
   // do something with the Error
 }
@@ -67,8 +67,7 @@ are out of disk space or memory.
 ## Enter, Either
 
 ```typescript
-type Either<E,A> = { type: "Left", value: E }
-                 | { type: "Right", value: A }
+type Either<E, A> = { type: "Left"; value: E } | { type: "Right"; value: A };
 ```
 
 - It represents any two outcomes, but usually...
@@ -83,7 +82,7 @@ type Either<E,A> = { type: "Left", value: E }
 
 - `Either` and `Result` are semantically the same
 
-- If you wish to sound clever you can say they are `isomorphic` to one another. 
+- If you wish to sound clever you can say they are `isomorphic` to one another.
 
 - This means you can swap between the two at will without losing any
   information
@@ -95,20 +94,18 @@ type Either<E,A> = { type: "Left", value: E }
 - `Left :: E -> Either<E, never>`
 
 ```typescript
-const left = <E>(value: E): Either<E,never> =>
-  ({ type: "Left", value })
+const left = <E>(value: E): Either<E, never> => ({ type: "Left", value });
 
-left("egg")
+left("egg");
 // { type: "Left", value: "egg" }
 ```
 
 - `Right :: A -> Either<never, A>`
 
 ```typescript
-const right = <A>(value: A): Either<never,A> => 
-  ({ type: "Right", value })
+const right = <A>(value: A): Either<never, A> => ({ type: "Right", value });
 
-right("leg")
+right("leg");
 // { type: "Right", value: "leg" }
 ```
 
@@ -119,23 +116,23 @@ Now when something fails, we can say why
 ```typescript
 const divide = (dividend: number, divisor: number): Either<string, number> => {
   if (divisor === 0) {
-    return left("Cannot divide by zero")
+    return left("Cannot divide by zero");
   }
-  return right(dividend / divisor)
-}
+  return right(dividend / divisor);
+};
 ```
 
 - When things go well...
 
 ```typescript
-divide(10,2)
+divide(10, 2);
 // { type: "Right", value: 5 }
 ```
 
 - Or when they don't...
 
 ```typescript
-divide(100,0)
+divide(100, 0);
 // { type: "Left", value: "Cannot divide by zero" }
 ```
 
@@ -169,9 +166,9 @@ const horses: Horse[] = [
 
 ```typescript
 const getHorse = (name: string): Either<string, Horse> => {
-  const found = horses.filter(horse => horse.name === name)
-  return found[0] ? right(found[0]): left(`Horse ${name} not found`)
-}
+  const found = horses.filter(horse => horse.name === name);
+  return found[0] ? right(found[0]) : left(`Horse ${name} not found`);
+};
 ```
 
 ## Step 2 - Tidy Horse Name
@@ -179,12 +176,10 @@ const getHorse = (name: string): Either<string, Horse> => {
 - `tidyHorseName :: Horse -> Horse`
 
 ```typescript
-const tidyHorseName = (horse: Horse): Horse => 
-  ({
-    ...horse,
-    name: horse.name.charAt(0).toUpperCase() + 
-        horse.name.slice(1).toLowerCase()
-  })
+const tidyHorseName = (horse: Horse): Horse => ({
+  ...horse,
+  name: horse.name.charAt(0).toUpperCase() + horse.name.slice(1).toLowerCase()
+});
 ```
 
 ## Step 3 - Standardise Horse
@@ -199,30 +194,31 @@ type StandardHorse = {
   type: "STANDARD_HORSE";
 };
 
-type TailCheckError = { type: "HAS_NO_TAIL" } 
-                    | { type: "TOO_MANY_LEGS" } 
-                    | { type: "NOT_ENOUGH_LEGS" }
+type TailCheckError =
+  | { type: "HAS_NO_TAIL" }
+  | { type: "TOO_MANY_LEGS" }
+  | { type: "NOT_ENOUGH_LEGS" };
 ```
 
 - `standardise :: Horse -> Either TailCheckError StandardHorse`
 
 ```typescript
-const standardise = (horse: Horse): Either<TailCheckError,StandardHorse> => {
+const standardise = (horse: Horse): Either<TailCheckError, StandardHorse> => {
   if (!horse.hasTail) {
-    return left({ type: "HAS_NO_TAIL" })
+    return left({ type: "HAS_NO_TAIL" });
   }
   if (horse.legs < 4) {
-    return left({ type: "NOT_ENOUGH_LEGS" })
+    return left({ type: "NOT_ENOUGH_LEGS" });
   }
   if (horse.legs > 4) {
-    return left({ type: "TOO_MANY_LEGS" })
+    return left({ type: "TOO_MANY_LEGS" });
   }
   return right({
     name: horse.name,
     hasTail: true,
     legs: 4,
     type: "STANDARD_HORSE"
-  })
+  });
 };
 ```
 
@@ -231,10 +227,6 @@ const standardise = (horse: Horse): Either<TailCheckError,StandardHorse> => {
 - `horseFinder2 :: String -> Either String StandardHorse`
 
 - Over to you...
-
-## Great work.
-
-- You are very smart.
 
 ## Alternatives - a nice pattern
 
@@ -269,11 +261,12 @@ const otherHorses: Horse[] = [
 - We could adapt this function to take the horse source as a parameter..
 
 ```typescript
-const getHorse2 = (possibleHorses: Horse[]) => 
-  (name: string): Either<string, Horse> => {
-    const found = possibleHorses.filter(horse => horse.name === name)
-    return found[0] ? right(found[0]): left(`Horse ${name} not found`)
-}
+const getHorse2 = (possibleHorses: Horse[]) => (
+  name: string
+): Either<string, Horse> => {
+  const found = possibleHorses.filter(horse => horse.name === name);
+  return found[0] ? right(found[0]) : left(`Horse ${name} not found`);
+};
 ```
 
 - But how do we try one and then the other?
@@ -285,6 +278,5 @@ const getHorse2 = (possibleHorses: Horse[]) =>
 - Or indeed, for `Maybe`:
 
 - `alt :: Maybe A -> Maybe A -> Maybe A`
- 
-- Let's try fixing our horse issues with these:
 
+- Let's try fixing our horse issues with these:
