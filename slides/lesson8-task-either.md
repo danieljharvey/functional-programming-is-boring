@@ -1,19 +1,3 @@
----
-title: Functional Programming Is Boring 
-author: Daniel J. Harvey
-patat:
-  wrap: true
-  margins:
-    left: 10
-    right: 10
-    top: 10
-    bottom: 10
-  incrementalLists: true
-  images:
-    backend: iterm2
-
----
-
 ## Lesson 8
 
 Previously, we've looked at both `Either`, which allows us to return values
