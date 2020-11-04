@@ -5,7 +5,7 @@ export type Horse = {
   hasTail: boolean;
 };
 
-const goodHorses: Horse[] = [
+export const standardHorses: Horse[] = [
   {
     type: "HORSE",
     name: "CHAMPION",
@@ -22,9 +22,9 @@ const goodHorses: Horse[] = [
 
 const getHorse = (name: string) => {
   let found;
-  goodHorses.forEach(goodHorse => {
-    if (goodHorse.name === name) {
-      found = goodHorse;
+  standardHorses.forEach(standardHorse => {
+    if (standardHorse.name === name) {
+      found = standardHorse;
     }
   });
   return found;
@@ -37,14 +37,14 @@ const tidyHorseName = (horse: Horse): Horse => {
   };
 };
 
-type GoodHorse = {
+type StandardHorse = {
   name: string;
   hasTail: true;
   legs: 4;
-  type: "GOOD_HORSE";
+  type: "STANDARD_HORSE";
 };
 
-const mandatoryTailCheck = (horse: Horse): GoodHorse | undefined => {
+const mandatoryTailCheck = (horse: Horse): StandardHorse | undefined => {
   if (!horse.hasTail || horse.legs !== 4) {
     return undefined;
   }
@@ -52,7 +52,7 @@ const mandatoryTailCheck = (horse: Horse): GoodHorse | undefined => {
     name: horse.name,
     hasTail: true,
     legs: 4,
-    type: "GOOD_HORSE"
+    type: "STANDARD_HORSE"
   };
 };
 
@@ -66,7 +66,7 @@ const perhapsMap = <A, B>(
   return undefined;
 };
 
-const orElse = <A, B>(
+const valueOrElse = <A, B>(
   perhapsValue: A | undefined,
   func: (a: A) => B,
   def: B
@@ -77,10 +77,10 @@ const horseFinder = (name: string): string => {
 
   const tidyHorse = perhapsMap(tidyHorseName, horse);
 
-  const goodHorse = perhapsMap(mandatoryTailCheck, tidyHorse);
+  const standardHorse = perhapsMap(mandatoryTailCheck, tidyHorse);
 
-  return orElse(
-    goodHorse,
+  return valueOrElse(
+    standardHorse,
     horse => `Found a good horse named ${horse.name}`,
     `${name} is not a good horse`
   );
@@ -96,25 +96,59 @@ const horseFinder = (name: string): string => {
 type Maybe<A> = { type: "Just"; value: A } | { type: "Nothing" };
 
 // just :: A -> Maybe A
+export const just = <A>(value: A): Maybe<A> => ({ type: "Just", value });
 
 // nothing :: () -> Maybe never
+export const nothing = (): Maybe<never> => ({ type: "Nothing" });
 
 // map :: (A -> B) -> Maybe A -> Maybe B
+export const map = <A, B>(f: (a: A) => B, maybeA: Maybe<A>): Maybe<B> =>
+  maybeA.type === "Just" ? just(f(maybeA.value)) : nothing();
 
 // orElse :: (A -> B) -> B -> Maybe A -> B
+export const orElse = <A, B>(f: (a: A) => B, def: B, maybeA: Maybe<A>): B =>
+  maybeA.type === "Just" ? f(maybeA.value) : def;
 
-/*
- * Now let's use them to rewrite horseFinder
- */
+export const bind = <A, B>(
+  f: (a: A) => Maybe<B>,
+  maybeA: Maybe<A>
+): Maybe<B> => (maybeA.type === "Just" ? f(maybeA.value) : nothing());
 
-// GO
+// newGetHorse :: String -> Maybe<Horse>
+export const newGetHorse = (name: string): Maybe<Horse> => {
+  let found;
+  standardHorses.forEach(standardHorse => {
+    if (standardHorse.name === name) {
+      found = standardHorse;
+    }
+  });
+  return found ? just(found) : nothing();
+};
 
-// horseFinder :: String -> String
+// newMandatoryTailCheck :: Horse -> Maybe<StandardHorse>
+export const newMandatoryTailCheck = (horse: Horse): Maybe<StandardHorse> => {
+  if (!horse.hasTail || horse.legs !== 4) {
+    return nothing();
+  }
+  return just({
+    name: horse.name,
+    hasTail: true,
+    legs: 4,
+    type: "STANDARD_HORSE"
+  });
+};
 
-// you may also find you need
+// newHorseFinder :: String -> String
+export const newHorseFinder = (name: string): string => {
+  const horse = newGetHorse(name);
 
-// join :: Maybe (Maybe A) -> Maybe A
+  const tidyHorse = map(tidyHorseName, horse);
 
-// or
+  const standardHorse = bind(newMandatoryTailCheck, tidyHorse);
 
-// bind :: (A -> Maybe B) -> Maybe A -> Maybe B
+  return orElse(
+    horse => `Found a good horse named ${horse.name}`,
+    `${name} is not a good horse`,
+    standardHorse
+  );
+};
