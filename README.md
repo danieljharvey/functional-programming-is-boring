@@ -14,9 +14,9 @@ Click on the words for information about subjects and things.
 
 ### Lesson 2 - Either
 
-[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson2-either-tuple.md)
+[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson2-either.md)
 
-[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson2-either-tuple.ts)
+[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson2-either.ts)
 
 ### Lesson 3 - Monoids
 
@@ -48,7 +48,7 @@ Click on the words for information about subjects and things.
 
 [Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson7-parsers.ts)
 
-### Lesson 7 - TaskEither 
+### Lesson 7 - TaskEither
 
 [Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson8-task-either.md)
 
