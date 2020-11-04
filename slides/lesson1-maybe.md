@@ -58,9 +58,9 @@ const tidyHorseName = (horse: Horse): Horse => {
 };
 ```
 
-- But wait, we're not dealing with `horse`
+- But wait, we're not dealing with `Horse`
 
-- We're dealing with `horse | undefined`
+- We're dealing with `Horse | undefined`
 
 - So we either make our horse tidying function more accomodating...
 
@@ -348,79 +348,3 @@ fromMissing(undefined)
 
 - Down to you...
 
-## Answers
-
-- These are not the only answers, but some answers
-
-- map
-
-`map :: (A -> B) -> Maybe A -> Maybe B`
-
-```typescript
-const map = (func: (a: A) => B, maybe: Maybe<A>): Maybe<B> =>
-  maybe.type === "Just" ? { type: "Just", value: func(maybe.value) } : maybe;
-```
-
-- orElse
-
-`orElse :: (A -> B) -> B -> Maybe A -> Maybe B`
-
-```typescript
-const orElse = (func: (a: A) => B, def: B, maybe: Maybe<A>): Maybe<B> =>
-  maybe.type === "Just" ? func(maybe.value) : def
-```
-
-- join
-
-`join :: Maybe (Maybe A) -> Maybe A`
-
-```typescript
-const join = (value: Maybe<Maybe<A>>): Maybe<A> => 
-  value.type === 'Just' ? value.value : nothing()
-```
-
-- bind
-
-`bind :: (A -> Maybe B) -> Maybe A -> Maybe B`
-
-```typescript
-const bind = (func: (a: A) => Maybe B, value: Maybe<A>): Maybe<B> => 
-  value.type === 'Just' ? func(value.value) : nothing()
-```
-
-## A note on currying
-
-Often in functional languages (or indeed, in libraries like `Ramda` or `fp-ts`)
-our functions are `curried`
-
-This means they are split into single arity functions that each return the rest
-of the function.
-
-The regular example is this:
-
-```typescript
-const add = (a,b) => a + b
-```
-
-- becoming this...
-
-```typescript
-const addCurried = a => b => a + b
-```
-
-- which allows
-
-```typescript
-const add2 = addCurried(2)
-
-add2(1) // 3
-```
-
-- This is used a lot so that functions like `map` and `bind` can be used
-  point-free.
-
-- It does make things a lot more dense though
-
-## One last thing
-
-- https://egghead.io/lessons/javascript-you-ve-been-using-monads

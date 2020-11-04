@@ -1,10 +1,14 @@
 # Hello.
 
-### Functional programming is ~~exciting~~ boring
+## __Functional programming is exciting__ 
 
-### ~~Functional~~ imperative programming is difficult
+## Functional programming is boring
 
-### Functional programming is **tediously predictable**
+## __Functional programming is difficult__
+
+## Imperative programming is difficult
+
+## Functional programming is **tediously predictable**
 
 ## What's the big idea then?
 
