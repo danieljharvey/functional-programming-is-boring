@@ -2,15 +2,18 @@ export type Semigroup<A> = {
   append: (one: A, two: A) => A;
 };
 
-export const monoidArray = undefined as any;
+// combines two arrays with concatenation
+export const monoidArray = <A>(): Monoid<A[]> => undefined as any;
 
-export const monoidString = undefined as any;
+// combine two strings with concatenation
+export const monoidString: Monoid<string> = undefined as any;
 
 export type Monoid<A> = {
   empty: A;
 } & Semigroup<A>;
 
-export const monoidAnd = undefined as any;
+// combine two booleans with &&
+export const monoidAnd: Monoid<boolean> = undefined as any;
 
 // we can combine them...
 export type Nothing = { type: "Nothing" };
@@ -21,21 +24,26 @@ export const just = <A>(value: A): Maybe<A> => ({ type: "Just", value });
 
 export const nothing = (): Maybe<never> => ({ type: "Nothing" });
 
-export const monoidMaybe = undefined as any;
+// this combines two Maybe<A> values
+export const monoidMaybe: <A>(monoid: Monoid<A>): Monoid<Maybe<A>> = undefined as any;
 
-export const monoidMaybeString = undefined as any;
+// this combines two Maybe<string> values
+export const monoidMaybeString: Monoid<Maybe<string>> = undefined as any;
 
 ////
 
 // combines numbers with addition
-const monoidSum = undefined as any;
+const monoidSum: Monoid<number> = undefined as any;
 
-export const monoidMaybeSum = undefined as any;
+// this combines two Maybe<number> values with addition
+export const monoidMaybeSum: Monoid<Maybe<number>> = undefined as any;
 
 //////////////
 
-export const monoidFirst = undefined as any;
+// this combines two Maybe values, returning the first one that is Just (or Nothing if neither are)
+export const monoidFirst: <A>(): Monoid<Maybe<A>> => undefined as any;
 
+// combine lots of A using Monoid<A>
 // concat :: Monoid<A> -> A[] -> A
 export const concat = <A>(monoid: Monoid<A>, list: A[]): A =>
   list.reduce(monoid.append, monoid.empty);
