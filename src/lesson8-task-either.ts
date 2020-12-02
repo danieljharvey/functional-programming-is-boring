@@ -102,6 +102,9 @@ const wrappedBadEndpoint: TE.TaskEither<MyError, ApiReturn> = pipe(
 
 // Now, let's take a look at the error. If it's an InternalError
 // then we're going to want to retry, otherwise we should give up
+
+// We can use 'TE.orElse` for this: https://gcanti.github.io/fp-ts/modules/TaskEither.ts.html#orelse
+
 // niceEndpoint :: TaskEither UserError ApiReturn
 export const niceEndpoint: TE.TaskEither<
   UserError,
@@ -159,3 +162,6 @@ export const sixth: TE.TaskEither<
   UserError | TooManyAttempts,
   ApiReturn
 > = niceEndpointWithBackoff(5, 0);
+
+// extension task: could with make a withBackoff function for generalising this
+// operation the way withDelay works?
