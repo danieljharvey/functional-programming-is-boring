@@ -1,25 +1,25 @@
 Arguments: 
-  /usr/local/Cellar/node/12.12.0/bin/node /usr/local/bin/yarn test
+  /Users/danielharvey/.nvm/versions/node/v10.19.0/bin/node /usr/local/Cellar/yarn/1.22.10/libexec/bin/yarn.js test:watch
 
 PATH: 
-  /Users/daniel/.cargo/bin:/Users/daniel/.nix-profile/bin:/Users/daniel/.local/bin:/Users/daniel/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/daniel/.cargo/bin:/Users/daniel/.nix-profile/bin:/Users/daniel/.local/bin
+  /Users/danielharvey/.cabal/bin:/Users/danielharvey/.ghcup/bin:/Users/danielharvey/.nvm/versions/node/v10.19.0/bin:/Users/danielharvey/.nix-profile/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/danielharvey/.cabal/bin:/Users/danielharvey/.ghcup/bin:/Users/danielharvey/.nvm/versions/node/v10.19.0/bin:/Users/danielharvey/.nix-profile/bin:/Users/danielharvey/.local/bin:/Users/danielharvey/scripts:/Users/danielharvey/.local/bin:/Users/danielharvey/scripts
 
 Yarn version: 
-  1.21.1
+  1.22.10
 
 Node version: 
-  12.12.0
+  10.19.0
 
 Platform: 
   darwin x64
 
 Trace: 
-  SyntaxError: /Users/daniel/Git/functional-programming-is-boring/package.json: Unexpected token : in JSON at position 420
+  SyntaxError: /Users/danielharvey/Git/Bulb/functional-programming-is-boring/package.json: Unexpected token } in JSON at position 355
       at JSON.parse (<anonymous>)
-      at /usr/local/lib/node_modules/yarn/lib/cli.js:1625:59
+      at /usr/local/Cellar/yarn/1.22.10/libexec/lib/cli.js:1625:59
       at Generator.next (<anonymous>)
-      at step (/usr/local/lib/node_modules/yarn/lib/cli.js:310:30)
-      at /usr/local/lib/node_modules/yarn/lib/cli.js:321:13
+      at step (/usr/local/Cellar/yarn/1.22.10/libexec/lib/cli.js:310:30)
+      at /usr/local/Cellar/yarn/1.22.10/libexec/lib/cli.js:321:13
 
 npm manifest: 
   {
@@ -29,13 +29,24 @@ npm manifest:
     "repository": "git@github.com:danieljharvey/functional-programming-is-boring.git",
     "author": "Daniel Harvey <danieljamesharvey@gmail.com>",
     "license": "MIT",
+    "prettier": {
+  "trailingComma": "es5",
+    "tabWidth": 4,
+    "semi": false,
+    "singleQuote": true,
+    },
     "dependencies": {
+      "axios": "^0.21.0",
       "fast-check": "^2.3.0",
+      "fp-ts": "^2.8.4",
+      "io-ts": "^2.2.13",
       "jest": "^26.4.2",
+      "monocle-ts": "^2.3.3",
+      "prettier": "^2.1.2",
       "ts-jest": "^26.3.0",
       "typescript": "^4.0.3"
     },
-    "scripts":
+    "scripts": {
       "typescript:watch": "tsc --noEmit --watch",
       "typescript": "tsc --noEmit",
       "test": "jest",
@@ -783,6 +794,13 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.10.1.tgz#e1e82e4f3e999e2cfd61b161280d16a111f86428"
     integrity sha512-zg7Hz2k5lI8kb7U32998pRRFin7zJlkfezGJjUc2heaD4Pw2wObakCDVzkKztTm/Ln7eiVvYsjqak0Ed4LkMDA==
   
+  axios@^0.21.0:
+    version "0.21.0"
+    resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.0.tgz#26df088803a2350dff2c27f96fef99fe49442aca"
+    integrity sha512-fmkJBknJKoZwem3/IKSSLpkdNXZeBu5Q7GA/aRsr2btgrptmSCxi2oFjZHqGdK9DoTil9PIHlPIZw2EcRJXRvw==
+    dependencies:
+      follow-redirects "^1.10.0"
+  
   babel-jest@^26.3.0:
     version "26.3.0"
     resolved "https://registry.yarnpkg.com/babel-jest/-/babel-jest-26.3.0.tgz#10d0ca4b529ca3e7d1417855ef7d7bd6fc0c3463"
@@ -1466,6 +1484,11 @@ Lockfile:
       locate-path "^5.0.0"
       path-exists "^4.0.0"
   
+  follow-redirects@^1.10.0:
+    version "1.13.0"
+    resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.13.0.tgz#b42e8d93a2a7eea5ed88633676d6597bc8e384db"
+    integrity sha512-aq6gF1BEKje4a9i9+5jimNFIpq4Q1WiwBToeRK5NvZBd/TRsmW8BsJfOEGkr76TbOyPVD3OVDN910EcUNtRYEA==
+  
   for-in@^1.0.2:
     version "1.0.2"
     resolved "https://registry.yarnpkg.com/for-in/-/for-in-1.0.2.tgz#81068d295a8142ec0ac726c6e2200c30fb6d5e80"
@@ -1484,6 +1507,11 @@ Lockfile:
       asynckit "^0.4.0"
       combined-stream "^1.0.6"
       mime-types "^2.1.12"
+  
+  fp-ts@^2.8.4:
+    version "2.8.4"
+    resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-2.8.4.tgz#d1af738a94de8591d441ef656153d04bd878edeb"
+    integrity sha512-J+kwce5SysU0YKuZ3aCnFk+dyezZD1mij6u26w1fCVfuLYgJR4eeXmVfJiUjthpZ+4yCRkRfcwMI5SkGw52oFA==
   
   fragment-cache@^0.2.1:
     version "0.2.1"
@@ -1687,6 +1715,11 @@ Lockfile:
     version "2.0.4"
     resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.4.tgz#0fa2c64f932917c3433a0ded55363aae37416b7c"
     integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
+  
+  io-ts@^2.2.13:
+    version "2.2.13"
+    resolved "https://registry.yarnpkg.com/io-ts/-/io-ts-2.2.13.tgz#e04016685e863dd5cffb2b5262c5c9c74432dfda"
+    integrity sha512-BYJgE/BanovJKDvCnAkrr7f3gTucSyk+Sr5VtpouBO1/YfBKUyIn2z1ODG8LEF+1D4sjKZ3Bd/A5/v8JrJe5UQ==
   
   ip-regex@^2.1.0:
     version "2.1.0"
@@ -2553,6 +2586,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
     integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
   
+  monocle-ts@^2.3.3:
+    version "2.3.3"
+    resolved "https://registry.yarnpkg.com/monocle-ts/-/monocle-ts-2.3.3.tgz#1e6d83dcf42bcb96b74fdda07813c2a47ec6cfa4"
+    integrity sha512-pcQyauWO2vapxyZgbhTd73Dv8TmTELx1rL81bvrtPO2sUYTi1MIHmw3j/iMyeNaJwTmnGNAjqJpYV8Gq1Eu68g==
+  
   ms@2.0.0:
     version "2.0.0"
     resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -2814,6 +2852,11 @@ Lockfile:
     version "1.1.2"
     resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
     integrity sha1-IZMqVJ9eUv/ZqCf1cOBL5iqX2lQ=
+  
+  prettier@^2.1.2:
+    version "2.1.2"
+    resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.1.2.tgz#3050700dae2e4c8b67c4c3f666cdb8af405e1ce5"
+    integrity sha512-16c7K+x4qVlJg9rEbXl7HEGmQyZlG4R9AgP+oHKRMsMsuk8s+ATStlf1NpDqyBI1HpVyfjLOeMhH2LvuNvV5Vg==
   
   pretty-format@^25.2.1, pretty-format@^25.5.0:
     version "25.5.0"

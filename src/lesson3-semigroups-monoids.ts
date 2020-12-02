@@ -25,7 +25,8 @@ export const just = <A>(value: A): Maybe<A> => ({ type: "Just", value });
 export const nothing = (): Maybe<never> => ({ type: "Nothing" });
 
 // this combines two Maybe<A> values
-export const monoidMaybe: <A>(monoid: Monoid<A>): Monoid<Maybe<A>> = undefined as any;
+export const monoidMaybe = <A>(monoid: Monoid<A>): Monoid<Maybe<A>> =>
+  undefined as any;
 
 // this combines two Maybe<string> values
 export const monoidMaybeString: Monoid<Maybe<string>> = undefined as any;
@@ -33,7 +34,7 @@ export const monoidMaybeString: Monoid<Maybe<string>> = undefined as any;
 ////
 
 // combines numbers with addition
-const monoidSum: Monoid<number> = undefined as any;
+export const monoidSum: Monoid<number> = undefined as any;
 
 // this combines two Maybe<number> values with addition
 export const monoidMaybeSum: Monoid<Maybe<number>> = undefined as any;
@@ -41,7 +42,7 @@ export const monoidMaybeSum: Monoid<Maybe<number>> = undefined as any;
 //////////////
 
 // this combines two Maybe values, returning the first one that is Just (or Nothing if neither are)
-export const monoidFirst: <A>(): Monoid<Maybe<A>> => undefined as any;
+export const monoidFirst = <A>(): Monoid<Maybe<A>> => undefined as any;
 
 // combine lots of A using Monoid<A>
 // concat :: Monoid<A> -> A[] -> A

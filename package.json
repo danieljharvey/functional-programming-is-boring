@@ -5,10 +5,18 @@
   "repository": "git@github.com:danieljharvey/functional-programming-is-boring.git",
   "author": "Daniel Harvey <danieljamesharvey@gmail.com>",
   "license": "MIT",
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true,
+    "printWidth": 70
+  },
   "dependencies": {
     "axios": "^0.21.0",
     "fast-check": "^2.3.0",
     "fp-ts": "^2.8.4",
+    "io-ts": "^2.2.13",
     "jest": "^26.4.2",
     "monocle-ts": "^2.3.3",
     "prettier": "^2.1.2",
