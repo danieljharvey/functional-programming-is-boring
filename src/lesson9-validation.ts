@@ -6,15 +6,19 @@ import * as A from 'fp-ts/Apply'
 import axios, { AxiosResponse } from 'axios'
 
 // API TYPES
-
+// These are defined using io-ts
+// which is like Joi or Yup but also lets us derive a type
+// for the output of the validator...
 const breed = t.union([
   t.literal('pug'),
   t.literal('shiba'),
   t.literal('spanish'),
 ])
 
+// ...like this
 type Breed = t.TypeOf<typeof breed>
 
+// post data in our requests
 const apiRequest = t.type({
   breed,
   name: t.string,
@@ -23,6 +27,7 @@ const apiRequest = t.type({
 
 type ApiRequest = t.TypeOf<typeof apiRequest>
 
+// response type we will be returning
 const apiResponse = t.type({
   message: t.string,
   url: t.string,
@@ -30,14 +35,14 @@ const apiResponse = t.type({
 
 type ApiResponse = t.TypeOf<typeof apiResponse>
 
-// Dog API return type
+// validator for data we will be receiving from the external API
 const dogApiResponse = t.type({
   message: t.string,
   status: t.literal('success'),
 })
 
 // ERROR TYPE
-
+// all of the different things that can go wrong in our API, defined below:
 type ApiError =
   | AgeTooLow
   | NameIsEmpty
@@ -46,28 +51,37 @@ type ApiError =
   | AxiosFetchError
 
 type AgeTooLow = { type: 'AgeTooLow' }
+
 type NameIsEmpty = { type: 'NameIsEmpty' }
+
 type AxiosFetchError = { type: 'AxiosFetchError' }
+
 type DogApiValidationFailure = {
   type: 'ApiValidationFailure'
   errors: t.Errors
 }
+
 type RequestValidationFailure = {
   type: 'RequestValidationFailure'
   errors: t.Errors
 }
 
+// constructor functions for our errors
 const ageTooLow = (): AgeTooLow => ({ type: 'AgeTooLow' })
+
 const nameIsEmpty = (): NameIsEmpty => ({ type: 'NameIsEmpty' })
+
 const axiosFetchError = (): AxiosFetchError => ({
   type: 'AxiosFetchError',
 })
+
 const dogApiValidationFailure = (
   errors: t.Errors
 ): DogApiValidationFailure => ({
   type: 'ApiValidationFailure',
   errors,
 })
+
 const requestValidationFailure = (
   errors: t.Errors
 ): RequestValidationFailure => ({
@@ -76,8 +90,9 @@ const requestValidationFailure = (
 })
 
 // COMBINATORS
+// These functions will be helpful in making our API more resilient
 
-// retry a given task X times on failure
+// retry a given task `te` X times on failure
 const withRetries = <E, A>(
   te: TE.TaskEither<E, A>,
   retries: number
@@ -89,7 +104,7 @@ const withRetries = <E, A>(
     )
   )
 
-// validate input using io-ts
+// validate input using the provided io-ts `validator`
 const withIoTs = <E, A>(
   validator: t.Type<A>,
   toError: (e: t.Errors) => E
@@ -100,6 +115,19 @@ const withIoTs = <E, A>(
       E.orElse(err => E.left(toError(err)))
     )
   )
+
+// used to simulate failure
+// `probability` is between 0 and 1 that task fails
+// `te` is a TaskEither that you wish to fail sometimes
+// `err` is the error you wish it to fail with
+export const sometimesExplode = <E, A>(
+  probability: number,
+  te: TE.TaskEither<E, A>,
+  err: E
+): TE.TaskEither<E, A> => {
+  const rand = Math.random()
+  return rand < probability ? TE.left(err) : te
+}
 
 // FUNCTIONS
 
@@ -119,15 +147,10 @@ const axiosGet = (
 // fetch dog from API (retrying 5 times)
 // unwrap AxiosResponse
 // validate response using io-ts
-const getDogWithValidation = (
+// return `message` from the payload
+export const getDogWithValidation = (
   breed: Breed
-): TE.TaskEither<ApiError, string> =>
-  pipe(
-    withRetries(axiosGet(getBreedUrl(breed)), 5),
-    TE.map(a => a.data),
-    TE.chainW(withIoTs(dogApiResponse, dogApiValidationFailure)),
-    TE.map(a => a.message)
-  )
+): TE.TaskEither<ApiError, string> => undefined as any
 
 // if the name and age are valid, then construct a nice birthday message
 const makeBirthdayMessage = (
@@ -143,24 +166,16 @@ const makeBirthdayMessage = (
   return E.right(message)
 }
 
+// pass multiple TaskEithers to run them in parallel and return
+// a tuple of results
 const parallel = A.sequenceT(TE.taskEither)
 
+// the whole endpoint should do the following
+// validate the input with the `apiRequest` validator
+// take the output and then...
+// a) fetch a dog with `getDogWithValidation`
+// b) try to make a birthday message
+// then combine those to create an `apiResponse`
 export const endpoint = (
   postData: unknown
-): TE.TaskEither<ApiError, ApiResponse> =>
-  pipe(
-    postData,
-    // validate postData
-    withIoTs(apiRequest, requestValidationFailure),
-    // take validate api request...
-    TE.chainW(req =>
-      parallel(
-        // fetch dog from api
-        getDogWithValidation(req.breed),
-        // create birthday message
-        TE.fromEither(makeBirthdayMessage(req))
-      )
-    ),
-    // combine everything and return it
-    TE.map(([url, message]) => ({ message, url }))
-  )
+): TE.TaskEither<ApiError, ApiResponse> => undefined as any
