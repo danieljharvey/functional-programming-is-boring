@@ -74,7 +74,7 @@ const list = ["Dog", "Log", "Hog", "Bog", "Egg"]
 Often `reduce` is a go to tool for this.
 
 ```typescript
-const conflattenate = (strs: string): string => 
+const conflattenate = (strs: string[]): string => 
   strs.reduce((total, str) => `${total}${str}`,"")
 ```
 
