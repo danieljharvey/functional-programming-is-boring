@@ -48,11 +48,17 @@ Click on the words for information about subjects and things.
 
 [Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson7-parsers.ts)
 
-### Lesson 7 - TaskEither
+### Lesson 8 - TaskEither
 
 [Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson8-task-either.md)
 
 [Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson8-task-either.ts)
+
+### Lesson 9 - Validation
+
+[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson9-validation.md)
+
+[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson9-validation.ts)
 
 ### Bonus 1 - Currying
 
