@@ -1,50 +1,86 @@
-export type Writer<W, A> = { type: "Writer"; value: A; logs: W[] };
+import * as W from 'fp-ts/lib/Writer'
+import { Monoid } from 'fp-ts/lib/Monoid'
+import { pipe, pipeable } from 'fp-ts/lib/pipeable'
 
-// writer :: W[] -> A -> Writer W A
-export const writer = <W, A>(logs: W[], value: A): Writer<W, A> => ({
-  type: "Writer",
-  value,
-  logs
-});
+type Cmd =
+  | { type: 'None' }
+  | { type: 'Log'; message: string }
+  | { type: 'Many'; one: Cmd; two: Cmd }
 
-console.log(writer(["Thing happened"], "dog"));
+const logCmd = (message: string): Cmd => ({
+  type: 'Log',
+  message,
+})
 
-// pure :: A -> Writer<never,A>
-const pure = <A>(value: A): Writer<never, A> => ({
-  type: "Writer",
-  value,
-  logs: [] as never[]
-});
+const noCmd: Cmd = { type: 'None' }
 
-console.log(pure("dog"));
+const manyCmd = (one: Cmd, two: Cmd): Cmd => ({
+  type: 'Many',
+  one,
+  two,
+})
 
-// tell :: W -> A -> Writer W A
-const tell = <W>(log: W): Writer<W, null> => writer([log], null);
+const monoidCmd: Monoid<Cmd> = {
+  empty: noCmd,
+  concat: (x, y) => {
+    if (y.type === 'None') {
+      return x
+    }
+    if (x.type === 'None') {
+      return y
+    }
+    return manyCmd(x, y)
+  },
+}
 
-console.log(tell("Hello"));
+// SW: Monad2C<"Writer", string>
+const SW = W.getMonad(monoidCmd)
 
-// map :: (A -> B) -> Writer W A -> Writer W B
-const map = <W, A, B>(f: (a: A) => B, a: Writer<W, A>): Writer<W, B> => ({
-  type: "Writer",
-  value: f(a.value),
-  logs: a.logs
-});
+pipe(SW.of(2), w => SW.map(w, x => x + 1))
 
-console.log(map(a => a.toUpperCase(), pure("dog")));
+// pipeable functions
+const {
+  ap,
+  apFirst,
+  apSecond,
+  chain,
+  chainFirst,
+  flatten,
+  map,
+} = pipeable(SW)
 
-// bind :: (A -> Writer W B) -> Writer W A -> Writer W B
-const bind = <W, A, B>(
-  fn: (a: A) => Writer<W, B>,
-  a: Writer<W, A>
-): Writer<W, B> => {
-  const next = fn(a.value);
-  return writer(a.logs.concat(next.logs), next.value);
-};
+const withCmd = <A>(cmd: Cmd, state: A): W.Writer<Cmd, A> => () => [
+  state,
+  cmd,
+]
 
-console.log(bind(a => tell("Oh no"), pure("Horse")));
+const withNoCmd = <A>(state: A): W.Writer<Cmd, A> => SW.of(state)
 
-// then :: Writer W B -> Writer W A -> Writer W B
-const then = <W, A, B>(b: Writer<W, B>, a: Writer<W, A>): Writer<W, B> =>
-  bind(() => b, a);
+type MyAction =
+  | { type: 'Fetch'; breed: string }
+  | { type: 'ReceiveDog'; url: string }
 
-// TODO example for this
+// the type of a reducer - it takes a state and an action
+// and returns a new action, and a command
+type WriterReducer<Action, State, Command> = (
+  action: Action,
+  state: State
+) => W.Writer<Command, State>
+
+type State = {
+  loading: boolean
+  url: string | null
+}
+
+const reducer: WriterReducer<MyAction, State, Cmd> = (
+  action,
+  state
+) => {
+  if (action.type === 'Fetch') {
+    return withCmd(logCmd('Fetch!'), { ...state, loading: true })
+  }
+  if (action.type === 'ReceiveDog') {
+    return withNoCmd({ ...state, loading: false, url: action.url })
+  }
+  return withNoCmd(state)
+}
