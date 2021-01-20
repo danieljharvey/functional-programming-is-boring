@@ -1,6 +1,8 @@
-## Part 1
+# Part 1
 
 Dealing with things that may or may not be there.
+
+- Here is a horse type
 
 ```typescript
 type Horse = {
@@ -9,7 +11,11 @@ type Horse = {
   legs: number
   hasTail: boolean
 }
+```
 
+- Here are some horses
+
+```typescript
 const goodHorses: Horse[] = [
   {
     type: 'HORSE',
@@ -24,10 +30,14 @@ const goodHorses: Horse[] = [
     hasTail: true,
   },
 ]
+```
 
+- And a function for trying to find a horse by name
+
+```typescript
 const getHorse = (name: string) => {
   let found
-  goodHorses.forEach((goodHorse) => {
+  goodHorses.forEach(goodHorse => {
     if (goodHorse.name === name) {
       found = goodHorse
     }
@@ -36,7 +46,7 @@ const getHorse = (name: string) => {
 }
 ```
 
-## How do we use this getHorse function?
+# How do we use this getHorse function?
 
 - What if there isn't a match?
 
@@ -50,7 +60,7 @@ if (horse) {
 
 - Seems fine I guess
 
-## How do we change `horse`?
+# How do we change `horse`?
 
 - Say we now need to tidy up those weird uppercase names
 
@@ -64,6 +74,8 @@ const tidyHorseName = (horse: Horse): Horse => {
 ```
 
 - But wait, we're not dealing with `Horse`
+
+# Actually...
 
 - We're dealing with `Horse | undefined`
 
@@ -91,28 +103,30 @@ const horse = getHorse('CHAMPION')
 const tidyHorse = horse ? tidyHorseName(horse) : undefined
 ```
 
-## One more thing
+# One more thing
 
 - Rules are rules, we are going to need to inspect this horse for a few things
 
 - We are going to make a new type that describes the good horse
 
 ```typescript
-type GoodHorse = {
+type StandardHorse = {
   name: string
   hasTail: true
   legs: 4
-  type: 'GOOD_HORSE'
+  type: 'STANDARD_HORSE'
 }
 ```
 
-- That way, we can use types to make sure we don't pass a bad horse where it's
+- That way, we can use types to make sure we don't pass a non-standard horse where it's
   not wanted
 
 - Here's our check:
 
 ```typescript
-const mandatoryTailCheck = (horse: Horse): GoodHorse | undefined => {
+const mandatoryTailCheck = (
+  horse: Horse
+): StandardHorse | undefined => {
   if (!horse.hasTail || horse.legs !== 4) {
     return undefined
   }
@@ -125,7 +139,7 @@ const mandatoryTailCheck = (horse: Horse): GoodHorse | undefined => {
 }
 ```
 
-## How to use it
+# How to use it
 
 - Once again, we have two choices for dealing with the potential lack of `horse`
 
@@ -159,7 +173,7 @@ const goodHorse = tidyHorse
   : undefined
 ```
 
-## Which do you prefer?
+# Which do you prefer?
 
 - .
 
@@ -169,7 +183,7 @@ const goodHorse = tidyHorse
 
 - If you chose **none of them, i want more abstraction** then you are correct
 
-## Discriminated unions
+# Discriminated unions
 
 - We're familiar with **union types** right?
 
@@ -203,14 +217,16 @@ type Action = Smash | GiveUp
 const weirdReducer = (action: Action) {
   switch (action.type) {
     case 'SMASH_THAT_LIKE_BUTTON':
-      return action.timestamp // Typescript knows this should be here
+      // Typescript knows timestamp should be here
+      return action.timestamp
     case 'GIVE_UP':
+      // Typescript knows timestamp will not be here
       return 0
   }
 }
 ```
 
-## Option
+# Option
 
 Option is a container for holding things that may or may not be there:
 
@@ -243,7 +259,7 @@ const b = none()
 // b == { type: "None" }
 ```
 
-## Examples in action
+# Examples in action
 
 - We can then return this where we would have partial data
 
@@ -251,9 +267,7 @@ const b = none()
 
 ```typescript
 const getHorse = (name: string): Option<Horse> => {
-  const found = goodHorses.find(
-    (goodHorse) => goodHorse.name === name
-  )
+  const found = goodHorses.find(goodHorse => goodHorse.name === name)
   return found ? some(found) : none()
 }
 ```
@@ -282,7 +296,7 @@ getHorse("NON-EXISTANT-HORSE")
 /*
 ```
 
-## What about changing the value inside?
+# What about changing the value inside?
 
 We can use a function called `map`:
 
@@ -295,6 +309,6 @@ const map = (f: (a: A) => B, option: Option<A>): Option<B> =>
 Think of it working like `Array.map` - if the `Array` is empty, nothing
 happens, and if there's items inside, we run the function on it.
 
-## How would we use these to make the horse finding function nicer?
+# How would we use these to make the horse finding function nicer?
 
 - Down to you...
