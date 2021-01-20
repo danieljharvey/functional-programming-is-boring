@@ -4,25 +4,25 @@
 
 So far we've looked at a couple of things:
 
-- `Maybe` and `Either` which are both __functors__ and __monads__
+- `Option` and `Either` which are both **functors** and **monads**
 
 - They've helped us express _stuff that goes wrong_, as life does
 
-- Lots of different __monoids__ for `strings` and things
+- Lots of different **monoids** for `strings` and things
 
 - These have helped us formalise the _smashing together of data_
 
-## Recap: 
+## Recap:
 
 All of the abstractions we've looked at so far have a few things in common:
 
-- They are `pure` 
+- They are `pure`
 
 - They are `synchronous`
 
 - But surely you must find yourself asking...
 
-- __"That's all great, but where is the business value hiding?"__
+- **"That's all great, but where is the business value hiding?"**
 
 ## Bombshell:
 
@@ -31,7 +31,7 @@ All of the abstractions we've looked at so far have a few things in common:
 - ...but throw `synchronous` out of the window and straight through the sunroof of some
   idiot's passing sportscar
 
-## But first, as ever... 
+## But first, as ever...
 
 ...a meandering distraction.
 
@@ -46,7 +46,7 @@ that. They simplify down like maths equations.
 
 - `a = 24`
 
-- __OK__
+- **OK**
 
 ## The same but with functions
 
@@ -75,13 +75,14 @@ there is some sort of ordering to how things are calculated.
 Let's look at the functions we've been using a lot of recently:
 
 ```haskell
-map :: (A -> B) -> Maybe A -> Maybe B
+map :: (A -> B) -> Option A -> Option B
 ```
+
 - (brief recap)
 
 ```typescript
-const map = <A,B>(f: (a: A) => B, a: Maybe<A>): Maybe<B> 
-  => a.type === 'Just' ? just(f(a.value)) : nothing()
+const map = <A, B>(f: (a: A) => B, a: Option<A>): Option<B> =>
+  a.type === 'Just' ? just(f(a.value)) : nothing()
 ```
 
 - Ordering doesn't really matter here, all the values are ready to go
@@ -90,10 +91,11 @@ const map = <A,B>(f: (a: A) => B, a: Maybe<A>): Maybe<B>
 
 Let's imagine a fictional type `Async<A>`.
 
-- Think of it like a `Promise<A>`, ie __something that will give me an A at
-  some point__
+- Think of it like a `Promise<A>`, ie **something that will give me an A at
+  some point**
 
 - How does `map` work ordering wise there?
+
 ```haskell
 map :: (A -> B) -> Async A -> Async B
 ```
@@ -129,13 +131,13 @@ Meet our new buddy `ap`. Conceptually, he lives somewhere between `map` and `bin
 - He works on a bunch of our old friends:
 
 ```haskell
-ap :: Maybe (A -> B) -> Maybe A -> Maybe B
+ap :: Option (A -> B) -> Option A -> Option B
 ```
 
 ```haskell
 ap :: Either E (A -> B) -> Either E A -> Either E B
 ```
- 
+
 - He can be quite helpful there, but not particularly interesting.
 
 - However...
@@ -148,9 +150,9 @@ ap :: Either E (A -> B) -> Either E A -> Either E B
 ap :: Async (A -> B) -> Async A -> Async B
 ```
 
-- We __wait__ for an `A -> B` function from our first `Async`
+- We **wait** for an `A -> B` function from our first `Async`
 
-- We also __wait__ for an `A` value from our second one.
+- We also **wait** for an `A` value from our second one.
 
 - Then we smash them together.
 
@@ -163,6 +165,6 @@ ap :: Async (A -> B) -> Async A -> Async B
 Today we're going to build a thing called `Continuation` (in some places it's
 called `Cont`)
 
-It's better than a __callback__, worse than a __Promise__.
+It's better than a **callback**, worse than a **Promise**.
 
 We can improve him in future though.

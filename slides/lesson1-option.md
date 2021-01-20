@@ -1,34 +1,39 @@
 ## Part 1
 
-Dealing with things that may or maybe not be there.
+Dealing with things that may or may not be there.
 
 ```typescript
-type Horse = { type: "HORSE"; name: string; legs: number; hasTail: boolean };
+type Horse = {
+  type: 'HORSE'
+  name: string
+  legs: number
+  hasTail: boolean
+}
 
 const goodHorses: Horse[] = [
   {
-    type: "HORSE",
-    name: "CHAMPION",
+    type: 'HORSE',
+    name: 'CHAMPION',
     legs: 3,
-    hasTail: false
+    hasTail: false,
   },
   {
-    type: "HORSE",
-    name: "HOOVES_GALORE",
+    type: 'HORSE',
+    name: 'HOOVES_GALORE',
     legs: 4,
-    hasTail: true
-  }
-];
+    hasTail: true,
+  },
+]
 
 const getHorse = (name: string) => {
-  let found;
-  goodHorses.forEach(goodHorse => {
+  let found
+  goodHorses.forEach((goodHorse) => {
     if (goodHorse.name === name) {
-      found = goodHorse;
+      found = goodHorse
     }
-  });
-  return found;
-};
+  })
+  return found
+}
 ```
 
 ## How do we use this getHorse function?
@@ -36,7 +41,7 @@ const getHorse = (name: string) => {
 - What if there isn't a match?
 
 ```typescript
-const horse = getHorse("CHAMPION");
+const horse = getHorse('CHAMPION')
 
 if (horse) {
   // do stuff with horse
@@ -53,9 +58,9 @@ if (horse) {
 const tidyHorseName = (horse: Horse): Horse => {
   return {
     ...horse,
-    name: horse.name.toLowerCase()
-  };
-};
+    name: horse.name.toLowerCase(),
+  }
+}
 ```
 
 - But wait, we're not dealing with `Horse`
@@ -65,23 +70,25 @@ const tidyHorseName = (horse: Horse): Horse => {
 - So we either make our horse tidying function more accomodating...
 
 ```typescript
-const tidyHorseName = (horse: Horse | undefined): Horse | undefined => {
+const tidyHorseName = (
+  horse: Horse | undefined
+): Horse | undefined => {
   if (!horse) {
-    return undefined;
+    return undefined
   }
   return {
     ...horse,
-    name: horse.name.toLowerCase()
-  };
-};
+    name: horse.name.toLowerCase(),
+  }
+}
 ```
 
 - Or we are more careful about when we use it
 
 ```typescript
-const horse = getHorse("CHAMPION");
+const horse = getHorse('CHAMPION')
 
-const tidyHorse = horse ? tidyHorseName(horse) : undefined;
+const tidyHorse = horse ? tidyHorseName(horse) : undefined
 ```
 
 ## One more thing
@@ -92,11 +99,11 @@ const tidyHorse = horse ? tidyHorseName(horse) : undefined;
 
 ```typescript
 type GoodHorse = {
-  name: string;
-  hasTail: true;
-  legs: 4;
-  type: "GOOD_HORSE";
-};
+  name: string
+  hasTail: true
+  legs: 4
+  type: 'GOOD_HORSE'
+}
 ```
 
 - That way, we can use types to make sure we don't pass a bad horse where it's
@@ -107,15 +114,15 @@ type GoodHorse = {
 ```typescript
 const mandatoryTailCheck = (horse: Horse): GoodHorse | undefined => {
   if (!horse.hasTail || horse.legs !== 4) {
-    return undefined;
+    return undefined
   }
   return {
     name: horse.name,
     hasTail: true,
     legs: 4,
-    type: "GOOD_HORSE"
-  };
-};
+    type: 'GOOD_HORSE',
+  }
+}
 ```
 
 ## How to use it
@@ -129,25 +136,27 @@ const mandatoryTailCheck = (
   horse: Horse | undefined
 ): GoodHorse | undefined => {
   if (!horse || !horse.hasTail || horse.legs !== 4) {
-    return undefined;
+    return undefined
   }
   return {
     name: horse.name,
     hasTail: true,
     legs: 4,
-    type: "GOOD_HORSE"
-  };
-};
+    type: 'GOOD_HORSE',
+  }
+}
 ```
 
 - Or we put the burden on the caller of the function:
 
 ```typescript
-const horse = getHorse("CHAMPION");
+const horse = getHorse('CHAMPION')
 
-const tidyHorse = horse ? tidyHorseName(horse) : undefined;
+const tidyHorse = horse ? tidyHorseName(horse) : undefined
 
-const goodHorse = tidyHorse ? mandatoryTailCheck(tidyHorse) : undefined;
+const goodHorse = tidyHorse
+  ? mandatoryTailCheck(tidyHorse)
+  : undefined
 ```
 
 ## Which do you prefer?
@@ -165,7 +174,7 @@ const goodHorse = tidyHorse ? mandatoryTailCheck(tidyHorse) : undefined;
 - We're familiar with **union types** right?
 
 ```typescript
-type Fuel = string | null | number;
+type Fuel = string | null | number
 ```
 
 - A **discriminated union** is a union where there is some sort of unique key
@@ -173,15 +182,15 @@ type Fuel = string | null | number;
 ```typescript
 // like Redux actions, innit
 type Smash = {
-  type: "SMASH_THAT_LIKE_BUTTON";
-  timestamp: number;
-};
+  type: 'SMASH_THAT_LIKE_BUTTON'
+  timestamp: number
+}
 
 type GiveUp = {
-  type: "GIVE_UP";
-};
+  type: 'GIVE_UP'
+}
 
-type Action = Smash | GiveUp;
+type Action = Smash | GiveUp
 ```
 
 - (said unique key is the **discriminator**, surprise)
@@ -201,50 +210,52 @@ const weirdReducer = (action: Action) {
 }
 ```
 
-## Maybe
+## Option
 
-Maybe is a container for holding things that may or may not be there:
+Option is a container for holding things that may or may not be there:
 
 ```typescript
-type Maybe<A> = { type: "Just"; value: A } | { type: "Nothing" };
+type Option<A> = { type: 'Some'; value: A } | { type: 'None' }
 ```
 
-- Because it uses a generic parameter, we can make a `Maybe<string>` or a
-  `Maybe<number>`, depending on what it (maybe) contains.
+- Because it uses a generic parameter, we can make a `Option<string>` or a
+  `Option<number>`, depending on what it (maybe) contains.
 
 - We can make some nice helpers for these:
 
-`just :: a -> Maybe a`
+`some :: a -> Option a`
 
 ```typescript
-const just = <A>(value: A): Maybe<A> => ({ type: "Just", value });
+const some = <A>(value: A): Option<A> => ({ type: 'Some', value })
 
-const a = just("horses");
-// a == { type: "Just", value: "horses" }
+const a = some('horses')
+// a == { type: "Some", value: "horses" }
 ```
 
 - and...
 
-`nothing :: () -> maybe never`
+`none :: () -> option never`
 
 ```typescript
-const nothing = (): Maybe<never> => ({ type: "Nothing" });
+const none = (): Option<never> => ({ type: 'None' })
 
-const b = nothing();
-// b == { type: "Nothing" }
+const b = none()
+// b == { type: "None" }
 ```
 
 ## Examples in action
 
 - We can then return this where we would have partial data
 
-`getHorse :: string -> Maybe Horse`
+`getHorse :: string -> Option Horse`
 
 ```typescript
-const getHorse = (name: string): Maybe<Horse> => {
-  const found = goodHorses.find(goodHorse => goodHorse.name === name);
-  return found ? just(found) : nothing();
-};
+const getHorse = (name: string): Option<Horse> => {
+  const found = goodHorses.find(
+    (goodHorse) => goodHorse.name === name
+  )
+  return found ? some(found) : none()
+}
 ```
 
 - Example 1
@@ -252,7 +263,7 @@ const getHorse = (name: string): Maybe<Horse> => {
 ```typescript
 getHorse("CHAMPION")
 /*
-{ type: "Just",
+{ type: "Some",
   value:{
     type: "HORSE",
     name: "CHAMPION",
@@ -267,7 +278,7 @@ getHorse("CHAMPION")
 ```typescript
 getHorse("NON-EXISTANT-HORSE")
 /*
-{ type: "Nothing" }
+{ type: "None" }
 /*
 ```
 
@@ -276,9 +287,9 @@ getHorse("NON-EXISTANT-HORSE")
 We can use a function called `map`:
 
 ```typescript
-// map :: (A -> B) -> Maybe A -> Maybe B
-const map = (f: (a: A) => B, maybe: Maybe<A>): Maybe<B> =>
-  maybe.type === 'Just' ? just(f(maybe.value)) : nothing()
+// map :: (A -> B) -> Option A -> Option B
+const map = (f: (a: A) => B, option: Option<A>): Option<B> =>
+  option.type === 'Some' ? some(f(option.value)) : none()
 ```
 
 Think of it working like `Array.map` - if the `Array` is empty, nothing
@@ -287,4 +298,3 @@ happens, and if there's items inside, we run the function on it.
 ## How would we use these to make the horse finding function nicer?
 
 - Down to you...
-

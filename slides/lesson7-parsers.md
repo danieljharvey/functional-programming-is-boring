@@ -15,14 +15,14 @@ Just to be clear, we are not talking about validation.
 
 ```typescript
 const isFine = (data: any): boolean => {
-  return ("id" in data && "name" in data)
+  return 'id' in data && 'name' in data
 }
 ```
 
 - Validation tells us something about the data, but at the end, we have no more
   idea of it's structure.
 
-- Parsing takes us from __unstructured__ to _structured_ data.
+- Parsing takes us from **unstructured** to _structured_ data.
 
 ## Classic parsing
 
@@ -50,23 +50,24 @@ const processApiStuff = (jsonStr: string): object | null => {
 ## Refining
 
 Libraries like `io-ts` let us further refine `object` into something more
-  specific if we're feeling particularly type-safe.
+specific if we're feeling particularly type-safe.
+
 ```typescript
 import * as t from 'io-ts'
 
 const idNameThing = t.type({
   name: t.string,
-  id: t.integer
+  id: t.integer,
 })
 
 type IdNameThing = t.TypeOf<typeof idNameThing>
 
-idNameThing.decode({ id: 123, name: "Bruce" }) // Right IdNameThing
+idNameThing.decode({ id: 123, name: 'Bruce' }) // Right IdNameThing
 
-idNameThing.decode({ id: "Horse time", name: 123 }) // Left Error
+idNameThing.decode({ id: 'Horse time', name: 123 }) // Left Error
 ```
 
-- Again, we have gone from `object -> IdNameThing` and learned more about the structure 
+- Again, we have gone from `object -> IdNameThing` and learned more about the structure
 
 ## This sounds solved then
 
@@ -76,10 +77,11 @@ from any lump of string data?
 - This often goes one of two ways:
 
 - A custom function:
+
 ```typescript
 const decode = (input: string): string => {
-  const start = input.slice(0,5)
-  return start 
+  const start = input.slice(0, 5)
+  return start
 }
 ```
 
@@ -104,15 +106,17 @@ understand.
 
 - Easy!
 
-- A parser of _things_ is a function from __strings__ to lists of pairs of __strings__
+- A parser of _things_ is a function from **strings** to lists of pairs of **strings**
   and _things_
 
 - By which of course, I mean:
+
 ```haskell
 parser :: String -> [(String, A)]
 ```
 
 - or
+
 ```typescript
 type ParsingFunction<A> = (str: string) => [string, A][]
 ```
@@ -125,15 +129,16 @@ type ParsingFunction<A> = (str: string) => [string, A][]
 There is a slightly simpler version which we will use today:
 
 ```typescript
-type ParsingFunction<A> = (str: string) => Maybe<[string, A]>
+type ParsingFunction<A> = (str: string) => Option<[string, A]>
 ```
 
-- This takes a __string__ and then returns either `Nothing` (for "I could not
+- This takes a **string** and then returns either `Nothing` (for "I could not
   parse this nonsense") or a `Just` with the remainder and the thing it parsed.
 
 - We'll wrap it up like this so Typescript can keep up:
+
 ```typescript
-type Parser<A> = { parse: (str: string) => Maybe<[string,A]> }
+type Parser<A> = { parse: (str: string) => Option<[string, A]> }
 ```
 
 - The simplest one would be:
@@ -143,15 +148,16 @@ anyChar :: Parser<string>
 ```
 
 - This returns any single character.
+
 ```typescript
-anyChar.parse("horse") // Just(["orse", "h"])
-anyChar.parse("") // Nothing
+anyChar.parse('horse') // Just(["orse", "h"])
+anyChar.parse('') // Nothing
 ```
 
 ## Combination time
 
 Let's say we want it to be a bit more fussy? Let's introduce our first
-  combinator:
+combinator:
 
 ```haskell
 pred :: Parser A -> (A -> Boolean) -> Parser A
@@ -160,35 +166,33 @@ pred :: Parser A -> (A -> Boolean) -> Parser A
 - Now we can ask for specifically capitalised letters:
 
 ```typescript
-const isCapital = (char:string) => {
-  const code = char.charCodeAt(0);
+const isCapital = (char: string) => {
+  const code = char.charCodeAt(0)
   return (
-    (code > 64 && code < 91) // upper alpha (A-Z)
-  );
+    code > 64 && code < 91 // upper alpha (A-Z)
+  )
 }
 
-const capitalChar: Parser<string> = 
-  pred(anyChar, isCapital) 
+const capitalChar: Parser<string> = pred(anyChar, isCapital)
 
-capitalChar.parse("horse") // Nothing
-capitalChar.parse("Horse") // Just(["orse", "H"])
+capitalChar.parse('horse') // Nothing
+capitalChar.parse('Horse') // Just(["orse", "H"])
 ```
 
 - Great! How what about one for numbers?
 
 ```typescript
-const isDigit = (char:string) => {
-  const code = char.charCodeAt(0);
+const isDigit = (char: string) => {
+  const code = char.charCodeAt(0)
   return (
-    (code > 47 && code < 58) // numeric (0-9)
-  );
+    code > 47 && code < 58 // numeric (0-9)
+  )
 }
 
-const digitChar: Parser<string> = 
-  pred(anyChar, isNumber) 
+const digitChar: Parser<string> = pred(anyChar, isNumber)
 
-digitChar.parse("horse") // Nothing
-digitChar.parse("9 horses") // Just([" horses", "9"])
+digitChar.parse('horse') // Nothing
+digitChar.parse('9 horses') // Just([" horses", "9"])
 ```
 
 - We have a problem though, all we have now is a `string` that we know has a
@@ -209,16 +213,18 @@ digitChar.parse("9 horses") // Just([" horses", "9"])
 ## It's our old pal
 
 Yes, you guessed it. It's our old friend, `map`.
+
 ```haskell
 map :: (A -> B) -> Parser A -> Parser B
 ```
 
 - Therefore we can make a `Parser<number>`.
-```typescript
-const digitParser: Parser<number> = map(digitChar, a => Number(a))
 
-digitParser.parse("horse") // Nothing
-digitParser.parse("123") // Just(["12",3])
+```typescript
+const digitParser: Parser<number> = map(digitChar, (a) => Number(a))
+
+digitParser.parse('horse') // Nothing
+digitParser.parse('123') // Just(["12",3])
 ```
 
 - What about parsing more than one thing?
@@ -243,15 +249,18 @@ oneOrMore  :: Parser A -> Parser A[]
 
 - Usually we'd then `map` over the result to combine the array of characters into something more useful.
 
-- Let's grab a pile of capital letters 
+- Let's grab a pile of capital letters
+
 ```typescript
 const capitalParser: Parser<string> = pred(anyChar, isCapital)
 
-const shoutingWordParser: Parser<string> = 
-  map(oneOrMore(capitalParser), as => as.join(''))
+const shoutingWordParser: Parser<string> = map(
+  oneOrMore(capitalParser),
+  (as) => as.join('')
+)
 
-shoutingParser.parse("not shouting") // Nothing
-shoutingParser.parse("SHOUTING time") // Just([" time", "SHOUTING"])
+shoutingParser.parse('not shouting') // Nothing
+shoutingParser.parse('SHOUTING time') // Just([" time", "SHOUTING"])
 ```
 
 ## Trying different things
@@ -269,17 +278,18 @@ altMany :: (Parser A)[] -> Parser A
 
 - Let's try them with the helpful `matchLiteral` function, which is a `Parser`
   that takes a `string` and matches if it's exactly the same.
+
 ```typescript
-type Animal = "Dog" | "Cat" | "Horse"
+type Animal = 'Dog' | 'Cat' | 'Horse'
 
 const animalParser: Parser<Animal> = altMany(
-  matchLiteral("Dog"),
-  matchLiteral("Cat"),
-  matchLiteral("Horse")
+  matchLiteral('Dog'),
+  matchLiteral('Cat'),
+  matchLiteral('Horse')
 )
 
-animalParser.parse("Bat hat") // Nothing
-animalParser.parse("Horse course") // Just<[" course", "Horse"]>
+animalParser.parse('Bat hat') // Nothing
+animalParser.parse('Horse course') // Just<[" course", "Horse"]>
 ```
 
 ## More combining
@@ -292,11 +302,13 @@ pair :: Parser A -> Parser B -> Parser [A,B]
 ```
 
 ```typescript
-const animalWithPunctuation: Parser<[Animal,string]>
-  = pair(animalParser, matchLiteral("."))
+const animalWithPunctuation: Parser<[Animal, string]> = pair(
+  animalParser,
+  matchLiteral('.')
+)
 
-animalWithPunctuation.parse("Horse") // Nothing
-animalWithPunctuation.parse("Horse.") // Just<["", ["Horse","."]]>
+animalWithPunctuation.parse('Horse') // Nothing
+animalWithPunctuation.parse('Horse.') // Just<["", ["Horse","."]]>
 ```
 
 - Often, we want to check elements are there, but we don't care about them, so
@@ -308,29 +320,29 @@ right :: Parser A -> Parser B -> Parser B
 ```
 
 ```typescript
-const animalParserLeft = left(animalParser, matchLiteral("."))
+const animalParserLeft = left(animalParser, matchLiteral('.'))
 
-animalParserLeft.parse("Horse") // Nothing
-animalParserLeft.parser("Horse.") // Just<["","Horse"]>
+animalParserLeft.parse('Horse') // Nothing
+animalParserLeft.parser('Horse.') // Just<["","Horse"]>
 ```
 
 - We need the full stop to be there, but we don't want to keep it.
 
 - Or perhaps we're incredibly interested in punctuation and nothing else
- ```typescript
-const animalParserRight = right(animalParser, matchLiteral("."))
 
-animalParserRight.parse("Dog") // Nothing
-animalParserRight.parser("Dog.") // Just<["","."]>
+```typescript
+const animalParserRight = right(animalParser, matchLiteral('.'))
+
+animalParserRight.parse('Dog') // Nothing
+animalParserRight.parser('Dog.') // Just<["","."]>
 ```
 
 ## Great
 
-That's a __LOT__ of things. I am sorry.
+That's a **LOT** of things. I am sorry.
 
 However, I would say that this stuff is a lot more intuitive once you start
 using it a bit, so we should probably do that.
 
 We are going to parse some _email addresses_, and then if we're really lucky,
 some _meter serial numbers_. What a day.
-

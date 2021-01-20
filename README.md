@@ -6,11 +6,11 @@ Click on the words for information about subjects and things.
 
 [Intro](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/intro.md)
 
-### Lesson 1 - Maybe
+### Lesson 1 - Option
 
-[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson1-maybe.md)
+[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson1-option.md)
 
-[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson1-maybe.ts)
+[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson1-option.ts)
 
 ### Lesson 2 - Either
 

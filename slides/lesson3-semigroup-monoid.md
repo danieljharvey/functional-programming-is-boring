@@ -1,14 +1,14 @@
 # Part 3
 
-## Smashing things together, generally 
+## Smashing things together, generally
 
-In the last two things we looked at, `Maybe` and `Either`, there was one key
+In the last two things we looked at, `Option` and `Either`, there was one key
 theme:
 
 - When we did stuff like:
 
 ```typescript
-const maybeBigNumber = Maybe.map(x => x * 2, maybeSmallNumber)
+const optionBigNumber = Option.map((x) => x * 2, optionSmallNumber)
 ```
 
 - We separated _what_ we want to do with the data inside
@@ -20,12 +20,12 @@ const maybeBigNumber = Maybe.map(x => x * 2, maybeSmallNumber)
 - (check whether there's any data there first, and only run the function if
   there is)
 
-## This certainly isn't a new idea 
+## This certainly isn't a new idea
 
 - Compare:
 
 ```typescript
-const numbers = [1,2,3,4,5]
+const numbers = [1, 2, 3, 4, 5]
 
 const doubleNumbers = () => {
   let newNumbers = []
@@ -40,7 +40,7 @@ const doubleNumbers = () => {
 - With:
 
 ```typescript
-const newNumbers = [1,2,3,4,5].map(i => i * 2)
+const newNumbers = [1, 2, 3, 4, 5].map((i) => i * 2)
 ```
 
 - In the first example _how_ and _what_ are all jumbled up.
@@ -54,7 +54,7 @@ const newNumbers = [1,2,3,4,5].map(i => i * 2)
 Let's say we have a list of `string` values.
 
 ```typescript
-const list = ["Dog", "Log", "Hog", "Bog", "Egg"]
+const list = ['Dog', 'Log', 'Hog', 'Bog', 'Egg']
 ```
 
 - For some reason, we want to squash these together into one cursed string.
@@ -74,8 +74,8 @@ const list = ["Dog", "Log", "Hog", "Bog", "Egg"]
 Often `reduce` is a go to tool for this.
 
 ```typescript
-const conflattenate = (strs: string[]): string => 
-  strs.reduce((total, str) => `${total}${str}`,"")
+const conflattenate = (strs: string[]): string =>
+  strs.reduce((total, str) => `${total}${str}`, '')
 ```
 
 - Seems fine
@@ -105,6 +105,7 @@ the _how_ a bit.
 - What would that function look like?
 
 - Hopefully, something like:
+
 ```typescript
 const append = (a: string, b: string): string => `${a}${b}`
 ```
@@ -122,8 +123,9 @@ const append = (a: string, b: string): string => `${a}${b}`
 - What does thing look like?
 
 - Hopefully:
+
 ```typescript
-const empty = ""
+const empty = ''
 ```
 
 - What happens when we `append` a `String` with an empty `String`?
@@ -131,7 +133,7 @@ const empty = ""
 - Nothing!
 
 - That's because the `empty` value is an `identity` value - ie, it does
-  nothing when `append`-ed to another value. 
+  nothing when `append`-ed to another value.
 
 ## Putting it together
 
@@ -139,12 +141,13 @@ This abstraction is called `Monoid`.
 
 - You might remember the term from it's hit single:
 
-- __A MONAD IS A MONOID IN THE CATEGORY OF ENDOFUNCTORS__
+- **A MONAD IS A MONOID IN THE CATEGORY OF ENDOFUNCTORS**
 
-- It's not very clever, just two functions in a record 
+- It's not very clever, just two functions in a record
+
 ```typescript
 type Monoid<A> = {
-  append: (one: A, two: A) => A,
+  append: (one: A, two: A) => A
   empty: A
 }
 ```
@@ -161,20 +164,21 @@ const monoidString: Monoid<string> => {
 - And then create a function that uses it on an array of strings:
 
 ```typescript
-const concat = (monoid: A, list: A[]): A => 
+const concat = (monoid: A, list: A[]): A =>
   list.reduce(monoid.append, monoid.empty)
 ```
 
 - It works!
+
 ```typescript
-console.log(concat(monoidString,["Dog","Log","Hog","Bog","Egg"]))
+console.log(concat(monoidString, ['Dog', 'Log', 'Hog', 'Bog', 'Egg']))
 // "DogLogHogBogEgg"
 ```
 
 - And also, the empty version works...
 
 ```typescript
-console.log(concat(monoidString,[]))
+console.log(concat(monoidString, []))
 // ""
 ```
 
@@ -186,7 +190,7 @@ I assure you, that this is a feature, not a bug.
 
 - The binary _AND_ operation: `True && False`
 
-- Or indeed, _OR_: `False || True` 
+- Or indeed, _OR_: `False || True`
 
 - Array concatenation: `[1,2,3,4].concat([5,6,5])`
 
@@ -197,9 +201,9 @@ I assure you, that this is a feature, not a bug.
 ## WHOA
 
 - It is said that arguing with idiots is impossible because they bring you down
-to their level, and then _beat you with experience_.
+  to their level, and then _beat you with experience_.
 
 - By reducing all our problems into smaller more stupid problems, we can do the
-same.
+  same.
 
 - Let's give some of these a smash

@@ -2,7 +2,7 @@
 
 ## If it isn't there, why isn't it?
 
-So last time we looked at `Maybe`, which can be
+So last time we looked at `Option`, which can be
 
 - `Just<thing>`
 
@@ -23,10 +23,10 @@ So last time we looked at `Maybe`, which can be
 - Let's look back to our horse getting
 
 ```typescript
-const getHorse = (name: string): Maybe<Horse> => {
-  const found = goodHorses.find(horse => horse.name === name);
-  return found ? just(found) : nothing();
-};
+const getHorse = (name: string): Option<Horse> => {
+  const found = goodHorses.find((horse) => horse.name === name)
+  return found ? just(found) : nothing()
+}
 ```
 
 - `nothing` is all very well but it doesn't tell us why we are sitting here
@@ -38,20 +38,20 @@ const getHorse = (name: string): Maybe<Horse> => {
 
 ```typescript
 const getHorse = (name: string): Horse => {
-  const found = goodHorses.find(horse => horse.name === name);
+  const found = goodHorses.find((horse) => horse.name === name)
   if (!found) {
-    throw Error(`Horse ${name} not found`);
+    throw Error(`Horse ${name} not found`)
   }
-  return found;
-};
+  return found
+}
 ```
 
 - ...and catch them down the line to see what happened.
 
 ```typescript
-let maybeHorse;
+let optionHorse
 try {
-  maybeHorse = getHorse("FAST-BOY");
+  optionHorse = getHorse('FAST-BOY')
 } catch (e: string) {
   // do something with the Error
 }
@@ -67,7 +67,9 @@ are out of disk space or memory.
 ## Enter, Either
 
 ```typescript
-type Either<E, A> = { type: "Left"; value: E } | { type: "Right"; value: A };
+type Either<E, A> =
+  | { type: 'Left'; value: E }
+  | { type: 'Right'; value: A }
 ```
 
 - It represents any two outcomes, but usually...
@@ -94,18 +96,24 @@ type Either<E, A> = { type: "Left"; value: E } | { type: "Right"; value: A };
 - `Left :: E -> Either<E, never>`
 
 ```typescript
-const left = <E>(value: E): Either<E, never> => ({ type: "Left", value });
+const left = <E>(value: E): Either<E, never> => ({
+  type: 'Left',
+  value,
+})
 
-left("egg");
+left('egg')
 // { type: "Left", value: "egg" }
 ```
 
 - `Right :: A -> Either<never, A>`
 
 ```typescript
-const right = <A>(value: A): Either<never, A> => ({ type: "Right", value });
+const right = <A>(value: A): Either<never, A> => ({
+  type: 'Right',
+  value,
+})
 
-right("leg");
+right('leg')
 // { type: "Right", value: "leg" }
 ```
 
@@ -114,25 +122,28 @@ right("leg");
 Now when something fails, we can say why
 
 ```typescript
-const divide = (dividend: number, divisor: number): Either<string, number> => {
+const divide = (
+  dividend: number,
+  divisor: number
+): Either<string, number> => {
   if (divisor === 0) {
-    return left("Cannot divide by zero");
+    return left('Cannot divide by zero')
   }
-  return right(dividend / divisor);
-};
+  return right(dividend / divisor)
+}
 ```
 
 - When things go well...
 
 ```typescript
-divide(10, 2);
+divide(10, 2)
 // { type: "Right", value: 5 }
 ```
 
 - Or when they don't...
 
 ```typescript
-divide(100, 0);
+divide(100, 0)
 // { type: "Left", value: "Cannot divide by zero" }
 ```
 
@@ -142,22 +153,27 @@ divide(100, 0);
   `Either`.
 
 ```typescript
-type Horse = { type: "HORSE"; name: string; legs: number; hasTail: boolean };
+type Horse = {
+  type: 'HORSE'
+  name: string
+  legs: number
+  hasTail: boolean
+}
 
 const horses: Horse[] = [
   {
-    type: "HORSE",
-    name: "CHAMPION",
+    type: 'HORSE',
+    name: 'CHAMPION',
     legs: 3,
-    hasTail: false
+    hasTail: false,
   },
   {
-    type: "HORSE",
-    name: "HOOVES_GALORE",
+    type: 'HORSE',
+    name: 'HOOVES_GALORE',
     legs: 4,
-    hasTail: true
-  }
-];
+    hasTail: true,
+  },
+]
 ```
 
 ## Step 1 - Find Horse
@@ -166,9 +182,9 @@ const horses: Horse[] = [
 
 ```typescript
 const getHorse = (name: string): Either<string, Horse> => {
-  const found = horses.filter(horse => horse.name === name);
-  return found[0] ? right(found[0]) : left(`Horse ${name} not found`);
-};
+  const found = horses.filter((horse) => horse.name === name)
+  return found[0] ? right(found[0]) : left(`Horse ${name} not found`)
+}
 ```
 
 ## Step 2 - Tidy Horse Name
@@ -178,8 +194,10 @@ const getHorse = (name: string): Either<string, Horse> => {
 ```typescript
 const tidyHorseName = (horse: Horse): Horse => ({
   ...horse,
-  name: horse.name.charAt(0).toUpperCase() + horse.name.slice(1).toLowerCase()
-});
+  name:
+    horse.name.charAt(0).toUpperCase() +
+    horse.name.slice(1).toLowerCase(),
+})
 ```
 
 ## Step 3 - Standardise Horse
@@ -188,38 +206,40 @@ const tidyHorseName = (horse: Horse): Horse => ({
 
 ```typescript
 type StandardHorse = {
-  name: string;
-  hasTail: true;
-  legs: 4;
-  type: "STANDARD_HORSE";
-};
+  name: string
+  hasTail: true
+  legs: 4
+  type: 'STANDARD_HORSE'
+}
 
 type TailCheckError =
-  | { type: "HAS_NO_TAIL" }
-  | { type: "TOO_MANY_LEGS" }
-  | { type: "NOT_ENOUGH_LEGS" };
+  | { type: 'HAS_NO_TAIL' }
+  | { type: 'TOO_MANY_LEGS' }
+  | { type: 'NOT_ENOUGH_LEGS' }
 ```
 
 - `standardise :: Horse -> Either TailCheckError StandardHorse`
 
 ```typescript
-const standardise = (horse: Horse): Either<TailCheckError, StandardHorse> => {
+const standardise = (
+  horse: Horse
+): Either<TailCheckError, StandardHorse> => {
   if (!horse.hasTail) {
-    return left({ type: "HAS_NO_TAIL" });
+    return left({ type: 'HAS_NO_TAIL' })
   }
   if (horse.legs < 4) {
-    return left({ type: "NOT_ENOUGH_LEGS" });
+    return left({ type: 'NOT_ENOUGH_LEGS' })
   }
   if (horse.legs > 4) {
-    return left({ type: "TOO_MANY_LEGS" });
+    return left({ type: 'TOO_MANY_LEGS' })
   }
   return right({
     name: horse.name,
     hasTail: true,
     legs: 4,
-    type: "STANDARD_HORSE"
-  });
-};
+    type: 'STANDARD_HORSE',
+  })
+}
 ```
 
 ## What we want
@@ -238,18 +258,18 @@ aren't so simple.
 ```typescript
 const otherHorses: Horse[] = [
   {
-    type: "HORSE",
-    name: "ROAST_BEEF",
+    type: 'HORSE',
+    name: 'ROAST_BEEF',
     legs: 2,
-    hasTail: false
+    hasTail: false,
   },
   {
-    type: "HORSE",
-    name: "INFINITE_JEFF",
+    type: 'HORSE',
+    name: 'INFINITE_JEFF',
     legs: 5,
-    hasTail: true
-  }
-];
+    hasTail: true,
+  },
+]
 ```
 
 - Therefore, when doing `getHorse` we have two places we can look.
@@ -264,9 +284,9 @@ const otherHorses: Horse[] = [
 const getHorse2 = (possibleHorses: Horse[]) => (
   name: string
 ): Either<string, Horse> => {
-  const found = possibleHorses.filter(horse => horse.name === name);
-  return found[0] ? right(found[0]) : left(`Horse ${name} not found`);
-};
+  const found = possibleHorses.filter((horse) => horse.name === name)
+  return found[0] ? right(found[0]) : left(`Horse ${name} not found`)
+}
 ```
 
 - But how do we try one and then the other?
@@ -275,8 +295,8 @@ const getHorse2 = (possibleHorses: Horse[]) => (
 
 - `alt :: Either E A -> Either E A -> Either E A`
 
-- Or indeed, for `Maybe`:
+- Or indeed, for `Option`:
 
-- `alt :: Maybe A -> Maybe A -> Maybe A`
+- `alt :: Option A -> Option A -> Option A`
 
 - Let's try fixing our horse issues with these:
