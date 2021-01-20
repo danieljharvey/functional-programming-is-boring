@@ -24,12 +24,12 @@ So last time we looked at `Option`, which can be
 
 ```typescript
 const getHorse = (name: string): Option<Horse> => {
-  const found = goodHorses.find((horse) => horse.name === name)
+  const found = goodHorses.find(horse => horse.name === name)
   return found ? some(found) : none()
 }
 ```
 
-- `nothing` is all very well but it doesn't tell us why we are sitting here
+- `none` is all very well but it doesn't tell us why we are sitting here
   without any horse.
 
 ## Errors
@@ -38,7 +38,7 @@ const getHorse = (name: string): Option<Horse> => {
 
 ```typescript
 const getHorse = (name: string): Horse => {
-  const found = goodHorses.find((horse) => horse.name === name)
+  const found = goodHorses.find(horse => horse.name === name)
   if (!found) {
     throw Error(`Horse ${name} not found`)
   }
@@ -159,7 +159,11 @@ type Horse = {
   legs: number
   hasTail: boolean
 }
+```
 
+- Here again, are our horses
+
+```typescript
 const horses: Horse[] = [
   {
     type: 'HORSE',
@@ -182,7 +186,7 @@ const horses: Horse[] = [
 
 ```typescript
 const getHorse = (name: string): Either<string, Horse> => {
-  const found = horses.filter((horse) => horse.name === name)
+  const found = horses.filter(horse => horse.name === name)
   return found[0] ? right(found[0]) : left(`Horse ${name} not found`)
 }
 ```
@@ -284,7 +288,7 @@ const otherHorses: Horse[] = [
 const getHorse2 = (possibleHorses: Horse[]) => (
   name: string
 ): Either<string, Horse> => {
-  const found = possibleHorses.filter((horse) => horse.name === name)
+  const found = possibleHorses.filter(horse => horse.name === name)
   return found[0] ? right(found[0]) : left(`Horse ${name} not found`)
 }
 ```
