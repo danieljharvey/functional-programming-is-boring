@@ -16,16 +16,16 @@ export type Monoid<A> = {
 export const monoidAnd: Monoid<boolean> = undefined as any
 
 // we can combine them...
-export type Nothing = { type: 'Nothing' }
-export type Just<A> = { type: 'Just'; value: A }
-export type Option<A> = Nothing | Just<A>
+export type None = { type: 'None' }
+export type Some<A> = { type: 'Some'; value: A }
+export type Option<A> = None | Some<A>
 
-export const just = <A>(value: A): Option<A> => ({
-  type: 'Just',
+export const some = <A>(value: A): Option<A> => ({
+  type: 'Some',
   value,
 })
 
-export const nothing = (): Option<never> => ({ type: 'Nothing' })
+export const none = (): Option<never> => ({ type: 'None' })
 
 // this combines two Option<A> values
 export const monoidOption = <A>(
@@ -49,7 +49,7 @@ export const monoidOptionSum: Monoid<Option<
 
 //////////////
 
-// this combines two Option values, returning the first one that is Just (or Nothing if neither are)
+// this combines two Option values, returning the first one that is Some (or None if neither are)
 export const monoidFirst = <A>(): Monoid<Option<A>> =>
   undefined as any
 

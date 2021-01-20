@@ -6,10 +6,10 @@ import {
   Monoid,
   monoidAnd,
   Option,
-  Nothing,
-  Just,
-  just,
-  nothing,
+  None,
+  Some,
+  some,
+  none,
   monoidOptionString,
   monoidOptionSum,
   monoidFirst,
@@ -102,22 +102,22 @@ describe.skip('And monoid', () => {
   })
 })
 
-const justArbitrary = <A>(
+const someArbitrary = <A>(
   arb: fc.Arbitrary<A>
-): fc.Arbitrary<Just<A>> =>
-  fc.record<Just<A>>({
-    type: fc.constant('Just'),
+): fc.Arbitrary<Some<A>> =>
+  fc.record<Some<A>>({
+    type: fc.constant('Some'),
     value: arb,
   })
 
-const nothingArbitrary: fc.Arbitrary<Nothing> = fc.record<Nothing>({
-  type: fc.constant('Nothing'),
+const noneArbitrary: fc.Arbitrary<None> = fc.record<None>({
+  type: fc.constant('None'),
 })
 
 const optionArbitrary = <A>(
   arb: fc.Arbitrary<A>
 ): fc.Arbitrary<Option<A>> =>
-  fc.oneof(justArbitrary(arb), nothingArbitrary)
+  fc.oneof(someArbitrary(arb), noneArbitrary)
 
 const optionStringArbitrary = optionArbitrary(fc.string())
 
@@ -134,10 +134,10 @@ const isIdempotent = <A>(semigroup: Semigroup<A>, a: A): boolean =>
 describe.skip('Option<string> monoid', () => {
   it('Combines two Option<string>', () => {
     expect(
-      monoidOptionString.append(just('up'), just('dog'))
-    ).toEqual(just('updog'))
-    expect(monoidOptionString.append(nothing(), just('hi'))).toEqual(
-      just('hi')
+      monoidOptionString.append(some('up'), some('dog'))
+    ).toEqual(some('updog'))
+    expect(monoidOptionString.append(none(), some('hi'))).toEqual(
+      some('hi')
     )
   })
   it('Obeys associativity', () => {
@@ -191,11 +191,11 @@ const optionNumberArbitrary = optionArbitrary(fc.integer())
 
 describe.skip('Option Sum monoid', () => {
   it('Combines two Option Sum', () => {
-    expect(monoidOptionSum.append(just(10), just(15))).toEqual(
-      just(25)
+    expect(monoidOptionSum.append(some(10), some(15))).toEqual(
+      some(25)
     )
-    expect(monoidOptionSum.append(nothing(), just(10))).toEqual(
-      just(10)
+    expect(monoidOptionSum.append(none(), some(10))).toEqual(
+      some(10)
     )
   })
   it('Obeys associativity', () => {
@@ -243,9 +243,9 @@ const optionAnythingArbitrary = optionArbitrary(fc.anything())
 
 describe.skip('Option First monoid', () => {
   it('Combines two Option First', () => {
-    expect(monoidFirst().append(just(10), just(15))).toEqual(just(10))
-    expect(monoidFirst().append(nothing(), just(10))).toEqual(
-      just(10)
+    expect(monoidFirst().append(some(10), some(15))).toEqual(some(10))
+    expect(monoidFirst().append(none(), some(10))).toEqual(
+      some(10)
     )
   })
   it('Obeys associativity', () => {

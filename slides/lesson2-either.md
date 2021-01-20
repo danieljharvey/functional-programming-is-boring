@@ -4,11 +4,11 @@
 
 So last time we looked at `Option`, which can be
 
-- `Just<thing>`
+- `Some<thing>`
 
 - or
 
-- `Nothing`
+- `None`
 
 ## We've certainly gained some things
 
@@ -25,7 +25,7 @@ So last time we looked at `Option`, which can be
 ```typescript
 const getHorse = (name: string): Option<Horse> => {
   const found = goodHorses.find((horse) => horse.name === name)
-  return found ? just(found) : nothing()
+  return found ? some(found) : none()
 }
 ```
 

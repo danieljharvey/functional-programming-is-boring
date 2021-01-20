@@ -82,7 +82,7 @@ map :: (A -> B) -> Option A -> Option B
 
 ```typescript
 const map = <A, B>(f: (a: A) => B, a: Option<A>): Option<B> =>
-  a.type === 'Just' ? just(f(a.value)) : nothing()
+  a.type === 'Some' ? some(f(a.value)) : none()
 ```
 
 - Ordering doesn't really matter here, all the values are ready to go

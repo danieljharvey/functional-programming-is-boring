@@ -132,8 +132,8 @@ There is a slightly simpler version which we will use today:
 type ParsingFunction<A> = (str: string) => Option<[string, A]>
 ```
 
-- This takes a **string** and then returns either `Nothing` (for "I could not
-  parse this nonsense") or a `Just` with the remainder and the thing it parsed.
+- This takes a **string** and then returns either `None` (for "I could not
+  parse this nonsense") or a `Some` with the remainder and the thing it parsed.
 
 - We'll wrap it up like this so Typescript can keep up:
 
@@ -150,8 +150,8 @@ anyChar :: Parser<string>
 - This returns any single character.
 
 ```typescript
-anyChar.parse('horse') // Just(["orse", "h"])
-anyChar.parse('') // Nothing
+anyChar.parse('horse') // Some(["orse", "h"])
+anyChar.parse('') // None
 ```
 
 ## Combination time
@@ -175,8 +175,8 @@ const isCapital = (char: string) => {
 
 const capitalChar: Parser<string> = pred(anyChar, isCapital)
 
-capitalChar.parse('horse') // Nothing
-capitalChar.parse('Horse') // Just(["orse", "H"])
+capitalChar.parse('horse') // None
+capitalChar.parse('Horse') // Some(["orse", "H"])
 ```
 
 - Great! How what about one for numbers?
@@ -191,8 +191,8 @@ const isDigit = (char: string) => {
 
 const digitChar: Parser<string> = pred(anyChar, isNumber)
 
-digitChar.parse('horse') // Nothing
-digitChar.parse('9 horses') // Just([" horses", "9"])
+digitChar.parse('horse') // None
+digitChar.parse('9 horses') // Some([" horses", "9"])
 ```
 
 - We have a problem though, all we have now is a `string` that we know has a
@@ -223,8 +223,8 @@ map :: (A -> B) -> Parser A -> Parser B
 ```typescript
 const digitParser: Parser<number> = map(digitChar, (a) => Number(a))
 
-digitParser.parse('horse') // Nothing
-digitParser.parse('123') // Just(["12",3])
+digitParser.parse('horse') // None
+digitParser.parse('123') // Some(["12",3])
 ```
 
 - What about parsing more than one thing?
@@ -259,8 +259,8 @@ const shoutingWordParser: Parser<string> = map(
   (as) => as.join('')
 )
 
-shoutingParser.parse('not shouting') // Nothing
-shoutingParser.parse('SHOUTING time') // Just([" time", "SHOUTING"])
+shoutingParser.parse('not shouting') // None
+shoutingParser.parse('SHOUTING time') // Some([" time", "SHOUTING"])
 ```
 
 ## Trying different things
@@ -288,8 +288,8 @@ const animalParser: Parser<Animal> = altMany(
   matchLiteral('Horse')
 )
 
-animalParser.parse('Bat hat') // Nothing
-animalParser.parse('Horse course') // Just<[" course", "Horse"]>
+animalParser.parse('Bat hat') // None
+animalParser.parse('Horse course') // Some<[" course", "Horse"]>
 ```
 
 ## More combining
@@ -307,8 +307,8 @@ const animalWithPunctuation: Parser<[Animal, string]> = pair(
   matchLiteral('.')
 )
 
-animalWithPunctuation.parse('Horse') // Nothing
-animalWithPunctuation.parse('Horse.') // Just<["", ["Horse","."]]>
+animalWithPunctuation.parse('Horse') // None
+animalWithPunctuation.parse('Horse.') // Some<["", ["Horse","."]]>
 ```
 
 - Often, we want to check elements are there, but we don't care about them, so
@@ -322,8 +322,8 @@ right :: Parser A -> Parser B -> Parser B
 ```typescript
 const animalParserLeft = left(animalParser, matchLiteral('.'))
 
-animalParserLeft.parse('Horse') // Nothing
-animalParserLeft.parser('Horse.') // Just<["","Horse"]>
+animalParserLeft.parse('Horse') // None
+animalParserLeft.parser('Horse.') // Some<["","Horse"]>
 ```
 
 - We need the full stop to be there, but we don't want to keep it.
@@ -333,8 +333,8 @@ animalParserLeft.parser('Horse.') // Just<["","Horse"]>
 ```typescript
 const animalParserRight = right(animalParser, matchLiteral('.'))
 
-animalParserRight.parse('Dog') // Nothing
-animalParserRight.parser('Dog.') // Just<["","."]>
+animalParserRight.parse('Dog') // None
+animalParserRight.parser('Dog.') // Some<["","."]>
 ```
 
 ## Great

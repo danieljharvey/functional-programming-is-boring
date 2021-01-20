@@ -87,9 +87,9 @@ This measure of how many possible values exist in a type is called _cardinality_
 
 - The type `Option<boolean>` could have values of either
 
-- `Just(true)`
+- `Some(true)`
 
-- `Just(false)`
+- `Some(false)`
 
 - `Nothing`
 

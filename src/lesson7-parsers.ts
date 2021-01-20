@@ -1,27 +1,27 @@
 // rustle up a quick option type
 
-export type Just<A> = { type: 'Just'; value: A }
-export type Nothing = { type: 'Nothing' }
-export type Option<A> = Nothing | Just<A>
+export type Some<A> = { type: 'Some'; value: A }
+export type None = { type: 'None' }
+export type Option<A> = None | Some<A>
 
-export const just = <A>(value: A): Option<A> => ({
-  type: 'Just',
+export const some = <A>(value: A): Option<A> => ({
+  type: 'Some',
   value,
 })
 
-export const nothing = (): Option<never> => ({ type: 'Nothing' })
+export const none = (): Option<never> => ({ type: 'None' })
 
 export const optionMap = <A, B>(
   f: (a: A) => B,
   option: Option<A>
 ): Option<B> =>
-  option.type === 'Just' ? just(f(option.value)) : nothing()
+  option.type === 'Some' ? some(f(option.value)) : none()
 
-export const isNothing = <A>(option: Option<A>): option is Nothing =>
-  option.type === 'Nothing'
+export const isNone = <A>(option: Option<A>): option is None =>
+  option.type === 'None'
 
-export const isJust = <A>(option: Option<A>): option is Just<A> =>
-  !isNothing(option)
+export const isSome = <A>(option: Option<A>): option is Some<A> =>
+  !isNone(option)
 
 // and off we go...
 
@@ -44,12 +44,12 @@ export const runParser = <A>(
   input: string
 ): Option<A> => {
   const result = parser.parse(input)
-  if (isNothing(result)) {
-    return nothing()
+  if (isNone(result)) {
+    return none()
   }
   return result.value[0].length === 0
-    ? just(result.value[1])
-    : nothing()
+    ? some(result.value[1])
+    : none()
 }
 
 // take the first X characters of string, returns null if X is over string
@@ -80,7 +80,7 @@ export const alt = <A>(
 ): Parser<A> =>
   makeParser((input) => {
     const resultA = parser1.parse(input)
-    if (isJust(resultA)) {
+    if (isSome(resultA)) {
       return resultA
     }
     return parser2.parse(input)
@@ -100,7 +100,7 @@ export const andThen = <A, B>(
 ): Parser<B> =>
   makeParser((input) => {
     const result = parserA.parse(input)
-    if (isNothing(result)) {
+    if (isNone(result)) {
       return result
     }
     const [next, a] = result.value
@@ -115,17 +115,17 @@ export const pair = <A, B>(
 ): Parser<[A, B]> =>
   makeParser((input) => {
     const resultA = parserA.parse(input)
-    if (isNothing(resultA)) {
+    if (isNone(resultA)) {
       return resultA
     }
     const [rest, a] = resultA.value
     const resultB = parserB.parse(rest)
-    if (isNothing(resultB)) {
+    if (isNone(resultB)) {
       return resultB
     }
     const [restB, b] = resultB.value
 
-    return just([restB, [a, b]])
+    return some([restB, [a, b]])
   })
 
 // parse two things, then discard the second one
@@ -144,21 +144,21 @@ export const right = <A, B>(
 export const oneOrMore = <A>(parserA: Parser<A>): Parser<A[]> =>
   makeParser((input) => {
     const res = parserA.parse(input)
-    if (isNothing(res)) {
+    if (isNone(res)) {
       return res
     }
     let [next, result] = res.value
     let results = [result]
     while (true) {
       const parsed = parserA.parse(next)
-      if (isJust(parsed)) {
+      if (isSome(parsed)) {
         next = parsed.value[0]
         results.push(parsed.value[1])
       } else {
         break
       }
     }
-    return just([next, results])
+    return some([next, results])
   })
 
 // given a parser, return an array with zero or more matches
@@ -168,20 +168,20 @@ export const zeroOrMore = <A>(parserA: Parser<A>): Parser<A[]> =>
     let results = []
     while (true) {
       const parsed = parserA.parse(next)
-      if (isJust(parsed)) {
+      if (isSome(parsed)) {
         next = parsed.value[0]
         results.push(parsed.value[1])
       } else {
         break
       }
     }
-    return just([next, results])
+    return some([next, results])
   })
 
 // a parser that matches any character
 export const anyChar = makeParser((input) => {
   const [match, rest] = splitString(input, 1)
-  return match !== null ? just([rest, match]) : nothing()
+  return match !== null ? some([rest, match]) : none()
 })
 
 // given a parser, and a predicate, return a new, fussier parser
@@ -191,11 +191,11 @@ export const pred = <A>(
 ): Parser<A> =>
   makeParser((input) => {
     const result = parser.parse(input)
-    if (isNothing(result)) {
+    if (isNone(result)) {
       return result
     }
     const [rest, a] = result.value
-    return predicate(a) ? just([rest, a]) : nothing()
+    return predicate(a) ? some([rest, a]) : none()
   })
 
 // parser that matches 'lit' exactly or fails
@@ -204,7 +204,7 @@ export const matchLiteral = <Lit extends string>(
 ): Parser<Lit> =>
   makeParser((input) => {
     const [match, rest] = splitString(input, lit.length)
-    return match === lit ? just([rest, lit]) : nothing()
+    return match === lit ? some([rest, lit]) : none()
   })
 
 // predicate for number
