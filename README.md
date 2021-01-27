@@ -68,6 +68,8 @@ Some more concrete examples of FP in the wild (please feel free to contribute he
 
 [Option](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/Option.ts)
 
+[Either](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/Either.ts)
+
 ## Extra meandering things that didn't fit into any lesson
 
 ### Bonus 1 - Currying
