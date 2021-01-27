@@ -6,6 +6,8 @@ Click on the words for information about subjects and things.
 
 [Intro](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/intro.md)
 
+## Lessons, as such
+
 ### Lesson 1 - Option
 
 [Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson1-option.md)
@@ -59,6 +61,8 @@ Click on the words for information about subjects and things.
 [Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson9-validation.md)
 
 [Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson9-validation.ts)
+
+## Extra meandering things that didn't fit into any lesson
 
 ### Bonus 1 - Currying
 

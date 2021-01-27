@@ -15,7 +15,7 @@
   "dependencies": {
     "axios": "^0.21.0",
     "fast-check": "^2.3.0",
-    "fp-ts": "^2.8.4",
+    "fp-ts": "^2.9.0",
     "io-ts": "^2.2.13",
     "jest": "^26.4.2",
     "monocle-ts": "^2.3.3",
