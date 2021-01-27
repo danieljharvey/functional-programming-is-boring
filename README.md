@@ -62,6 +62,12 @@ Click on the words for information about subjects and things.
 
 [Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson9-validation.ts)
 
+## Examples
+
+Some more concrete examples of FP in the wild (please feel free to contribute here if you find something worth sharing)
+
+[Option](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/Option.ts)
+
 ## Extra meandering things that didn't fit into any lesson
 
 ### Bonus 1 - Currying
