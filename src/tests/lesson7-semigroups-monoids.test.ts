@@ -13,7 +13,7 @@ import {
   monoidOptionString,
   monoidOptionSum,
   monoidFirst,
-} from '../lesson3-semigroups-monoids'
+} from '../lesson7-semigroups-monoids'
 
 // cope better with javascript's terrible notion of equality
 const eq = <A>(a: A, b: A): boolean =>
@@ -95,7 +95,7 @@ describe.skip('And monoid', () => {
   })
   it('Has a working identity value', () => {
     fc.assert(
-      fc.property(fc.boolean(), (a) => {
+      fc.property(fc.boolean(), a => {
         expect(hasIdentity(monoidAnd, a)).toBeTruthy()
       })
     )
@@ -156,7 +156,7 @@ describe.skip('Option<string> monoid', () => {
   })
   it('Has a working identity value', () => {
     fc.assert(
-      fc.property(optionStringArbitrary, (a) => {
+      fc.property(optionStringArbitrary, a => {
         expect(hasIdentity(monoidOptionString, a)).toBeTruthy()
       })
     )
@@ -179,7 +179,7 @@ describe.skip('Option<string> monoid', () => {
   it('Is not idempotent', () => {
     expect(() =>
       fc.assert(
-        fc.property(optionStringArbitrary, (a) =>
+        fc.property(optionStringArbitrary, a =>
           expect(isIdempotent(monoidOptionString, a)).toBeTruthy()
         )
       )
@@ -194,9 +194,7 @@ describe.skip('Option Sum monoid', () => {
     expect(monoidOptionSum.append(some(10), some(15))).toEqual(
       some(25)
     )
-    expect(monoidOptionSum.append(none(), some(10))).toEqual(
-      some(10)
-    )
+    expect(monoidOptionSum.append(none(), some(10))).toEqual(some(10))
   })
   it('Obeys associativity', () => {
     fc.assert(
@@ -212,7 +210,7 @@ describe.skip('Option Sum monoid', () => {
   })
   it('Has a working identity value', () => {
     fc.assert(
-      fc.property(optionNumberArbitrary, (a) => {
+      fc.property(optionNumberArbitrary, a => {
         expect(hasIdentity(monoidOptionSum, a)).toBeTruthy()
       })
     )
@@ -231,7 +229,7 @@ describe.skip('Option Sum monoid', () => {
   it('Is not idempotent', () => {
     expect(() =>
       fc.assert(
-        fc.property(optionNumberArbitrary, (a) =>
+        fc.property(optionNumberArbitrary, a =>
           expect(isIdempotent(monoidOptionSum, a)).toBeTruthy()
         )
       )
@@ -244,9 +242,7 @@ const optionAnythingArbitrary = optionArbitrary(fc.anything())
 describe.skip('Option First monoid', () => {
   it('Combines two Option First', () => {
     expect(monoidFirst().append(some(10), some(15))).toEqual(some(10))
-    expect(monoidFirst().append(none(), some(10))).toEqual(
-      some(10)
-    )
+    expect(monoidFirst().append(none(), some(10))).toEqual(some(10))
   })
   it('Obeys associativity', () => {
     fc.assert(
@@ -262,7 +258,7 @@ describe.skip('Option First monoid', () => {
   })
   it('Has a working identity value', () => {
     fc.assert(
-      fc.property(optionAnythingArbitrary, (a) => {
+      fc.property(optionAnythingArbitrary, a => {
         expect(hasIdentity(monoidFirst(), a)).toBeTruthy()
       })
     )
@@ -282,7 +278,7 @@ describe.skip('Option First monoid', () => {
   })
   it('Is idempotent', () => {
     fc.assert(
-      fc.property(optionAnythingArbitrary, (a) =>
+      fc.property(optionAnythingArbitrary, a =>
         expect(isIdempotent(monoidFirst(), a)).toBeTruthy()
       )
     )

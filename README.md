@@ -6,7 +6,7 @@ Click on the words for information about subjects and things.
 
 [Intro](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/intro.md)
 
-## Lessons, as such
+## Part 1
 
 ### Lesson 1 - Option
 
@@ -20,47 +20,49 @@ Click on the words for information about subjects and things.
 
 [Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson2-either.ts)
 
-### Lesson 3 - Monoids
+### Lesson 3 - Optics
 
-[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson3-semigroup-monoid.md)
+[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson3-optics.md)
 
-[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson3-semigroups-monoids.ts)
+[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson3-optics.ts)
 
-### Lesson 4 - Continuations
+### Lesson 4 - TaskEither
 
-[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson4-continuations.md)
+[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson4-task-either.md)
 
-[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson4-continuations.ts)
+[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson4-task-either.ts)
 
-### Lesson 5 - Reader
+### Lesson 5 - Parsers
 
-[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson5-reader.md)
+[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson5-parsers.md)
 
-[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson5-reader.ts)
+[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson5-parsers.ts)
 
-### Lesson 6 - Optics
+### Lesson 6 - Validation
 
-[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson6-optics.md)
+[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson6-validation.md)
 
-[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson6-optics.ts)
+[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson6-validation.ts)
 
-### Lesson 7 - Parsers
+## Part 2
 
-[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson7-parsers.md)
+### Lesson 7 - Monoids
 
-[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson7-parsers.ts)
+[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson7-semigroup-monoid.md)
 
-### Lesson 8 - TaskEither
+[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson7-semigroups-monoids.ts)
 
-[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson8-task-either.md)
+### Lesson 8 - Reader
 
-[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson8-task-either.ts)
+[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson8-reader.md)
 
-### Lesson 9 - Validation
+[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson8-reader.ts)
 
-[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson9-validation.md)
+### Lesson 9 - Continuations
 
-[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson9-validation.ts)
+[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson9-continuations.md)
+
+[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson9-continuations.ts)
 
 ## Examples
 
@@ -69,6 +71,8 @@ Some more concrete examples of FP in the wild (please feel free to contribute he
 [Option](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/Option.ts)
 
 [Either](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/Either.ts)
+
+[io-ts validator](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/io-ts.ts)
 
 ## Extra meandering things that didn't fit into any lesson
 

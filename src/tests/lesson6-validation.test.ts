@@ -1,4 +1,4 @@
-import { endpoint, getDogWithValidation } from '../lesson9-validation'
+import { endpoint, getDogWithValidation } from '../lesson6-validation'
 
 import { isLeft, isRight } from 'fp-ts/lib/Either'
 
