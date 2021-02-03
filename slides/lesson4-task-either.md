@@ -1,6 +1,6 @@
-## Lesson 8
+## Lesson 4
 
-Previously, we've looked at both `Either`, which allows us to return values
+Previously, we've looked at `Either`, which allows us to return values
 that either are success or failure:
 
 ```typescript
@@ -9,20 +9,10 @@ type Either<E, A> =
   | { type: 'Right'; value: A }
 ```
 
-We also looked at `Continuation`, which lets us chain callbacks in a nice
-functional style:
+- Now that's all well and good, until we want do __do__ something, like fetch
+  from an API or fire nuclear warheads.
 
-```typescript
-type Continuation<A> = {
-  type: 'Continuation'
-  runContinuation: (next: (a: A) => void) => void
-}
-```
-
-- Now, if you remember back, we described `Continuation` as "`Promise`, but a
-  bit worse".
-
-- That's because it ignores the idea that anything can fail.
+- That's what we use `Promises` for right?
 
 - So what does `Promise` do?
 

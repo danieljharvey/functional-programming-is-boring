@@ -1,11 +1,9 @@
-# Part 6
+# Part 3
 
 ## Optics
 
-So last time we looked at `Reader`, which is a way of getting around all those
-variables we were dragging around.
-
-There's another cost of immutability we haven't yet talked about.
+Immutability makes everything a lot easier to reason about, and stops
+surprises, but there is a cost of immutability we haven't yet talked about.
 
 ## The good old days
 

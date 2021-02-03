@@ -1,9 +1,8 @@
-# Part 3
+# Part 7
 
 ## Smashing things together, generally
 
-In the last two things we looked at, `Option` and `Either`, there was one key
-theme:
+In all our previous lessons there has (hopefully) been one key theme:
 
 - When we did stuff like:
 

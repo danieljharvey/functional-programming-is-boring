@@ -1,8 +1,8 @@
-# Lesson 9
+# Lesson 6
 
 ## Validation
 
-Previously we looked at `TaskEither`, which combines the power of a `Task` and
+Previously we've looked at `TaskEither`, which combines the power of a `Task` and
 an `Either`.
 
 - Today we're going to look at starting to use these things in a **REAL LIFE**

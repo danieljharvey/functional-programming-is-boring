@@ -1,8 +1,8 @@
-# Part 7
+# Part 5
 
 ## Parsers
 
-Last time we looked at `optics`, particularly `lenses`, a way of getting
+Previously we looked at `optics`, particularly `lenses`, a way of getting
 information from and changing structured data.
 
 - But what if the data isn't structured yet?
