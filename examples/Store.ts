@@ -35,13 +35,13 @@ const results: ST.Store<number, Race> = {
   pos: 1,
 }
 
-const next = ST.seeks<number>(a => a + 1)
+const next = ST.seeks<number>((a) => a + 1)
 
-const prev = ST.seeks<number>(a => a - 1)
+const prev = ST.seeks<number>((a) => a - 1)
 
 console.log('first result', ST.extract(results))
-console.log('second result', ST.extract(next(results)))
-console.log('first result again', ST.extract(next(prev(results))))
+//console.log('second result', ST.extract(next(results)))
+//console.log('first result again', ST.extract(next(prev(results))))
 
 // because Store is a Comonad, and all Comonads are also Functors,
 // we are able to map over all the items inside if we want
@@ -50,7 +50,7 @@ const loudResults = ST.map((result: Race) => ({
   horseName: result.horseName.toUpperCase(),
 }))(results)
 
-console.log('First result with big name', ST.extract(loudResults))
+//console.log('First result with big name', ST.extract(loudResults))
 const getAverage = (arr: number[]) =>
   arr.reduce((p, c) => p + c, 0) / arr.length
 
@@ -62,7 +62,7 @@ type Average = {
 // computations, where each item can peek at the items around it
 // this can be used in graphics to creating blur functions
 // or to simulate the classic Comonad example, Conways Game of Life
-const rollingAverages = ST.extend<number, Race, Average>(res => {
+const rollingAverages = ST.extend<number, Race, Average>((res) => {
   const prevValue = ST.extract(prev(res))
   const thisValue = ST.extract(res)
   const nextValue = ST.extract(next(res))
@@ -77,7 +77,8 @@ const rollingAverages = ST.extend<number, Race, Average>(res => {
 })(results)
 
 // we can use this new store to grab individual averages
-console.log('first rolling average', ST.extract(rollingAverages))
+//console.log('first rolling average', ST.extract(rollingAverages))
+/*
 console.log(
   'second rolling average',
   ST.extract(next(rollingAverages))
@@ -85,12 +86,12 @@ console.log(
 console.log(
   'third rolling average',
   ST.extract(next(next(rollingAverages)))
-)
+)*/
 
 // or grab all the keys and get them all
 const keys = [...resultData.keys()]
 
 const averages = keys
-  .map(a => rollingAverages.peek(a))
-  .map(a => a.average)
-console.log('Rolling average finish time', averages)
+  .map((a) => rollingAverages.peek(a))
+  .map((a) => a.average)
+//console.log('Rolling average finish time', averages)
