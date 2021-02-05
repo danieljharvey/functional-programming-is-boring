@@ -1,67 +1,46 @@
-// rustle up a quick option type
+import * as O from 'fp-ts/Option'
+import { flow, pipe } from 'fp-ts/function'
 
-export type Some<A> = { type: 'Some'; value: A }
-export type None = { type: 'None' }
-export type Option<A> = None | Some<A>
-
-export const some = <A>(value: A): Option<A> => ({
-  type: 'Some',
-  value,
-})
-
-export const none = (): Option<never> => ({ type: 'None' })
-
-export const optionMap = <A, B>(
-  f: (a: A) => B,
-  option: Option<A>
-): Option<B> =>
-  option.type === 'Some' ? some(f(option.value)) : none()
-
-export const isNone = <A>(option: Option<A>): option is None =>
-  option.type === 'None'
-
-export const isSome = <A>(option: Option<A>): option is Some<A> =>
-  !isNone(option)
-
-// and off we go...
-
-// Parser A
+// this is a type for a Parser. The `A` generic shows the type that it will
+// return if it succeeds
 export type Parser<A> = {
   type: 'Parser'
-  parse: (input: string) => Option<[string, A]>
+  parse: (input: string) => O.Option<[string, A]>
 }
 
-// basic constructor
+// a constructor function for buiiding a Parser from it's function and wrapping
+// it in a discriminated union to make TS happy
 export const makeParser = <A>(
-  parse: (input: string) => Option<[string, A]>
+  parse: (input: string) => O.Option<[string, A]>
 ): Parser<A> => ({
   type: 'Parser',
   parse,
 })
 
+// given a Parser and a string, run it, returning a value if it works
 export const runParser = <A>(
   parser: Parser<A>,
   input: string
-): Option<A> => {
+): O.Option<A> => {
   const result = parser.parse(input)
-  if (isNone(result)) {
-    return none()
+  if (O.isNone(result)) {
+    return O.none
   }
   return result.value[0].length === 0
-    ? some(result.value[1])
-    : none()
+    ? O.some(result.value[1])
+    : O.none
 }
 
-// take the first X characters of string, returns null if X is over string
-// length
+// helper function that takes the first X characters of string, returning null
+// if X is over string length
 const splitString = (
   input: string,
   length: number
-): [string | null, string] => {
+): [string, O.Option<string>] => {
   const match = input.slice(0, length)
-  const actualMatch = match.length >= length ? match : null
+  const actualMatch = match.length >= length ? O.some(match) : O.none
   const rest = input.slice(length)
-  return [actualMatch, rest]
+  return [rest, actualMatch]
 }
 
 // map the item we've parsed into something else
@@ -69,8 +48,11 @@ export const map = <A, B>(
   parser: Parser<A>,
   f: (a: A) => B
 ): Parser<B> =>
-  makeParser((input) =>
-    optionMap(([rest, a]) => [rest, f(a)], parser.parse(input))
+  makeParser(
+    flow(
+      parser.parse,
+      O.map(([rest, a]) => [rest, f(a)])
+    )
   )
 
 // try parser1 then parser2
@@ -78,9 +60,9 @@ export const alt = <A>(
   parser1: Parser<A>,
   parser2: Parser<A>
 ): Parser<A> =>
-  makeParser((input) => {
+  makeParser(input => {
     const resultA = parser1.parse(input)
-    if (isSome(resultA)) {
+    if (O.isSome(resultA)) {
       return resultA
     }
     return parser2.parse(input)
@@ -98,9 +80,9 @@ export const andThen = <A, B>(
   parserA: Parser<A>,
   thenParserB: (a: A) => Parser<B>
 ): Parser<B> =>
-  makeParser((input) => {
+  makeParser(input => {
     const result = parserA.parse(input)
-    if (isNone(result)) {
+    if (O.isNone(result)) {
       return result
     }
     const [next, a] = result.value
@@ -113,19 +95,19 @@ export const pair = <A, B>(
   parserA: Parser<A>,
   parserB: Parser<B>
 ): Parser<[A, B]> =>
-  makeParser((input) => {
+  makeParser(input => {
     const resultA = parserA.parse(input)
-    if (isNone(resultA)) {
+    if (O.isNone(resultA)) {
       return resultA
     }
     const [rest, a] = resultA.value
     const resultB = parserB.parse(rest)
-    if (isNone(resultB)) {
+    if (O.isNone(resultB)) {
       return resultB
     }
     const [restB, b] = resultB.value
 
-    return some([restB, [a, b]])
+    return O.some([restB, [a, b]])
   })
 
 // parse two things, then discard the second one
@@ -142,46 +124,49 @@ export const right = <A, B>(
 
 // given a parser, return an array with one or more matches
 export const oneOrMore = <A>(parserA: Parser<A>): Parser<A[]> =>
-  makeParser((input) => {
+  makeParser(input => {
     const res = parserA.parse(input)
-    if (isNone(res)) {
+    if (O.isNone(res)) {
       return res
     }
     let [next, result] = res.value
     let results = [result]
     while (true) {
       const parsed = parserA.parse(next)
-      if (isSome(parsed)) {
+      if (O.isSome(parsed)) {
         next = parsed.value[0]
         results.push(parsed.value[1])
       } else {
         break
       }
     }
-    return some([next, results])
+    return O.some([next, results])
   })
 
 // given a parser, return an array with zero or more matches
 export const zeroOrMore = <A>(parserA: Parser<A>): Parser<A[]> =>
-  makeParser((input) => {
+  makeParser(input => {
     let next = input
     let results = []
     while (true) {
       const parsed = parserA.parse(next)
-      if (isSome(parsed)) {
+      if (O.isSome(parsed)) {
         next = parsed.value[0]
         results.push(parsed.value[1])
       } else {
         break
       }
     }
-    return some([next, results])
+    return O.some([next, results])
   })
 
 // a parser that matches any character
-export const anyChar = makeParser((input) => {
-  const [match, rest] = splitString(input, 1)
-  return match !== null ? some([rest, match]) : none()
+export const anyChar = makeParser(input => {
+  const [rest, optionMatch] = splitString(input, 1)
+  return pipe(
+    optionMatch,
+    O.map(match => [rest, match])
+  )
 })
 
 // given a parser, and a predicate, return a new, fussier parser
@@ -189,25 +174,34 @@ export const pred = <A>(
   parser: Parser<A>,
   predicate: (a: A) => boolean
 ): Parser<A> =>
-  makeParser((input) => {
+  makeParser(input => {
+    // run Parser
     const result = parser.parse(input)
-    if (isNone(result)) {
+    // if it fails, give up anyway
+    if (O.isNone(result)) {
       return result
     }
     const [rest, a] = result.value
-    return predicate(a) ? some([rest, a]) : none()
+    // if the output value satisfies our predicate, it parses,
+    // otherwise it fails
+    return predicate(a) ? O.some([rest, a]) : O.none
   })
 
 // parser that matches 'lit' exactly or fails
 export const matchLiteral = <Lit extends string>(
   lit: Lit
 ): Parser<Lit> =>
-  makeParser((input) => {
-    const [match, rest] = splitString(input, lit.length)
-    return match === lit ? some([rest, lit]) : none()
+  makeParser(input => {
+    // grab the next `X` chars
+    const [rest, optionMatch] = splitString(input, lit.length)
+    return pipe(
+      optionMatch,
+      // if we have a match, and it's what we expect, the Parser succeeds
+      O.chain(match => (match === lit ? O.some([rest, lit]) : O.none))
+    )
   })
 
-// predicate for number
+// predicate that checks whether a given char is numeric
 const isNumber = (char: string): boolean => {
   const code = char.charCodeAt(0)
   return (
@@ -215,7 +209,7 @@ const isNumber = (char: string): boolean => {
   )
 }
 
-// predicate for letter
+// predicate that checks whether a given char is a letter
 const isLetter = (char: string): boolean => {
   const code = char.charCodeAt(0)
   return (
@@ -224,7 +218,7 @@ const isLetter = (char: string): boolean => {
   )
 }
 
-// predicate for a char which is a letter or number
+// predicate that checks whether a given char is a letter or a number
 const isAlphaNumeric = (char: string): boolean =>
   isLetter(char) || isNumber(char)
 
@@ -235,22 +229,27 @@ export const alphaNumeric = pred(anyChar, isAlphaNumeric)
 export const number = pred(anyChar, isNumber)
 
 // parse a string of alphanumeric chars
-export const identifier = map(oneOrMore(alphaNumeric), (as) =>
+export const identifier = map(oneOrMore(alphaNumeric), as =>
   as.join('')
 )
 
 // parses a single piece of whitespace
-export const whitespace = pred(anyChar, (a) => a.trim() === '')
+export const whitespace = pred(anyChar, a => a.trim() === '')
 
-// parser of optional space
+// parser that consumes zero or more items of whitespace
 export const space0 = zeroOrMore(whitespace)
 
-// parser of required space
+// parser that consumes one or more items of whitespace
 export const space1 = oneOrMore(whitespace)
 
-// if parsers finds match, return output
-const mapLiteral = <A>(match: string, output: A): Parser<A> =>
-  map(matchLiteral(match), (_) => output)
+// a Parser that looks for `match`, and if it finds it, returns `A`
+export const mapLiteral = <A>(match: string, output: A): Parser<A> =>
+  map(matchLiteral(match), _ => output)
+
+// EXERCISE ONE
+//
+// That's a lot of tools up there, let create a parser that takes an email and
+// breaks it into it's useful parts
 
 // example: person@bulb.co.uk
 // would become { name: 'person', country: "UK" }
@@ -267,7 +266,7 @@ const usaParser: Parser<EmailCountry> = undefined as any
 const spainParser: Parser<EmailCountry> = undefined as any
 const franceParser: Parser<EmailCountry> = undefined as any
 
-const emailCountryParser: Parser<EmailCountry> = altMany(
+export const emailCountryParser: Parser<EmailCountry> = altMany(
   ukParser,
   usaParser,
   spainParser,
@@ -276,8 +275,12 @@ const emailCountryParser: Parser<EmailCountry> = altMany(
 
 export const bulbEmailParser: Parser<BulbEmailAddress> = undefined as any
 
-////////////
-// Exercise - meter serial numbers as per https://en.wikipedia.org/wiki/Meter_serial_number
+// EXERCISE TWO
+//
+// Great job. For this one, the final combinator `msnParser` has been created,
+// you just need to provide the small parsers that it's built from
+//
+// Codes taken from https://en.wikipedia.org/wiki/Meter_serial_number
 //
 
 /*
@@ -297,6 +300,7 @@ R	Sagem
 S	Actaris/Schlumberger (now owned by Itron)[1][2]
 */
 
+// some types...
 type ManufacturerCode =
   | 'AMPY'
   | 'CEWE'
@@ -331,10 +335,13 @@ export const yearParser: Parser<Year> = undefined as any
 // five or six digit number
 export const batchNumberParser: Parser<BatchNumber> = undefined as any
 
+// which manufacturer is this meter?
 export const manufacturerParser: Parser<ManufacturerCode> = undefined as any
 
+// which company purchased this meter?
 export const purchasingCompanyParser: Parser<PurchasingCompany> = undefined as any
 
+// our complete parser
 export const msnParser: Parser<MeterSerialNumber> = map(
   pair(
     pair(manufacturerParser, yearParser),
