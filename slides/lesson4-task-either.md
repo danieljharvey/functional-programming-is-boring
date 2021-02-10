@@ -79,16 +79,16 @@ about it because we're not jerks, is that they can also be combined.
 
 - `TaskEither<E,A>`
 
-- Now, we haven't talked about `Task<A>`, but it's the same as
-  `Continuation<A>`, in that it captures the idea of an async computation that
-  can't fail.
+- Now, we haven't talked about `Task<A>`, but it captures the idea of an async computation that
+  can't fail, such as a callback that returns a single value.
 
-- (also, this is what it's called in `fp-ts`, which we'll be using today)
+- And `Either<E,A>` lets us express the idea of something succeeding or
+  failing.
 
 - Therefore `TaskEither<E,A>` is an asynchronous computation that can succeed
   with an `A` or fail with an `E`.
 
-- We have a type for the failures.
+- Most importantly - we have a meaningful type for the failures.
 
 - (they are also lazy rather than eager, so returning one from a function
   doesn't run it until you decide, mumble mumble referential transparency)
