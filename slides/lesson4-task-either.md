@@ -9,7 +9,7 @@ type Either<E, A> =
   | { type: 'Right'; value: A }
 ```
 
-- Now that's all well and good, until we want do __do__ something, like fetch
+- Now that's all well and good, until we want do **do** something, like fetch
   from an API or fire nuclear warheads.
 
 - That's what we use `Promises` for right?
@@ -65,7 +65,7 @@ cousins `async` and `await` are excellent ways to unclutter asynchronous code.
 ## Typing the fail rail
 
 So a thing about `Monads`, which are a thing we've been using, but not boasting
-about it because we're not jerks, is that they can also be composed.
+about it because we're not jerks, is that they can also be combined.
 
 - We could have `ReaderOption<R,A>`, which provides a read only environment of
   type `R` and an `A` value, that may or may not exist.
@@ -128,7 +128,7 @@ type ApiReturn = { code: number; description: string }
 // businessValue :: TaskEither String (AxiosResponse ApiReturn)
 const businessValue = TE.tryCatch(
   () => axios.get('https://httpstat.us/200'),
-  (reason) => new Error(`${reason}`)
+  reason => new Error(`${reason}`)
 )
 ```
 
@@ -156,7 +156,7 @@ Our `businessValue` function returns either a `String` error or
 // betterBusinessValue :: TaskEither String ApiReturn
 const betterBusinessValue = pipe(
   businessValue,
-  TE.map((resp) => resp.data)
+  TE.map(resp => resp.data)
 )
 ```
 
@@ -168,8 +168,8 @@ const betterBusinessValue = pipe(
 // businessNumber :: TaskEither String Number
 const businessNumber = pipe(
   businessValue,
-  TE.map((resp) => resp.data),
-  TE.map((apiReturn) => apiReturn.code)
+  TE.map(resp => resp.data),
+  TE.map(apiReturn => apiReturn.code)
 )
 ```
 
