@@ -22,7 +22,7 @@ import {
 import * as O from 'fp-ts/Option'
 
 describe('Lesson 7 - parsers', () => {
-  describe('Warm ups', () => {
+  describe.skip('Warm ups', () => {
     it('one parses any character', () => {
       expect(runParser(one, '')).toEqual(O.none)
       expect(runParser(one, 'G')).toEqual(O.some('G'))

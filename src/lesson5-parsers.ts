@@ -267,48 +267,34 @@ export const mapLiteral = <A>(match: string, output: A): Parser<A> =>
 export const one: Parser<string> = anyChar
 
 // two - parse any numeric digit
-export const two: Parser<string> = digit
+export const two: Parser<string> = undefined as any
 
 // three - parse any numeric digit and turn it into a number
-export const three: Parser<number> = map(digit, Number)
+export const three: Parser<number> = undefined as any
 
 // four - parse any letter except H
-export const four: Parser<string> = pred(
-  anyChar,
-  a => isLetter(a) && a !== 'h' && a !== 'H'
-)
+export const four: Parser<string> = undefined as any
 
 // five - parse a string of exclamation marks as an array of characters
-export const five: Parser<string[]> = oneOrMore(
-  pred(anyChar, a => a == '!')
-)
+export const five: Parser<string[]> = undefined as any
 
 // six - parse a string of exclamation marks as a string
-export const six: Parser<string> = map(five, as => as.join(''))
+export const six: Parser<string> = undefined as any
 
 // seven - parse a string of alphanumeric characters
-export const seven: Parser<string> = identifier
+export const seven: Parser<string> = undefined as any
 
 // eight - parses two words separated by a space
-export const eight: Parser<[string, string]> = pair(
-  identifier,
-  right(space1, identifier)
-)
+export const eight: Parser<[string, string]> = undefined as any
 
 // nine - parses 'horse' and nothing else
-export const nine: Parser<'horse'> = matchLiteral('horse')
+export const nine: Parser<'horse'> = undefined as any
 
 // ten - parse one or more digits separated by commas
-export const ten: Parser<number[]> = map(
-  pair(three, zeroOrMore(right(matchLiteral(','), three))),
-  ([a, as]) => [a, ...as]
-)
+export const ten: Parser<number[]> = undefined as any
 
 // eleven - parse 'dog' or 'log' but nothing else
-export const eleven: Parser<'dog' | 'log'> = alt(
-  matchLiteral('dog'),
-  matchLiteral('log')
-)
+export const eleven: Parser<'dog' | 'log'> = undefined as any
 
 type TrafficLights =
   | { type: 'Stop' }
@@ -316,11 +302,7 @@ type TrafficLights =
   | { type: 'Go' }
 
 // twelve - parse 'red' 'yellow' or 'green' into datatype
-export const twelve: Parser<TrafficLights> = altMany<TrafficLights>(
-  map(matchLiteral('red'), _ => ({ type: 'Stop' })),
-  map(matchLiteral('yellow'), _ => ({ type: 'GetReady' })),
-  map(matchLiteral('green'), _ => ({ type: 'Go' }))
-)
+export const twelve: Parser<TrafficLights> = undefined as any
 
 // bonus - can you extract a useful combinator from the above?
 
