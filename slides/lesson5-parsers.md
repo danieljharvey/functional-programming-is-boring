@@ -221,7 +221,7 @@ map :: (A -> B) -> Parser A -> Parser B
 - Therefore we can make a `Parser<number>`.
 
 ```typescript
-const digitParser: Parser<number> = map(digitChar, (a) => Number(a))
+const digitParser: Parser<number> = map(digitChar, a => Number(a))
 
 digitParser.parse('horse') // None
 digitParser.parse('123') // Some(["12",3])
@@ -256,7 +256,7 @@ const capitalParser: Parser<string> = pred(anyChar, isCapital)
 
 const shoutingWordParser: Parser<string> = map(
   oneOrMore(capitalParser),
-  (as) => as.join('')
+  as => as.join('')
 )
 
 shoutingParser.parse('not shouting') // None
@@ -323,7 +323,7 @@ right :: Parser A -> Parser B -> Parser B
 const animalParserLeft = left(animalParser, matchLiteral('.'))
 
 animalParserLeft.parse('Horse') // None
-animalParserLeft.parser('Horse.') // Some<["","Horse"]>
+animalParserLeft.parse('Horse.') // Some<["","Horse"]>
 ```
 
 - We need the full stop to be there, but we don't want to keep it.
@@ -334,15 +334,16 @@ animalParserLeft.parser('Horse.') // Some<["","Horse"]>
 const animalParserRight = right(animalParser, matchLiteral('.'))
 
 animalParserRight.parse('Dog') // None
-animalParserRight.parser('Dog.') // Some<["","."]>
+animalParserRight.parse('Dog.') // Some<["","."]>
 ```
 
 ## Great
 
 That's a **LOT** of things. I am sorry.
 
-However, I would say that this stuff is a lot more intuitive once you start
-using it a bit, so we should probably do that.
+As usual, talk is cheap, and the best way to gain an intuition to use this stuff, so let's do that.
 
-We are going to parse some _email addresses_, and then if we're really lucky,
-some _meter serial numbers_. What a day.
+We're going to make lots of little parsers, building up to one for _email
+addresses_, and then if we're really lucky, some _meter serial numbers_.
+
+What a time to be alive.
