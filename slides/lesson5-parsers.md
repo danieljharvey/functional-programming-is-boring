@@ -224,7 +224,7 @@ map :: (A -> B) -> Parser A -> Parser B
 const digitParser: Parser<number> = map(digitChar, a => Number(a))
 
 digitParser.parse('horse') // None
-digitParser.parse('123') // Some(["12",3])
+digitParser.parse('123') // Some(["23",1])
 ```
 
 - What about parsing more than one thing?
