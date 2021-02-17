@@ -1,6 +1,8 @@
 import * as O from 'fp-ts/Option'
 import { flow, pipe } from 'fp-ts/function'
 
+// THE BASIC TYPES AND THINGS
+
 // this is a type for a Parser. The `A` generic shows the type that it will
 // return if it succeeds
 export type Parser<A> = {
@@ -42,6 +44,8 @@ const splitString = (
   const rest = input.slice(length)
   return [rest, actualMatch]
 }
+
+// THE COMBINATORS
 
 // map the item we've parsed into something else
 export const map = <A, B>(
@@ -160,15 +164,6 @@ export const zeroOrMore = <A>(parserA: Parser<A>): Parser<A[]> =>
     return O.some([next, results])
   })
 
-// a parser that matches any character
-export const anyChar = makeParser(input => {
-  const [rest, optionMatch] = splitString(input, 1)
-  return pipe(
-    optionMatch,
-    O.map(match => [rest, match])
-  )
-})
-
 // given a parser, and a predicate, return a new, fussier parser
 export const pred = <A>(
   parser: Parser<A>,
@@ -187,19 +182,7 @@ export const pred = <A>(
     return predicate(a) ? O.some([rest, a]) : O.none
   })
 
-// parser that matches 'lit' exactly or fails
-export const matchLiteral = <Lit extends string>(
-  lit: Lit
-): Parser<Lit> =>
-  makeParser(input => {
-    // grab the next `X` chars
-    const [rest, optionMatch] = splitString(input, lit.length)
-    return pipe(
-      optionMatch,
-      // if we have a match, and it's what we expect, the Parser succeeds
-      O.chain(match => (match === lit ? O.some([rest, lit]) : O.none))
-    )
-  })
+// USEFUL PREDICATES
 
 // predicate that checks whether a given char is numeric
 const isNumber = (char: string): boolean => {
@@ -222,31 +205,126 @@ const isLetter = (char: string): boolean => {
 const isAlphaNumeric = (char: string): boolean =>
   isLetter(char) || isNumber(char)
 
-// parse a single alphanumeric char
-export const alphaNumeric = pred(anyChar, isAlphaNumeric)
+// PARSERS
 
-// parse a single digit
-export const number = pred(anyChar, isNumber)
+// a parser that matches any character
+export const anyChar: Parser<string> = makeParser(input => {
+  const [rest, optionMatch] = splitString(input, 1)
+  return pipe(
+    optionMatch,
+    O.map(match => [rest, match])
+  )
+})
+
+// parser that matches 'lit' exactly or fails
+export const matchLiteral = <Lit extends string>(
+  lit: Lit
+): Parser<Lit> =>
+  makeParser(input => {
+    // grab the next `X` chars
+    const [rest, optionMatch] = splitString(input, lit.length)
+    return pipe(
+      optionMatch,
+      // if we have a match, and it's what we expect, the Parser succeeds
+      O.chain(match => (match === lit ? O.some([rest, lit]) : O.none))
+    )
+  })
+
+// parse a single alphanumeric char
+export const alphaNumeric: Parser<string> = pred(
+  anyChar,
+  isAlphaNumeric
+)
+
+// parse a single digit (returning it as a string)
+export const digit: Parser<string> = pred(anyChar, isNumber)
 
 // parse a string of alphanumeric chars
-export const identifier = map(oneOrMore(alphaNumeric), as =>
-  as.join('')
+export const identifier: Parser<string> = map(
+  oneOrMore(alphaNumeric),
+  as => as.join('')
 )
 
 // parses a single piece of whitespace
-export const whitespace = pred(anyChar, a => a.trim() === '')
+export const whitespace: Parser<string> = pred(
+  anyChar,
+  a => a.trim() === ''
+)
 
 // parser that consumes zero or more items of whitespace
-export const space0 = zeroOrMore(whitespace)
+export const space0: Parser<string[]> = zeroOrMore(whitespace)
 
 // parser that consumes one or more items of whitespace
-export const space1 = oneOrMore(whitespace)
+export const space1: Parser<string[]> = oneOrMore(whitespace)
 
 // a Parser that looks for `match`, and if it finds it, returns `A`
 export const mapLiteral = <A>(match: string, output: A): Parser<A> =>
   map(matchLiteral(match), _ => output)
 
-// EXERCISE ONE
+// WARM UP EXERCISES
+//
+// one - parse any single character
+export const one: Parser<string> = anyChar
+
+// two - parse any numeric digit
+export const two: Parser<string> = digit
+
+// three - parse any numeric digit and turn it into a number
+export const three: Parser<number> = map(digit, Number)
+
+// four - parse any letter except H
+export const four: Parser<string> = pred(
+  anyChar,
+  a => isLetter(a) && a !== 'h' && a !== 'H'
+)
+
+// five - parse a string of exclamation marks as an array of characters
+export const five: Parser<string[]> = oneOrMore(
+  pred(anyChar, a => a == '!')
+)
+
+// six - parse a string of exclamation marks as a string
+export const six: Parser<string> = map(five, as => as.join(''))
+
+// seven - parse a string of alphanumeric characters
+export const seven: Parser<string> = identifier
+
+// eight - parses two words separated by a space
+export const eight: Parser<[string, string]> = pair(
+  identifier,
+  right(space1, identifier)
+)
+
+// nine - parses 'horse' and nothing else
+export const nine: Parser<'horse'> = matchLiteral('horse')
+
+// ten - parse one or more digits separated by commas
+export const ten: Parser<number[]> = map(
+  pair(three, zeroOrMore(right(matchLiteral(','), three))),
+  ([a, as]) => [a, ...as]
+)
+
+// eleven - parse 'dog' or 'log' but nothing else
+export const eleven: Parser<'dog' | 'log'> = alt(
+  matchLiteral('dog'),
+  matchLiteral('log')
+)
+
+type TrafficLights =
+  | { type: 'Stop' }
+  | { type: 'GetReady' }
+  | { type: 'Go' }
+
+// twelve - parse 'red' 'yellow' or 'green' into datatype
+export const twelve: Parser<TrafficLights> = altMany<TrafficLights>(
+  map(matchLiteral('red'), _ => ({ type: 'Stop' })),
+  map(matchLiteral('yellow'), _ => ({ type: 'GetReady' })),
+  map(matchLiteral('green'), _ => ({ type: 'Go' }))
+)
+
+// bonus - can you extract a useful combinator from the above?
+
+// BIG EXERCISE ONE
 //
 // That's a lot of tools up there, let create a parser that takes an email and
 // breaks it into it's useful parts
@@ -275,7 +353,7 @@ export const emailCountryParser: Parser<EmailCountry> = altMany(
 
 export const bulbEmailParser: Parser<BulbEmailAddress> = undefined as any
 
-// EXERCISE TWO
+// BIG EXERCISE TWO
 //
 // Great job. For this one, the final combinator `msnParser` has been created,
 // you just need to provide the small parsers that it's built from
