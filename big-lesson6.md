@@ -1,3 +1,19 @@
+---
+title: Functional Programming Is Boring 
+author: Daniel J. Harvey
+patat:
+  wrap: true
+  margins:
+    left: 10
+    right: 10
+    top: 10
+    bottom: 10
+  incrementalLists: true
+  images:
+    backend: iterm2
+
+---
+
 # Lesson 6
 
 ## Validation
@@ -79,7 +95,7 @@ type ApiRequest = t.TypeOf<typeof apiRequest>
 // type ApiRequest = { name: string, age: number }
 ```
 
-- When it validates, it returns our old friend `Either`
+- When it validates, it returns out old friend `Either`
 
 ```typescript
 import * as t from 'io-ts'
@@ -99,89 +115,14 @@ const badResult: Either<t.Errors, ApiRequest> = apiRequest.decode({
 // badResult == { type: "Left", left: { ... error data from io-ts... }}
 ```
 
-## Functional endpoint design
-
-API endpoints are a really nice fit for FP, as we can think about them in
-types. Let's define a type for an API response:
-
-```typescript
-type Response<Body, Status extends number> = {
-  status: Status
-  body: Body
-}
-```
-
-- What would our endpoint types look like?
-
-## A simple example
-
-A `health` endpoint has no inputs
-
-- It always returns a `200` status code along with a message like `Ok`.
-
-- Therefore we can think of it as
-```haskell
-healthzAPI :: Response<'Ok', 200>
-```
-
-## What about something more complex?
-
-How about an endpoint that returns the status of a given feature flag?
-
-- It takes a `String`, which may or may not be one of the features flags.
-
-- If it is, we'll return `Response<boolean, 200>`
-
-- If we've never heard of that feature flag, we'll return `Response<string, 400>`
-
-- Therefore we could think about the endpoint as
-```haskell
-featureFlagAPI :: String -> Either<Response<string, 400>, Response<boolean, 200>
-```
-
-- (there are probably strictly more appropriate HTTP status codes to use)
-
-## And what about an endpoint that "does" something?
-
-Most of our endpoints are going to do something asynchronous, be it other API
-calls or database interactions.
-
-- They probably take in a number of parameters too
-
-- And it's pretty likely something might fail.
-
-- Therefore we might have a more complex error types:
-```haskell
-type UserError = Response<string, 400>
-type InternalError = Response<string, 500>
-type APIError = Either<UserError, InternalError>
-```
-
-- Also, since we don't trust our inputs, they become `unknown`
-
-- (They will gain proper types once they have been validated)
-
-- As we're generalising, let's say our response has type `APIResponse`
-
-- And therefore we're going to want something that looks like:
-```haskell
-niceAPI :: unknown -> TaskEither<APIError, APIResponse>
-```
-
-- Note that hopefully won't be written in one giant `pipe`, and instead built
-  up out of smaller, sensibly-named functions like you would do in any other application
-
-## Talk is cheap 
+## Bringing it all together
 
 Therefore, we can use these tools to bring everything together and made a
 handler for an API endpoint. Ours is going to:
 
 - Validate the post data to check it is valid
-
 - Fetch the URL of a picture of a dog from `dog.ceo`
-
 - Create a happy birthday message
-
 - Combine the message and the picture and return it to the user
 
 - We're going to be using `pipe` for this:
