@@ -154,7 +154,7 @@ calls or database interactions.
 ```haskell
 type UserError = Response<string, 400>
 type InternalError = Response<string, 500>
-type APIError = Either<UserError, InternalError>
+type APIError = UserError | InternalError
 ```
 
 - Also, since we don't trust our inputs, they become `unknown`
