@@ -192,6 +192,7 @@ import * as TE from 'fp-ts/TaskEither'
 
 const result = pipe(
   1,
+  TE.right,
   TE.map(a => a + 1),
   TE.map(a => a + 1)
 )
