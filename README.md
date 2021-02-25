@@ -52,7 +52,7 @@ along with unit tests that you can use to increase your 10x-ing.
 The tests for each unit are currently skipped, but can be enabled by removing
 `skip` from the matching test file.
 
-[Option](https://github.com/danieljharvey/functional-programming-is-boring/exercises/1-option.ts)
+[Option](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/1-option.ts)
 
 ## Examples
 
