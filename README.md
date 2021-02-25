@@ -54,6 +54,8 @@ The tests for each unit are currently skipped, but can be enabled by removing
 
 [Option](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/1-option.ts)
 
+[Either](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/2-either.ts)
+
 ## Examples
 
 Some more concrete examples of FP in the wild (please feel free to contribute here if you find something worth sharing)
