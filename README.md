@@ -64,15 +64,25 @@ Click on the words for information about subjects and things.
 
 [Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson9-continuations.ts)
 
+## Exercises
+
+If you'd like to practise using `fp-ts` in the wild, here are some exercises
+along with unit tests that you can use to increase your 10x-ing.
+
+The tests for each unit are currently skipped, but can be enabled by removing
+`skip` from the matching test file.
+
+[Option](https://github.com/danieljharvey/functional-programming-is-boring/exercises/1-option.ts)
+
 ## Examples
 
 Some more concrete examples of FP in the wild (please feel free to contribute here if you find something worth sharing)
 
-[Option](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/Option.ts)
+[Option](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/option/Option.ts)
 
-[Either](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/Either.ts)
+[Either](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/either/Either.ts)
 
-[io-ts validator](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/io-ts.ts)
+[io-ts validator](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/io-ts/TimeFromString.ts)
 
 ## Extra meandering things that didn't fit into any lesson
 
