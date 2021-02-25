@@ -44,26 +44,6 @@ Click on the words for information about subjects and things.
 
 [Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson6-validation.ts)
 
-## Part 2
-
-### Lesson 7 - Monoids
-
-[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson7-semigroup-monoid.md)
-
-[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson7-semigroups-monoids.ts)
-
-### Lesson 8 - Reader
-
-[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson8-reader.md)
-
-[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson8-reader.ts)
-
-### Lesson 9 - Continuations
-
-[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson9-continuations.md)
-
-[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson9-continuations.ts)
-
 ## Exercises
 
 If you'd like to practise using `fp-ts` in the wild, here are some exercises
