@@ -26,7 +26,7 @@ export const three = (input: O.Option<string>): string =>
 export const four = <A>(input: O.Option<A>): A | null =>
   undefined as any
 
-// Given an array, wrap the first item in `Some` or return `None` if it is
+// Given an array, wrap the first item in `Some` or return `None` if the array is
 // empty
 export const five = <A>(input: A[]): O.Option<A> => undefined as any
 
@@ -37,7 +37,7 @@ export const six = <A>(
   predicate: (a: A) => boolean
 ): O.Option<A> => undefined as any
 
-// Given either an Option<number>, double the number if it is available
+// Given an Option<number>, double the number if it is available
 export const seven = (input: O.Option<number>): O.Option<number> =>
   undefined as any
 
