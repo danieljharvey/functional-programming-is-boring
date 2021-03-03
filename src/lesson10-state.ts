@@ -96,3 +96,21 @@ export const defaultStable: Stable = {
 }
 
 const output = S.execute(defaultStable)(doHorseStuff)
+
+// given a state value and the initial value, run it and get the state out
+export const one = (
+  state: S.State<number, string>,
+  initialValue: number
+): number => S.execState(state, initialValue)
+
+// given a state value and the initial value, run it and get the value out
+export const two = (
+  state: S.State<number, string>,
+  initialValue: number
+): string => S.evalState(state, initialValue)
+
+// return a state value that increments the number inside by one
+export const three = (): S.State<number, void> => S.modify(a => a + 1)
+
+// return a state value that returns the state as the value
+export const four = <S>(): S.State<S, S> => S.get()

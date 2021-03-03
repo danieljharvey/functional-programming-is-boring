@@ -6,6 +6,9 @@ import {
   getHorses,
   countHorses,
   standardiseHorses,
+  one,
+  two,
+  three,
 } from '../lesson10-state'
 
 describe('State', () => {
@@ -74,6 +77,17 @@ describe('State', () => {
           )
         )
       ).toEqual(1)
+    })
+  })
+  describe('state exercises', () => {
+    it('one', () => {
+      expect(one(S.of('stuff'), 100)).toEqual(100)
+    })
+    it('two', () => {
+      expect(two(S.of('stuff'), 100)).toEqual('stuff')
+    })
+    it('three', () => {
+      expect(S.execState(three(), 100)).toEqual(101)
     })
   })
 })
