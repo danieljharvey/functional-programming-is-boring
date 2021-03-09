@@ -42,7 +42,17 @@ The tests for each unit are currently skipped, but can be enabled by removing
 
 ### Control flow types
 
+<<<<<<< HEAD
 [Option](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/option.ts) | [Either](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/either.ts)
+=======
+[Option](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/option.ts)
+
+[Either](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/either.ts)
+
+### Stateful types
+
+[State](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/state.ts)
+>>>>>>> 00b3507 (Nice)
 
 ### Stateful types
 
