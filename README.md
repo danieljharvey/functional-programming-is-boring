@@ -52,9 +52,15 @@ along with unit tests that you can use to increase your 10x-ing.
 The tests for each unit are currently skipped, but can be enabled by removing
 `skip` from the matching test file.
 
-[Option](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/1-option.ts)
+### Control flow types
 
-[Either](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/2-either.ts)
+[Option](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/option.ts)
+
+[Either](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/either.ts)
+
+### Stateful types
+
+[State](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/state.ts)
 
 ## Examples
 
