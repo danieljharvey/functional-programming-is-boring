@@ -3,7 +3,7 @@ import * as S from 'fp-ts/State'
 import * as State from './state'
 import * as O from 'fp-ts/Option'
 
-describe('State', () => {
+describe.skip('State', () => {
   it('one', () => {
     expect(State.one(S.of('stuff'), 100)).toEqual(100)
   })
