@@ -1,8 +1,8 @@
-import * as Exercises from './1-option'
+import * as Exercises from './option'
 import * as O from 'fp-ts/Option'
 import * as S from 'fp-ts/Semigroup'
 
-describe.skip('1) Option exercises', () => {
+describe.skip('Option exercises', () => {
   it('one', () => {
     expect(Exercises.one(null)).toEqual(O.none)
     expect(Exercises.one('horse')).toEqual(O.some('horse'))
