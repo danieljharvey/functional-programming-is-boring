@@ -10,39 +10,27 @@ Click on the words for information about subjects and things.
 
 ### Lesson 1 - Option
 
-[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson1-option.md)
-
-[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson1-option.ts)
+[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson1-option.md) | [Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson1-option.ts)
 
 ### Lesson 2 - Either
 
-[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson2-either.md)
-
-[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson2-either.ts)
+[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson2-either.md) | [Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson2-either.ts)
 
 ### Lesson 3 - Optics
 
-[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson3-optics.md)
-
-[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson3-optics.ts)
+[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson3-optics.md) | [Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson3-optics.ts)
 
 ### Lesson 4 - TaskEither
 
-[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson4-task-either.md)
-
-[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson4-task-either.ts)
+[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson4-task-either.md) | [Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson4-task-either.ts)
 
 ### Lesson 5 - Parsers
 
-[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson5-parsers.md)
-
-[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson5-parsers.ts)
+[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson5-parsers.md) | [Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson5-parsers.ts)
 
 ### Lesson 6 - Validation
 
-[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson6-validation.md)
-
-[Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson6-validation.ts)
+[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/lesson6-validation.md) | [Exercises](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/src/lesson6-validation.ts)
 
 ## Exercises
 
@@ -54,9 +42,7 @@ The tests for each unit are currently skipped, but can be enabled by removing
 
 ### Control flow types
 
-[Option](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/option.ts)
-
-[Either](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/either.ts)
+[Option](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/option.ts) | [Either](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/either.ts)
 
 ### Stateful types
 
@@ -66,11 +52,7 @@ The tests for each unit are currently skipped, but can be enabled by removing
 
 Some more concrete examples of FP in the wild (please feel free to contribute here if you find something worth sharing)
 
-[Option](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/option/Option.ts)
-
-[Either](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/either/Either.ts)
-
-[io-ts validator](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/io-ts/TimeFromString.ts)
+[Option](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/option/Option.ts) | [Either](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/either/Either.ts) | [io-ts validator](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/io-ts/TimeFromString.ts)
 
 ## Extra meandering things that didn't fit into any lesson
 
