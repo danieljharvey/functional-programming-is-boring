@@ -53,4 +53,25 @@ describe.skip('State', () => {
     ]
     expect(S.evalState(State.eight(), horses)).toEqual([horses[0]])
   })
+  it('nine', () => {
+    expect(
+      S.evalState(State.nine(S.of([1, 2]), S.of([3, 4])), 'test')
+    ).toEqual([1, 2, 3, 4])
+  })
+  it('ten', () => {
+    const a = pipe(
+      S.of<number, number>(1),
+      S.chainFirst(_ => S.modify<number>(i => i + 1))
+    )
+    const b = pipe(
+      S.of<number, number>(10),
+      S.chainFirst(_ => S.modify(i => i + 100))
+    )
+    expect(State.ten(a1 => b1 => a1 + b1, a, b)(0)).toEqual([11, 101])
+  })
+  it('eleven', () => {
+    const fn = (a: number) => a + 1
+    const value = 'dogs'
+    expect(State.eleven(value, fn)(100)).toEqual(['dogs', 101])
+  })
 })
