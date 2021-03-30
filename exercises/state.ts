@@ -57,11 +57,7 @@ export const eight = (): S.State<Horse[], Horse[]> => undefined as any
 export const nine = <S, A>(
   a: S.State<S, A[]>,
   b: S.State<S, A[]>
-): S.State<S, A[]> =>
-  pipe(
-    A.sequenceT(S.state)(a, b),
-    S.map(([a, b]) => [...a, ...b])
-  )
+): S.State<S, A[]> => undefined as any
 
 // given a function that combines the values inside two State values, and two
 // state values, combine them to create a new State value
@@ -70,12 +66,9 @@ export const ten = <S, A, B, C>(
   f: (a: A) => (b: B) => C,
   a: S.State<S, A>,
   b: S.State<S, B>
-): S.State<S, C> => pipe(a, S.map(f), S.ap(b))
+): S.State<S, C> => undefined as any
 
 // given a value, and a function that changes state, make a state action that
 // returns the action and makes the state change
 export const eleven = <S, A>(a: A, fn: (s: S) => S): S.State<S, A> =>
-  pipe(
-    S.of<S, A>(a),
-    S.chainFirst(_ => S.modify(fn))
-  )
+  undefined as any
