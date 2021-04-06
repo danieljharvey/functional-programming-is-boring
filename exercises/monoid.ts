@@ -4,6 +4,9 @@ import { flow } from 'fp-ts/function'
 import * as Arr from 'fp-ts/Array'
 import * as O from 'fp-ts/Option'
 
+// A Monoid describes a way of combining values
+// A Monoid<number> could describe adding two numbers, or multiplying them
+
 // add up all the passed numbers
 export const one: (as: number[]) => number = M.fold(M.monoidSum)
 
