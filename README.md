@@ -48,6 +48,10 @@ The tests for each unit are currently skipped, but can be enabled by removing
 
 [State](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/state.ts)
 
+### Combining types
+
+[Monoid](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/monoid.ts)
+
 ## Examples
 
 Some more concrete examples of FP in the wild (please feel free to contribute here if you find something worth sharing)
