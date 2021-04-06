@@ -46,7 +46,7 @@ The tests for each unit are currently skipped, but can be enabled by removing
 
 ### Stateful types
 
-[State](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/state.ts)
+[State](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/state.ts) | [Writer] (https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/writer.ts)
 
 ### Combining types
 
