@@ -4,8 +4,8 @@
 
 // using the built in `map` function, we can increment all the numbers inside it
 
-const exampleOne = [1, 2, 3].map(String)
-console.log({ exampleOne }) // == ["1","2","3"]
+export const exampleOne = [1, 2, 3].map(String)
+// console.log({ exampleOne }) // == ["1","2","3"]
 
 // what's happened here?
 
@@ -21,8 +21,8 @@ export const id = <A>(a: A) => a
 
 // the `id` function is a special one, look what happens when we map it over our array:
 
-const exampleTwo = [1, 2, 3].map(id)
-console.log({ exampleTwo }) // == [1,2,3]
+export const exampleTwo = [1, 2, 3].map(id)
+// console.log({ exampleTwo }) // == [1,2,3]
 
 // that's right, nothing!
 
@@ -32,13 +32,13 @@ export const double = (a: number) => a * 2
 
 export const numToString = (b: number) => String(b)
 
-const exampleThree = [1, 2, 3].map(double).map(numToString)
-console.log({ exampleThree }) // == ["2","4","6"]
+export const exampleThree = [1, 2, 3].map(double).map(numToString)
+// console.log({ exampleThree }) // == ["2","4","6"]
 
 // seems fine, but perhaps a little inefficient. what if we do one map, but run both functions together?
 
-const exampleFour = [1, 2, 3].map(a => numToString(double(a)))
-console.log({ exampleFour }) // == ["2","4","6"]
+export const exampleFour = [1, 2, 3].map(a => numToString(double(a)))
+// console.log({ exampleFour }) // == ["2","4","6"]
 
 // the answer is the same. What a relief.
 
@@ -60,17 +60,19 @@ export const identityMap = <A, B>(
   input: Identity<A>
 ): Identity<B> => identity(f(input.value))
 
-console.log(identityMap(a => a + 1, identity(1))) // identity(2)
-console.log(identityMap(id, identity(1))) // identity(1)
+// console.log(identityMap(a => a + 1, identity(1))) // identity(2)
+// console.log(identityMap(id, identity(1))) // identity(1)
 
 // here is your first one:
-
+// Maybe optionally contains an `A`, so if there is one, we should run the
+// function over it.
 type Maybe<A> = { type: 'Just'; value: A } | { type: 'Nothing' }
 
 export const just = <A>(value: A): Maybe<A> => ({
   type: 'Just',
   value,
 })
+
 export const nothing: Maybe<never> = { type: 'Nothing' }
 
 export const maybeMap = <A, B>(
@@ -78,3 +80,36 @@ export const maybeMap = <A, B>(
   maybe: Maybe<A>
 ): Maybe<B> =>
   maybe.type === 'Just' ? just(f(maybe.value)) : nothing
+
+// here is the second one:
+// Either<E,A> contains an `E` or an `A`. The `map` function should only affect
+// the `A`, any `E` values should be left as they are
+type Either<E, A> =
+  | { type: 'Left'; left: E }
+  | { type: 'Right'; right: A }
+
+export const right = <A>(right: A): Either<never, A> => ({
+  type: 'Right',
+  right,
+})
+
+export const left = <E>(left: E): Either<E, never> => ({
+  type: 'Left',
+  left,
+})
+
+export const eitherMap = <E, A, B>(
+  f: (a: A) => B,
+  either: Either<E, A>
+): Either<E, B> =>
+  either.type === 'Right' ? right(f(either.right)) : either
+
+// here is the third one:
+// Pair<A,B> = [A,B]
+// the functor should map over `B` and leave `A` alone
+type Pair<A, B> = [A, B]
+
+export const pairMap = <A, B, C>(
+  f: (b: B) => C,
+  [a, b]: Pair<A, B>
+): Pair<A, C> => [a, f(b)]

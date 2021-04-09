@@ -62,4 +62,62 @@ describe('Functors', () => {
       )
     })
   })
+
+  describe('Either', () => {
+    it('works', () => {
+      // regular map
+      expect(Fun.eitherMap(Fun.double, Fun.right(1))).toEqual(
+        Fun.right(2)
+      )
+      expect(Fun.eitherMap(Fun.double, Fun.left('hi'))).toEqual(
+        Fun.left('hi')
+      )
+    })
+    it('satisfies identity', () => {
+      // identity
+      expect(Fun.eitherMap(Fun.id, Fun.right(1))).toEqual(
+        Fun.right(1)
+      )
+      expect(Fun.eitherMap(Fun.id, Fun.left('test'))).toEqual(
+        Fun.left('test')
+      )
+    })
+    it('satisifies commutativeness (?)', () => {
+      expect(
+        Fun.eitherMap(
+          Fun.numToString,
+          Fun.eitherMap(Fun.double, Fun.right(1))
+        )
+      ).toEqual(
+        Fun.eitherMap(
+          compose(Fun.numToString, Fun.double),
+          Fun.right(1)
+        )
+      )
+    })
+  })
+
+  describe('Pair', () => {
+    it('works', () => {
+      // regular map
+      expect(Fun.pairMap(Fun.double, ['test', 1])).toEqual([
+        'test',
+        2,
+      ])
+    })
+    it('satisfies identity', () => {
+      // identity
+      expect(Fun.pairMap(Fun.id, ['test', 1])).toEqual(['test', 1])
+    })
+    it('satisifies commutativeness (?)', () => {
+      expect(
+        Fun.pairMap(
+          Fun.numToString,
+          Fun.pairMap(Fun.double, ['test', 1])
+        )
+      ).toEqual(
+        Fun.pairMap(compose(Fun.numToString, Fun.double), ['test', 1])
+      )
+    })
+  })
 })
