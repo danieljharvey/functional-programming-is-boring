@@ -120,4 +120,117 @@ describe('Functors', () => {
       )
     })
   })
+
+  describe('Tree', () => {
+    it('works', () => {
+      // regular map
+      expect(
+        Fun.treeMap(
+          Fun.double,
+          Fun.branch(
+            Fun.leaf,
+            1 as number,
+            Fun.branch(Fun.leaf, 2, Fun.leaf)
+          )
+        )
+      ).toEqual(
+        Fun.branch(
+          Fun.leaf,
+          2 as number,
+          Fun.branch(Fun.leaf, 4, Fun.leaf)
+        )
+      )
+
+      expect(Fun.treeMap(Fun.double, Fun.leaf)).toEqual(Fun.leaf)
+    })
+    it('satisfies identity', () => {
+      // identity
+      expect(
+        Fun.treeMap(Fun.id, Fun.branch(Fun.leaf, 1, Fun.leaf))
+      ).toEqual(Fun.branch(Fun.leaf, 1, Fun.leaf))
+    })
+    it('satisifies commutativeness (?)', () => {
+      expect(
+        Fun.treeMap(
+          Fun.numToString,
+          Fun.treeMap(Fun.double, Fun.branch(Fun.leaf, 1, Fun.leaf))
+        )
+      ).toEqual(
+        Fun.treeMap(
+          compose(Fun.numToString, Fun.double),
+          Fun.branch(Fun.leaf, 1, Fun.leaf)
+        )
+      )
+    })
+  })
+
+  const runReader = <R, A>(reader: Fun.Reader<R, A>, value: R): A =>
+    reader.runReader(value)
+
+  describe('Reader', () => {
+    it('works', () => {
+      // regular map
+      expect(
+        runReader(
+          Fun.readerMap(
+            Fun.double,
+            Fun.reader(_r => 1)
+          ),
+          'test'
+        )
+      ).toEqual(2)
+      expect(
+        runReader(
+          Fun.readerMap(
+            Fun.double,
+            Fun.reader((r: number) => r + 1)
+          ),
+          10
+        )
+      ).toEqual(22)
+    })
+    it('satisfies identity', () => {
+      expect(
+        runReader(
+          Fun.readerMap(
+            Fun.id,
+            Fun.reader(_r => 1)
+          ),
+          'test'
+        )
+      ).toEqual(1)
+
+      expect(
+        runReader(
+          Fun.readerMap(
+            Fun.id,
+            Fun.reader((r: number) => r + 1)
+          ),
+          10
+        )
+      ).toEqual(11)
+    })
+    it('satisifies commutativeness (?)', () => {
+      expect(
+        runReader(
+          Fun.readerMap(
+            Fun.numToString,
+            Fun.readerMap(
+              Fun.double,
+              Fun.reader((r: number) => r + 1)
+            )
+          ),
+          10
+        )
+      ).toEqual(
+        runReader(
+          Fun.readerMap(
+            compose(Fun.numToString, Fun.double),
+            Fun.reader((r: number) => r + 1)
+          ),
+          10
+        )
+      )
+    })
+  })
 })

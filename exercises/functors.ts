@@ -113,3 +113,51 @@ export const pairMap = <A, B, C>(
   f: (b: B) => C,
   [a, b]: Pair<A, B>
 ): Pair<A, C> => [a, f(b)]
+
+// the fourth one is a Tree
+// `map` should change all `A` values to `B`s
+type Tree<A> =
+  | { type: 'Leaf' }
+  | { type: 'Branch'; left: Tree<A>; value: A; right: Tree<A> }
+
+export const leaf: Tree<never> = { type: 'Leaf' }
+
+export const branch = <A>(
+  left: Tree<A>,
+  value: A,
+  right: Tree<A>
+): Tree<A> => ({
+  type: 'Branch',
+  left,
+  value,
+  right,
+})
+
+export const treeMap = <A, B>(
+  f: (a: A) => B,
+  tree: Tree<A>
+): Tree<B> =>
+  tree.type === 'Leaf'
+    ? tree
+    : branch(
+        treeMap(f, tree.left),
+        f(tree.value),
+        treeMap(f, tree.right)
+      )
+
+// here is the fifth one
+// Reader<R,A>
+
+export type Reader<R, A> = { type: 'Reader'; runReader: (r: R) => A }
+
+export const reader = <R, A>(
+  runReader: (r: R) => A
+): Reader<R, A> => ({
+  type: 'Reader',
+  runReader,
+})
+
+export const readerMap = <R, A, B>(
+  f: (a: A) => B,
+  value: Reader<R, A>
+): Reader<R, B> => reader(r => f(value.runReader(r)))
