@@ -29,4 +29,42 @@ describe('reader', () => {
     expect(reader(0)).toEqual('0 + 0')
     expect(reader(2)).toEqual('4 + 6')
   })
+  it('four', () => {
+    const translationsEnglish = {
+      greeting: 'Good morning',
+      happyBirthday: 'Happy birthday',
+      genericPleasantry: 'Have a nice day',
+    }
+    const reader = Read.four('Mr Horse', new Date('2020-01-01'))
+    expect(
+      reader({
+        translations: translationsEnglish,
+        date: new Date('2020-01-01'),
+      })
+    ).toEqual('Good morning, Mr Horse! Happy birthday!')
+    expect(
+      reader({
+        translations: translationsEnglish,
+        date: new Date('2021-02-01'),
+      })
+    ).toEqual('Good morning, Mr Horse! Have a nice day.')
+
+    const translationsItalian = {
+      greeting: 'Buongiorno',
+      happyBirthday: 'Buon compleanno',
+      genericPleasantry: 'Buona giornata',
+    }
+    expect(
+      reader({
+        translations: translationsItalian,
+        date: new Date('2020-01-01'),
+      })
+    ).toEqual('Buongiorno, Mr Horse! Buon compleanno!')
+    expect(
+      reader({
+        translations: translationsItalian,
+        date: new Date('2021-02-01'),
+      })
+    ).toEqual('Buongiorno, Mr Horse! Buona giornata.')
+  })
 })
