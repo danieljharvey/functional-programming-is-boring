@@ -57,7 +57,7 @@ The tests for each unit are currently skipped, but can be enabled by removing
 After we've used a few datatypes we'll start to notice the same old functions
 coming up again and again.
 
-[Functor](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/functor.ts)
+[Functor](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/functors.ts)
 
 ## Examples
 
