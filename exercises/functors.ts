@@ -58,7 +58,7 @@ export const identity = <A>(value: A): Identity<A> => ({
 export const identityMap = <A, B>(
   f: (a: A) => B,
   input: Identity<A>
-): Identity<B> => identity(f(input.value))
+): Identity<B> => undefined as any
 
 // console.log(identityMap(a => a + 1, identity(1))) // identity(2)
 // console.log(identityMap(id, identity(1))) // identity(1)
@@ -79,8 +79,7 @@ export const nothing: Maybe<never> = { type: 'Nothing' }
 export const maybeMap = <A, B>(
   f: (a: A) => B,
   maybe: Maybe<A>
-): Maybe<B> =>
-  maybe.type === 'Just' ? just(f(maybe.value)) : nothing
+): Maybe<B> => undefined as any
 
 // here is the second one:
 // Either<E,A> contains an `E` or an `A`. The `map` function should only affect
@@ -103,8 +102,7 @@ export const left = <E>(left: E): Either<E, never> => ({
 export const eitherMap = <E, A, B>(
   f: (a: A) => B,
   either: Either<E, A>
-): Either<E, B> =>
-  either.type === 'Right' ? right(f(either.right)) : either
+): Either<E, B> => undefined as any
 
 // here is the third one:
 // Pair<A,B> = [A,B]
@@ -115,7 +113,7 @@ type Pair<A, B> = [A, B]
 export const pairMap = <A, B, C>(
   f: (b: B) => C,
   [a, b]: Pair<A, B>
-): Pair<A, C> => [a, f(b)]
+): Pair<A, C> => undefined as any
 
 // the fourth one is a Tree
 // `map` should change all `A` values to `B`s
@@ -139,14 +137,7 @@ export const branch = <A>(
 export const treeMap = <A, B>(
   f: (a: A) => B,
   tree: Tree<A>
-): Tree<B> =>
-  tree.type === 'Leaf'
-    ? tree
-    : branch(
-        treeMap(f, tree.left),
-        f(tree.value),
-        treeMap(f, tree.right)
-      )
+): Tree<B> => undefined as any
 
 // here is the fifth one
 // Reader<R,A>
@@ -166,7 +157,7 @@ export const reader = <R, A>(
 export const readerMap = <R, A, B>(
   f: (a: A) => B,
   value: Reader<R, A>
-): Reader<R, B> => reader(r => f(value.runReader(r)))
+): Reader<R, B> => undefined as any
 
 // here the sixth one.
 // what about asynchronous stuff?
@@ -195,4 +186,4 @@ export const taskOf = <A>(a: A): Task<A> => task(next => next(a))
 export const taskMap = <A, B>(
   f: (a: A) => B,
   value: Task<A>
-): Task<B> => task(next => value.runTask(a => next(f(a))))
+): Task<B> => undefined as any

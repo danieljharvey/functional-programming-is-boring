@@ -4,7 +4,7 @@ const compose = <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (
   a: A
 ): C => f(g(a))
 
-describe('Functors', () => {
+describe.skip('Functors', () => {
   describe('Identity', () => {
     it('works', () => {
       // regular map
