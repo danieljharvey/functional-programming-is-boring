@@ -66,6 +66,7 @@ export const identityMap = <A, B>(
 // here is your first one:
 // Maybe optionally contains an `A`, so if there is one, we should run the
 // function over it.
+
 type Maybe<A> = { type: 'Just'; value: A } | { type: 'Nothing' }
 
 export const just = <A>(value: A): Maybe<A> => ({
@@ -84,6 +85,7 @@ export const maybeMap = <A, B>(
 // here is the second one:
 // Either<E,A> contains an `E` or an `A`. The `map` function should only affect
 // the `A`, any `E` values should be left as they are
+
 type Either<E, A> =
   | { type: 'Left'; left: E }
   | { type: 'Right'; right: A }
@@ -107,6 +109,7 @@ export const eitherMap = <E, A, B>(
 // here is the third one:
 // Pair<A,B> = [A,B]
 // the functor should map over `B` and leave `A` alone
+
 type Pair<A, B> = [A, B]
 
 export const pairMap = <A, B, C>(
@@ -148,6 +151,9 @@ export const treeMap = <A, B>(
 // here is the fifth one
 // Reader<R,A>
 
+// when the environment `R` is received, we will get an `A`, which we should
+// then turn into a `B` using the provided function.
+
 export type Reader<R, A> = { type: 'Reader'; runReader: (r: R) => A }
 
 export const reader = <R, A>(
@@ -161,3 +167,32 @@ export const readerMap = <R, A, B>(
   f: (a: A) => B,
   value: Reader<R, A>
 ): Reader<R, B> => reader(r => f(value.runReader(r)))
+
+// here the sixth one.
+// what about asynchronous stuff?
+
+// Task<A> represents an `A` that will appear in the future
+// when it does, the `map` function will need to turn it into a `B` using
+// the passed function
+
+export type Task<A> = {
+  type: 'Task'
+  runTask: (next: (a: A) => void) => void
+}
+
+// create a Task
+export const task = <A>(
+  runTask: (next: (a: A) => void) => void
+): Task<A> => ({
+  type: 'Task',
+  runTask,
+})
+
+// create a Task that immediately resolves to `A` (equivalent to
+// Promise.resolve)
+export const taskOf = <A>(a: A): Task<A> => task(next => next(a))
+
+export const taskMap = <A, B>(
+  f: (a: A) => B,
+  value: Task<A>
+): Task<B> => task(next => value.runTask(a => next(f(a))))

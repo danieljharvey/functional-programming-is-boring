@@ -233,4 +233,40 @@ describe('Functors', () => {
       )
     })
   })
+
+  const taskToPromise = <A>(value: Fun.Task<A>): Promise<A> =>
+    new Promise(resolve => {
+      value.runTask(resolve)
+    })
+
+  describe('Task', () => {
+    it('works', async () => {
+      // regular map
+      expect(
+        await taskToPromise(Fun.taskMap(Fun.double, Fun.taskOf(1)))
+      ).toEqual(2)
+    })
+    it('satisfies identity', async () => {
+      expect(
+        await taskToPromise(Fun.taskMap(Fun.id, Fun.taskOf(1)))
+      ).toEqual(1)
+    })
+    it('satisifies commutativeness (?)', async () => {
+      expect(
+        await taskToPromise(
+          Fun.taskMap(
+            Fun.numToString,
+            Fun.taskMap(Fun.double, Fun.taskOf(1))
+          )
+        )
+      ).toEqual(
+        await taskToPromise(
+          Fun.taskMap(
+            compose(Fun.numToString, Fun.double),
+            Fun.taskOf(1)
+          )
+        )
+      )
+    })
+  })
 })
