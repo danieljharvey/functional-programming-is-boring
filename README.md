@@ -40,40 +40,31 @@ along with unit tests that you can use to increase your 10x-ing.
 The tests for each unit are currently skipped, but can be enabled by removing
 `skip` from the matching test file.
 
-### Control flow types
+### Datatypes
+
+These exercises are for specific types that you will find in `fp-ts`.
+
+#### Control flow types
 
 [Option](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/option.ts) | [Either](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/either.ts)
 
-### Stateful types
+#### Stateful types
 
 [State](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/state.ts) | [Writer](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/writer.ts)
 
-### Combining types
+### Typeclasses
 
-[Monoid](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/monoid.ts)
+After we've used a few datatypes we'll start to notice the same old functions (such as `map`) coming up over and over. These interfaces, reused between many types, are called typeclasses, these exercises are to help gain a better intuition for them by implementing their functions yourself.
 
-## Typeclass patterns
+#### Exercises
 
-After we've used a few datatypes we'll start to notice the same old functions
-coming up again and again.
-
-[Functor](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/functors.ts)
+[Functor](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/functors.ts) | [Monoid](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/monoid.ts)
 
 ## Examples
 
 Some more concrete examples of FP in the wild (please feel free to contribute here if you find something worth sharing)
 
-[Option](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/option/Option.ts) | [Either](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/either/Either.ts) | [io-ts validator](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/io-ts/TimeFromString.ts)
-
-## Extra meandering things that didn't fit into any lesson
-
-### Bonus 1 - Currying
-
-[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/currying.md)
-
-### Bonus 2 - Complexity
-
-[Information](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/slides/complexity.md)
+[Option](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/option/Option.ts) | [Either](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/either/Either.ts) | [io-ts validator](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/io-ts/TimeFromString.ts) | [Store Comonad](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/comonads/Store.ts) | [Parser](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/parser/parser.ts)
 
 ## Installing stuff
 
