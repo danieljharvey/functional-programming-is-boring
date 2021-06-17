@@ -2,7 +2,7 @@ import * as E from 'fp-ts/Either'
 
 import { Newtype, iso, prism } from 'newtype-ts'
 
-// simple example
+// example request type
 export type DisplayNameRequest1 = {
   firstname: string
   surname: string
@@ -51,10 +51,12 @@ export const makeDisplayName2 = (
   firstname: Firstname,
   surname: Surname
 ): E.Either<string, string> => {
+  // unwrap the newtype to get the delicious raw string inside
   const strFirstname = isoFirstname.unwrap(firstname)
   if (strFirstname.length < 1) {
     return E.left('first name is empty')
   }
+  // unwrap the newtype to get the delicious raw string inside
   const strSurname = isoSurname.unwrap(surname)
   if (strSurname.length < 1) {
     return E.left('surname  is empty')
@@ -69,9 +71,7 @@ export const makeDisplayName2 = (
 
 // but it's all very 1x still because we still return an Either for what is a
 // very simple function
-
-// we can use these with io-ts to deserialise directly into these values:
-// https://github.com/gcanti/io-ts/blob/master/index.md#branded-types--refinements
+// what if our type also gave us some guarantees about the information inside
 
 type NEFirstname = Newtype<
   { readonly NEFirstname: unique symbol },
@@ -89,12 +89,14 @@ export type DisplayNameRequest3 = {
   surname: NESurname
 }
 
+// predicate that must be satisfied to create a NEFirstname or NESurname
 const isNonEmpty = (s: string) => s.length > 0
 
 // an iso is an optic for changing between two equivalent types
 export const prismFirstname = prism<NEFirstname>(isNonEmpty)
 export const prismSurname = prism<NESurname>(isNonEmpty)
 
+// no more Eithers
 export const makeDisplayName3 = (
   firstname: NEFirstname,
   surname: NESurname

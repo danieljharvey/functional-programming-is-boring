@@ -54,12 +54,12 @@ describe('with newtype', () => {
         isoSurname.wrap('log')
       )
     ).toEqual(E.right('XXdogYYlog'))
-    /*  
-    this doesn't work because type safety
+    /*
+    // this doesn't work because type safety
     makeDisplayName2(
-        isoSurname.wrap('loggle')
-        isoFirstname.wrap('doggle'),
-      )
+      isoSurname.wrap('loggle'),
+      isoFirstname.wrap('doggle')
+    )
   */
     expect(
       makeDisplayName2(
