@@ -58,13 +58,13 @@ After we've used a few datatypes we'll start to notice the same old functions (s
 
 #### Exercises
 
-[Functor](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/functors.ts) | [Monoid](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/monoid.ts)
+[Functor](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/functors.ts) | [Monoid](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/functors.ts)
 
 ## Examples
 
 Some more concrete examples of FP in the wild (please feel free to contribute here if you find something worth sharing)
 
-[Option](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/option/Option.ts) | [Either](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/either/Either.ts) | [io-ts validator](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/io-ts/TimeFromString.ts) | [Store Comonad](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/comonads/Store.ts) | [Parser](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/parser/parser.ts)
+[Option](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/option/Option.ts) | [Either](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/either/Either.ts) | [io-ts validator](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/io-ts/TimeFromString.ts) | [Store Comonad](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/comonads/Store.ts) | [Parser](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/parser/parser.ts) | [newtypes](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/examples/newtypes/newtypes.ts)
 
 ## Installing stuff
 
