@@ -58,7 +58,7 @@ After we've used a few datatypes we'll start to notice the same old functions (s
 
 #### Exercises
 
-[Functor](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/functors.ts) | [Monoid](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/functors.ts)
+[Functor](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/functors.ts) | [Monoid](https://github.com/danieljharvey/functional-programming-is-boring/blob/master/exercises/monoid.ts)
 
 ## Examples
 
