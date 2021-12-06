@@ -35,7 +35,7 @@ export const standardHorses: Horse[] = [
 // our somewhat basic horse getting function
 const getHorse = (name: string) => {
   let found
-  standardHorses.forEach(standardHorse => {
+  standardHorses.forEach((standardHorse) => {
     if (standardHorse.name === name) {
       found = standardHorse
     }
