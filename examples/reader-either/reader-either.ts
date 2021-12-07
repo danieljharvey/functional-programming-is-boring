@@ -2,6 +2,7 @@ import * as RE from 'fp-ts/ReaderEither'
 import { pipe } from 'fp-ts/function'
 
 // let's say we have some classic effectful functions that are hard to test...
+
 // returns an integer between 1 and 6
 // or sometimes `null` because life
 const getDiceRoll = (): number | null => {
