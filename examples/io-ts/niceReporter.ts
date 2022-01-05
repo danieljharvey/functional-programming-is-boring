@@ -17,13 +17,6 @@ const labelForCodec = (codec: t.Decoder<any, any>) => codec.name
 
 const destroyNumbers = (str: string) => str.replace(/[0-9]/g, '')
 
-// we want the longest key, that isn't a number ((???))
-const sortByLongestKey = (entries: t.Context): t.Context =>
-  [...entries].sort(
-    (a, b) =>
-      destroyNumbers(b.key).length - destroyNumbers(a.key).length
-  )
-
 const renderContext = (context: t.Context): string => {
   return (
     contextString(context) +
@@ -47,9 +40,9 @@ const chooseContextEntry = (context: t.Context): t.ContextEntry => {
 }
 
 const renderContextItem = (contextEntry: t.ContextEntry): string => {
-  return `Expected ${labelForCodec(contextEntry.type)}, got ${
-    contextEntry.actual
-  }`
+  return `Expected ${labelForCodec(
+    contextEntry.type
+  )}, got ${typeof contextEntry.actual}`
 }
 
 const contextString = (context: t.Context): string => {
